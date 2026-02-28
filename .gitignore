@@ -1,0 +1,36 @@
+.gradle
+build/
+!gradle/wrapper/gradle-wrapper.jar
+!**/src/main/resources/
+!**/src/test/resources/
+
+#### OSX
+.DS_Store
+
+#### Eclipse
+.classpath
+.project
+.settings/
+
+#### IntelliJ IDEA
+.idea/
+*.iws
+*.iml
+*.ipr
+out/
+!**/src/main/resources
+!**/src/test/resources
+
+#### VS Code
+.vscode/
+
+#### Kotlin
+.kotlin/
+
+### User specific files
+run/
+.settings/
+bin/
+tmp/
+*.log
+local.properties
