@@ -6,7 +6,7 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "beer_snacks:palm_tree_plank_block"
+          "name": "tmmod:iron_furnace"
         }
       ],
       "conditions": [

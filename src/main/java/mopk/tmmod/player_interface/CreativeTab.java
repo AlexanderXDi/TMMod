@@ -1,7 +1,8 @@
 package mopk.tmmod.player_interface;
 
 import mopk.tmmod.Tmmod;
-import static mopk.tmmod.items.ModItems.*;
+
+import static mopk.tmmod.blocks.ModBlocks.IRON_FURNACE;
 
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
@@ -19,8 +20,8 @@ public class CreativeTab {
 
     public static final DeferredHolder<CreativeModeTab, CreativeModeTab> MOD_TAB = CREATIVE_MODE_TABS.register("mod_tab",
             () -> CreativeModeTab.builder()
-                    .icon(() -> new ItemStack(TAB_ICON.get()))
-                    .title(Component.translatable("creativetab.beer_snacks.mod_tab"))
+                    .icon(() -> new ItemStack(IRON_FURNACE.get()))
+                    .title(Component.translatable("creativetab.tmmod.mod_tab"))
                     .displayItems((params, output) -> {})
                     .build());
 }

@@ -10,6 +10,8 @@ public class ModItems {
     public static final DeferredRegister.Items ITEMS =
             DeferredRegister.createItems(Tmmod.MODID);
 
-    public static final DeferredItem<Item> TAB_ICON = ITEMS.register("tab_icon",
+    public static final DeferredItem<Item> IRON_HAMMER = ITEMS.register("iron_hammer",
+            () -> new Item(new Item.Properties()));
+    public static final DeferredItem<Item> STEEL_INGOT = ITEMS.register("steel_ingot",
             () -> new Item(new Item.Properties()));
 }

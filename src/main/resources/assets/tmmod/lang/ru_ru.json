@@ -1,6 +1,12 @@
 {
-  "item.tmmod.tab_icon": "Tab Icon",
-  "creativetab.tmmod.mod_tab": "Beer snacks",
-  "block.tmmod.iron_furnace": "iron_furnace",
-  "container.tmmod.iron_furnace": "iron_furnace"
+  "creativetab.tmmod.mod_tab": "Иконка вкладки креатива",
+
+  "block.tmmod.iron_furnace": "Железная печь",
+  "block.tmmod.generator": "Генератор",
+
+  "container.iron_furnace": "Железная печь",
+  "container.generator": "Генератор",
+
+  "item.tmmod.iron_hammer": "Молот",
+  "item.tmmod.steel_ingot": "Стальной слиток"
 }

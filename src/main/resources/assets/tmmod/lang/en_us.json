@@ -1,6 +1,12 @@
 ﻿{
-  "item.tmmod.tab_icon": "Tab Icon",
-  "creativetab.tmmod.mod_tab": "Beer snacks",
-  "block.tmmod.iron_furnace": "iron_furnace",
-  "container.tmmod.iron_furnace": "iron_furnace"
+  "creativetab.tmmod.mod_tab": "Creative tab icon",
+
+  "block.tmmod.iron_furnace": "Iron furnace",
+  "block.tmmod.generator": "Generator",
+
+  "container.iron_furnace": "Iron furnace",
+  "container.generator": "Generator",
+
+  "item.tmmod.iron_hammer": "Hammer",
+  "item.tmmod.steel_ingot": "Steel ingot"
 }

@@ -1,6 +1,6 @@
-package mopk.tmmod.blocks.events_and_else.IronFurnace;
+package mopk.tmmod.events_and_else.IronFurnace;
 
-import mopk.tmmod.blocks.events_and_else.ModBlockEntities;
+import mopk.tmmod.events_and_else.ModBlockEntities;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;

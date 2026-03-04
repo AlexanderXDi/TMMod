@@ -1,8 +1,6 @@
-package mopk.tmmod.blocks.events_and_else.IronFurnace;
+package mopk.tmmod.events_and_else.IronFurnace;
 
-import mopk.tmmod.blocks.ModBlocks;
-import mopk.tmmod.blocks.events_and_else.ModMenuTypes;
-import static mopk.tmmod.blocks.events_and_else.ModMenuTypes.IRON_FURNACE_MENU;
+import static mopk.tmmod.events_and_else.ModMenuTypes.IRON_FURNACE_MENU;
 
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.Container;

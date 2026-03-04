@@ -1,6 +1,7 @@
 package mopk.tmmod.blocks;
 
 import mopk.tmmod.Tmmod;
+import mopk.tmmod.blocks.singleblocks.Generator;
 import mopk.tmmod.blocks.singleblocks.IronFurnace;
 import mopk.tmmod.items.ModItems.*;
 import static mopk.tmmod.items.ModItems.ITEMS;
@@ -22,6 +23,9 @@ public class ModBlocks {
 
     public static final DeferredBlock<Block> IRON_FURNACE = registerBlock("iron_furnace",
             () -> new IronFurnace(BlockBehaviour.Properties.ofFullCopy(Blocks.COBBLESTONE)));
+
+    public static final DeferredBlock<Block> GENERATOR = registerBlock("generator",
+            () -> new Generator(BlockBehaviour.Properties.ofFullCopy(Blocks.COBBLESTONE)));
 
     private static <T extends Block> DeferredBlock<T> registerBlock(String name, Supplier<T> block) {
         DeferredBlock<T> toReturn = BLOCKS.register(name, block);

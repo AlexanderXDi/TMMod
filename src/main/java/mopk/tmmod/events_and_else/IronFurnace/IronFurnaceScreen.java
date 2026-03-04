@@ -1,4 +1,4 @@
-package mopk.tmmod.blocks.events_and_else.IronFurnace;
+package mopk.tmmod.events_and_else.IronFurnace;
 
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
@@ -50,7 +50,7 @@ public class IronFurnaceScreen extends AbstractContainerScreen<IronFurnaceMenu> 
         int l = menu.getBurnProgress();
 
         guiGraphics.blit(ARROW_STATIC_TEXTURE, x + 79, y + 34, 0, 0, 24, 17, RTW_ARROW, RTH_ARROW);
-        guiGraphics.blit(ARROW_TEXTURE, x + 79, y + 34, 0, 0, l + 1, 17, RTW_ARROW, RTH_ARROW);
+        guiGraphics.blit(ARROW_TEXTURE, x + 79, y + 34, 0, 0, l, 17, RTW_ARROW, RTH_ARROW);
 
 
     }

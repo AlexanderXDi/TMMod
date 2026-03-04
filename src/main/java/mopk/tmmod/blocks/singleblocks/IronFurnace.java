@@ -1,11 +1,10 @@
 package mopk.tmmod.blocks.singleblocks;
 
-import static mopk.tmmod.blocks.events_and_else.ModBlockEntities.IRON_FURNACE_BE;
+import static mopk.tmmod.events_and_else.ModBlockEntities.IRON_FURNACE_BE;
 
-import mopk.tmmod.blocks.events_and_else.IronFurnace.IronFurnaceBE;
-import mopk.tmmod.blocks.events_and_else.ModBlockEntities;
+import mopk.tmmod.events_and_else.IronFurnace.IronFurnaceBE;
+import mopk.tmmod.events_and_else.ModBlockEntities;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.MenuProvider;
@@ -19,9 +18,6 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.level.block.state.properties.BooleanProperty;
-import net.minecraft.world.level.block.state.properties.DirectionProperty;
-import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.phys.BlockHitResult;
 import javax.annotation.Nullable;
 
