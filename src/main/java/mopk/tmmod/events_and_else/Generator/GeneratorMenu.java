@@ -2,47 +2,42 @@ package mopk.tmmod.events_and_else.Generator;
 
 import mopk.tmmod.blocks.ModBlocks;
 import mopk.tmmod.events_and_else.ModMenuTypes;
-import net.minecraft.network.RegistryFriendlyByteBuf;
+
+import mopk.tmmod.items.ModItems;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.*;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.items.SlotItemHandler;
 
 public class GeneratorMenu extends AbstractContainerMenu {
     private final GeneratorBE blockEntity;
+    private final Level level;
     private final ContainerData data;
 
-    //слоты и создание меню
-    public GeneratorMenu(int containerId, Inventory inv, RegistryFriendlyByteBuf buf) {
-        this(containerId, inv,
-                inv.player.level().getBlockEntity(buf.readBlockPos()),
-                new SimpleContainerData(2));
+    public GeneratorMenu(int containerId, Inventory inv, FriendlyByteBuf extraData) {
+        this(containerId, inv, (GeneratorBE) inv.player.level().getBlockEntity(extraData.readBlockPos()), new SimpleContainerData(2));
     }
 
-    //создание
-    public GeneratorMenu(int containerId, Inventory inv, BlockEntity entity, ContainerData data) {
+    public GeneratorMenu(int containerId, Inventory inv, GeneratorBE entity, ContainerData data) {
         super(ModMenuTypes.GENERATOR_MENU.get(), containerId);
 
-        if (entity instanceof GeneratorBE generatorBE) {
-            this.blockEntity = generatorBE;
-        } else {
-            throw new IllegalStateException("BlockEntity is not a GeneratorBE! " + entity);
-        }
-
+        this.blockEntity = entity;
+        this.level = inv.player.level();
         this.data = data;
 
-        addDataSlots(data);
-
-        this.addSlot(new SlotItemHandler(blockEntity.getInventory(), 0, 80, 35));
-        this.addSlot(new SlotItemHandler(blockEntity.getInventory(), 1, 80, 55));
+        this.addSlot(new SlotItemHandler(entity.getInventory(), 0, 100, 50));
+        this.addSlot(new SlotItemHandler(entity.getInventory(), 1, 120, 50));
 
         addPlayerInventory(inv);
         addPlayerHotbar(inv);
+
+        this.addDataSlots(data);
     }
 
-    // для прогрессбаров
     public int getEnergy() {
         return this.data.get(0);
     }
@@ -52,53 +47,62 @@ public class GeneratorMenu extends AbstractContainerMenu {
     }
 
     @Override
-    public boolean stillValid(Player player) {
-        return stillValid(ContainerLevelAccess.create(blockEntity.getLevel(), blockEntity.getBlockPos()),
-                player, ModBlocks.GENERATOR.get());
-    }
-
-
-    private static final int CONF_SLOT_COUNT = 2;
-
-    @Override
     public ItemStack quickMoveStack(Player player, int index) {
         ItemStack itemstack = ItemStack.EMPTY;
         Slot slot = this.slots.get(index);
-
         if (slot != null && slot.hasItem()) {
             ItemStack itemstack1 = slot.getItem();
             itemstack = itemstack1.copy();
-
-            if (index < CONF_SLOT_COUNT) {
-                if (!this.moveItemStackTo(itemstack1, CONF_SLOT_COUNT, this.slots.size(), true)) {
-                    return ItemStack.EMPTY;
-                }
-            } else {
-                if (!this.moveItemStackTo(itemstack1, 0, CONF_SLOT_COUNT, false)) {
+            if (itemstack1.is(ModItems.BATTERY.get())) {
+                if (!this.moveItemStackTo(itemstack1, 1, 2, false)) {
                     return ItemStack.EMPTY;
                 }
             }
-
+            if (index < 2) {
+                if (!this.moveItemStackTo(itemstack1, 2, 38, true)) {
+                    return ItemStack.EMPTY;
+                }
+            } else {
+                if (itemstack1.getBurnTime(null) > 0) {
+                    if (!this.moveItemStackTo(itemstack1, 0, 1, false)) {
+                        return ItemStack.EMPTY;
+                    }
+                } else {
+                    if (!this.moveItemStackTo(itemstack1, 1, 2, false)) {
+                        return ItemStack.EMPTY;
+                    }
+                }
+            }
             if (itemstack1.isEmpty()) {
-                slot.set(ItemStack.EMPTY);
+                slot.setByPlayer(ItemStack.EMPTY);
             } else {
                 slot.setChanged();
             }
+            if (itemstack1.getCount() == itemstack.getCount()) {
+                return ItemStack.EMPTY;
+            }
+            slot.onTake(player, itemstack1);
         }
         return itemstack;
     }
 
-    private void addPlayerInventory(Inventory playerInventory) {
-        for (int i = 0; i < 3; ++i) {
-            for (int j = 0; j < 9; ++j) {
-                this.addSlot(new Slot(playerInventory, j + i * 9 + 9, 8 + j * 18, 84 + i * 18));
+    @Override
+    public boolean stillValid(Player player) {
+        return stillValid(ContainerLevelAccess.create(level, blockEntity.getBlockPos()), player, ModBlocks.GENERATOR.get());
+    }
+
+    private void addPlayerInventory(Inventory playerInv) {
+        for (int row = 0; row < 3; ++row) {
+            for (int col = 0; col < 9; ++col) {
+                this.addSlot(new Slot(playerInv, col + row * 9 + 9, 8 + col * 18, 84 + row * 18));
             }
         }
     }
 
-    private void addPlayerHotbar(Inventory playerInventory) {
-        for (int i = 0; i < 9; ++i) {
-            this.addSlot(new Slot(playerInventory, i, 8 + i * 18, 142));
+    private void addPlayerHotbar(Inventory playerInv) {
+        for (int col = 0; col < 9; ++col) {
+            this.addSlot(new Slot(playerInv, col, 8 + col * 18, 142));
         }
     }
 }
+

@@ -45,7 +45,6 @@ public class IronFurnace extends FurnaceBlock {
         if (level.isClientSide) {
             return InteractionResult.SUCCESS;
         } else {
-            // Открываем меню через сущность блока
             this.openContainer(level, pos, player);
             return InteractionResult.CONSUME;
         }
@@ -54,9 +53,8 @@ public class IronFurnace extends FurnaceBlock {
     @Override
     protected void openContainer(Level level, BlockPos pos, Player player) {
         BlockEntity blockentity = level.getBlockEntity(pos);
-        if (blockentity instanceof IronFurnaceBE) { // Проверяем класс вашей сущности
+        if (blockentity instanceof IronFurnaceBE) {
             player.openMenu((MenuProvider)blockentity);
-            // Дополнительная статистика (необязательно)
             player.awardStat(Stats.INTERACT_WITH_FURNACE);
         }
     }

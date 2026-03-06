@@ -1,6 +1,4 @@
-package mopk.tmmod.player_interface;
-
-import mopk.tmmod.Tmmod;
+package mopk.tmmod;
 
 import static mopk.tmmod.blocks.ModBlocks.IRON_FURNACE;
 

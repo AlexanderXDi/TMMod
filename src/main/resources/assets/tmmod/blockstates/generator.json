@@ -1,14 +1,14 @@
 {
    "variants": {
-      "facing=north,lit=false": { "model": "tmmod:block/generator" },
-      "facing=south,lit=false": { "model": "tmmod:block/generator", "y": 180 },
-      "facing=west,lit=false":  { "model": "tmmod:block/generator", "y": 270 },
-      "facing=east,lit=false":  { "model": "tmmod:block/generator", "y": 90 },
+      "facing=north,lit=false": { "model": "tmmod:block/generator/generator" },
+      "facing=south,lit=false": { "model": "tmmod:block/generator/generator", "y": 180 },
+      "facing=west,lit=false":  { "model": "tmmod:block/generator/generator", "y": 270 },
+      "facing=east,lit=false":  { "model": "tmmod:block/generator/generator", "y": 90 },
 
-      "facing=north,lit=true": { "model": "tmmod:block/generator_working" },
-      "facing=south,lit=true": { "model": "tmmod:block/generator_working", "y": 180 },
-      "facing=west,lit=true":  { "model": "tmmod:block/generator_working", "y": 270 },
-      "facing=east,lit=true":  { "model": "tmmod:block/generator_working", "y": 90 }
+      "facing=north,lit=true": { "model": "tmmod:block/generator/generator_working" },
+      "facing=south,lit=true": { "model": "tmmod:block/generator/generator_working", "y": 180 },
+      "facing=west,lit=true":  { "model": "tmmod:block/generator/generator_working", "y": 270 },
+      "facing=east,lit=true":  { "model": "tmmod:block/generator/generator_working", "y": 90 }
    }
 }
 

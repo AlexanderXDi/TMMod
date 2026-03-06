@@ -38,7 +38,7 @@ public class IronFurnaceMenu extends AbstractContainerMenu {
     }
 
     public boolean isLit() {
-        return this.data.get(0) > 0;
+        return this.data.get(0) > 0 &! this.slots.isEmpty();
     }
 
     public int getLitProgress() {
@@ -109,16 +109,16 @@ public class IronFurnaceMenu extends AbstractContainerMenu {
     }
 
     private void addPlayerInventory(Inventory playerInv) {
-        for (int i = 0; i < 3; ++i) {
-            for (int j = 0; j < 9; ++j) {
-                this.addSlot(new Slot(playerInv, j + i * 9 + 9, 8 + j * 18, 84 + i * 18));
+        for (int row = 0; row < 3; ++row) {
+            for (int col = 0; col < 9; ++col) {
+                this.addSlot(new Slot(playerInv, col + row * 9 + 9, 8 + col * 18, 84 + row * 18));
             }
         }
     }
 
     private void addPlayerHotbar(Inventory playerInv) {
-        for (int i = 0; i < 9; ++i) {
-            this.addSlot(new Slot(playerInv, i, 8 + i * 18, 142));
+        for (int col = 0; col < 9; ++col) {
+            this.addSlot(new Slot(playerInv, col, 8 + col * 18, 142));
         }
     }
 
