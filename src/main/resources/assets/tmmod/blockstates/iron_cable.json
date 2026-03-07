@@ -1,0 +1,57 @@
+{
+  "multipart": [
+    {
+      "apply": {
+        "model": "tmmod:block/cables/iron_cable/iron_cable_core"
+      }
+    },
+    {
+      "when": {
+        "north": "true"
+      },
+      "apply": {
+        "model": "tmmod:block/cables/iron_cable/iron_cable_north"
+      }
+    },
+    {
+      "when": {
+        "east": "true"
+      },
+      "apply": {
+        "model": "tmmod:block/cables/iron_cable/iron_cable_east"
+      }
+    },
+    {
+      "when": {
+        "south": "true"
+      },
+      "apply": {
+        "model": "tmmod:block/cables/iron_cable/iron_cable_south"
+      }
+    },
+    {
+      "when": {
+        "west": "true"
+      },
+      "apply": {
+        "model": "tmmod:block/cables/iron_cable/iron_cable_west"
+      }
+    },
+    {
+      "when": {
+        "up": "true"
+      },
+      "apply": {
+        "model": "tmmod:block/cables/iron_cable/iron_cable_up"
+      }
+    },
+    {
+      "when": {
+        "down": "true"
+      },
+      "apply": {
+        "model": "tmmod:block/cables/iron_cable/iron_cable_down"
+      }
+    }
+  ]
+}

@@ -3,10 +3,15 @@
 
   "block.tmmod.iron_furnace": "Iron furnace",
   "block.tmmod.generator": "Generator",
+  "block.tmmod.copper_cable": "Copper cable",
+  "block.tmmod.iron_cable": "Iron cable",
+  "block.tmmod.gold_cable": "Gold cable",
+  "block.tmmod.diamond_cable": "Diamond cable",
 
   "container.iron_furnace": "Iron furnace",
   "container.generator": "Generator",
 
   "item.tmmod.iron_hammer": "Hammer",
-  "item.tmmod.steel_ingot": "Steel ingot"
+  "item.tmmod.steel_ingot": "Steel ingot",
+  "item.tmmod.battery": "Battery"
 }

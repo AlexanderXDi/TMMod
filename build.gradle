@@ -4,6 +4,7 @@ plugins {
     id 'idea'
     id 'maven-publish'
     id 'net.neoforged.moddev' version '2.0.71'
+    id 'org.jetbrains.kotlin.jvm'
 }
 
 version = mod_version
@@ -52,9 +53,11 @@ sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 repositories {
     mavenLocal()
+    mavenCentral()
 }
 
 dependencies {
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
 }
 
 tasks.withType(ProcessResources).configureEach {
@@ -107,3 +110,6 @@ tasks.register('copyJar', Copy) {
     rename { String fileName -> "${mod_name}.jar" }
 }
 build.finalizedBy(copyJar)
+kotlin {
+    jvmToolchain(21)
+}

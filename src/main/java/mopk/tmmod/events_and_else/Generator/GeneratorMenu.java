@@ -11,6 +11,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.*;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.items.SlotItemHandler;
 
 public class GeneratorMenu extends AbstractContainerMenu {
@@ -30,12 +31,26 @@ public class GeneratorMenu extends AbstractContainerMenu {
         this.data = data;
 
         this.addSlot(new SlotItemHandler(entity.getInventory(), 0, 100, 50));
-        this.addSlot(new SlotItemHandler(entity.getInventory(), 1, 120, 50));
+        this.addSlot(new SingleItemSlot(entity.getInventory(), 1, 120, 50));
 
         addPlayerInventory(inv);
         addPlayerHotbar(inv);
 
         this.addDataSlots(data);
+    }
+
+    private static class SingleItemSlot extends SlotItemHandler {
+        public SingleItemSlot(IItemHandler itemHandler, int index, int xPosition, int yPosition) {
+            super(itemHandler, index, xPosition, yPosition);
+        }
+        @Override
+        public int getMaxStackSize() {
+            return 1;
+        }
+        @Override
+        public int getMaxStackSize(ItemStack stack) {
+            return 1;
+        }
     }
 
     public int getEnergy() {
@@ -53,11 +68,6 @@ public class GeneratorMenu extends AbstractContainerMenu {
         if (slot != null && slot.hasItem()) {
             ItemStack itemstack1 = slot.getItem();
             itemstack = itemstack1.copy();
-            if (itemstack1.is(ModItems.BATTERY.get())) {
-                if (!this.moveItemStackTo(itemstack1, 1, 2, false)) {
-                    return ItemStack.EMPTY;
-                }
-            }
             if (index < 2) {
                 if (!this.moveItemStackTo(itemstack1, 2, 38, true)) {
                     return ItemStack.EMPTY;

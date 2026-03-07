@@ -8,8 +8,10 @@ import static mopk.tmmod.blocks.ModBlocks.*;
 import static mopk.tmmod.CreativeTab.CREATIVE_MODE_TABS;
 import static mopk.tmmod.CreativeTab.MOD_TAB;
 
+import mopk.tmmod.blocks.ModBlocks;
 import mopk.tmmod.events_and_else.Generator.GeneratorScreen;
 import mopk.tmmod.events_and_else.IronFurnace.IronFurnaceScreen;
+import mopk.tmmod.events_and_else.ModBlockEntities;
 import mopk.tmmod.events_and_else.ModDataComponents;
 import mopk.tmmod.events_and_else.ModMenuTypes;
 import mopk.tmmod.items.ModItems;
@@ -18,6 +20,8 @@ import net.minecraft.resources.ResourceLocation;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 
@@ -28,7 +32,7 @@ public class Tmmod {
     public Tmmod(IEventBus modEventBus) {
         modEventBus.addListener(this::commonSetup);
         modEventBus.addListener(this::registerScreens);
-
+        modEventBus.addListener(this::registerCapabilities);
 
         BLOCK_ENTITIES.register(modEventBus);
         ITEMS.register(modEventBus);
@@ -38,6 +42,21 @@ public class Tmmod {
         COMPONENTS.register(modEventBus);
 
         modEventBus.addListener(this::buildCreativeTabs);
+    }
+
+    private void registerCapabilities(RegisterCapabilitiesEvent event) {
+
+        event.registerBlockEntity(
+                Capabilities.EnergyStorage.BLOCK,
+                ModBlockEntities.GENERATOR_BE.get(),
+                (blockEntity, direction) -> blockEntity.getEnergyStorage()
+        );
+
+        event.registerBlockEntity(
+                Capabilities.EnergyStorage.BLOCK,
+                ModBlockEntities.CABLE_BE.get(),
+                (blockEntity, direction) -> blockEntity.getEnergyStorage()
+        );
     }
 
     private void commonSetup(final FMLCommonSetupEvent event) {
@@ -64,6 +83,9 @@ public class Tmmod {
             event.accept(IRON_FURNACE.get());
             event.accept(GENERATOR.get());
             event.accept(BATTERY.get());
+            ModBlocks.CABLES.values().forEach(cableBlock -> {
+                event.accept(cableBlock.get());
+            });
         }
     }
 }

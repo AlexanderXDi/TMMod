@@ -20,6 +20,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties; // <-- Добавлен импорт для LIT
+import net.neoforged.neoforge.energy.EnergyStorage;
+import net.neoforged.neoforge.energy.IEnergyStorage;
 import net.neoforged.neoforge.items.ItemStackHandler;
 
 import javax.annotation.Nullable;
@@ -81,26 +83,6 @@ public class GeneratorBE extends BlockEntity implements MenuProvider {
         return Component.translatable("container.generator");
     }
 
-    @Override
-    protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
-        super.loadAdditional(tag, registries);
-        if (tag.contains("inventory")) {
-            inventory.deserializeNBT(registries, tag.getCompound("inventory"));
-        }
-        this.energy = tag.getInt("generator.energy");
-        this.maxEnergy = tag.getInt("generator.maxEnergy");
-        this.burningTimeRemaining = tag.getInt("generator.burnTime");
-    }
-
-    @Override
-    protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
-        super.saveAdditional(tag, registries);
-        tag.put("inventory", inventory.serializeNBT(registries));
-        tag.putInt("generator.energy", this.energy);
-        tag.putInt("generator.maxEnergy", this.maxEnergy);
-        tag.putInt("generator.burnTime", this.burningTimeRemaining);
-    }
-
     @Nullable
     @Override
     public AbstractContainerMenu createMenu(int id, Inventory inventory, Player player) {
@@ -157,5 +139,30 @@ public class GeneratorBE extends BlockEntity implements MenuProvider {
         if (isDirty) {
             setChanged();
         }
+    }
+
+    private final EnergyStorage energyStorage = new EnergyStorage(50000, 0, 1000);
+    public IEnergyStorage getEnergyStorage() {
+        return this.energyStorage;
+    }
+
+    @Override
+    protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
+        super.loadAdditional(tag, registries);
+        if (tag.contains("inventory")) {
+            inventory.deserializeNBT(registries, tag.getCompound("inventory"));
+        }
+        this.energy = tag.getInt("generator.energy");
+        this.maxEnergy = tag.getInt("generator.maxEnergy");
+        this.burningTimeRemaining = tag.getInt("generator.burnTime");
+    }
+
+    @Override
+    protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
+        super.saveAdditional(tag, registries);
+        tag.put("inventory", inventory.serializeNBT(registries));
+        tag.putInt("generator.energy", this.energy);
+        tag.putInt("generator.maxEnergy", this.maxEnergy);
+        tag.putInt("generator.burnTime", this.burningTimeRemaining);
     }
 }

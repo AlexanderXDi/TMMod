@@ -3,10 +3,15 @@
 
   "block.tmmod.iron_furnace": "Железная печь",
   "block.tmmod.generator": "Генератор",
+  "item.tmmod.copper_cable": "Медный провод",
+  "item.tmmod.iron_cable": "Железный провод",
+  "item.tmmod.gold_cable": "Золотой провод",
+  "item.tmmod.diamond_cable": "Алмазный провод",
 
   "container.iron_furnace": "Железная печь",
   "container.generator": "Генератор",
 
   "item.tmmod.iron_hammer": "Молот",
-  "item.tmmod.steel_ingot": "Стальной слиток"
+  "item.tmmod.steel_ingot": "Стальной слиток",
+  "item.tmmod.battery": "Батарея"
 }
