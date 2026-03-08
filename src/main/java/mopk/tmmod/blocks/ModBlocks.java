@@ -1,6 +1,7 @@
 package mopk.tmmod.blocks;
 
 import mopk.tmmod.Tmmod;
+import mopk.tmmod.blocks.singleblocks.BatteryBlock;
 import mopk.tmmod.blocks.singleblocks.CableBlock;
 import mopk.tmmod.blocks.singleblocks.Generator;
 import mopk.tmmod.blocks.singleblocks.IronFurnace;
@@ -45,6 +46,10 @@ public class ModBlocks {
 
     public static final DeferredBlock<Block> GENERATOR = registerBlock("generator",
             () -> new Generator(BlockBehaviour.Properties.ofFullCopy(Blocks.COBBLESTONE)));
+
+    public static final DeferredBlock<Block> BATTERY_BLOCK = registerBlock("battery_block",
+            () -> new BatteryBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.COBBLESTONE)));
+
 
     private static <T extends Block> DeferredBlock<T> registerBlock(String name, Supplier<T> block) {
         DeferredBlock<T> toReturn = BLOCKS.register(name, block);

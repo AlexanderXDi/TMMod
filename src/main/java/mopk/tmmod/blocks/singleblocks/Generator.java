@@ -2,6 +2,7 @@ package mopk.tmmod.blocks.singleblocks;
 
 import mopk.tmmod.events_and_else.Generator.GeneratorBE;
 import com.mojang.serialization.MapCodec;
+import mopk.tmmod.events_and_else.ModBlockEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionResult;
@@ -80,11 +81,19 @@ public class Generator extends BaseEntityBlock {
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
-        if (level.isClientSide()) return null;
-        return (lvl, pos, st, blockEntity) -> {
-            if (blockEntity instanceof GeneratorBE generator) {
-                generator.tick(lvl, pos, st);
+        if (level.isClientSide) {
+            return null;
+        }
+
+        if (type != ModBlockEntities.GENERATOR_BE.get()) {
+            return null;
+        }
+
+        return (lvl, pos, st, be) -> {
+            if (be instanceof GeneratorBE gen) {
+                gen.tick(lvl, pos, st);
             }
         };
     }
+
 }

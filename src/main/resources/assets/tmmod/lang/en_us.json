@@ -7,6 +7,7 @@
   "block.tmmod.iron_cable": "Iron cable",
   "block.tmmod.gold_cable": "Gold cable",
   "block.tmmod.diamond_cable": "Diamond cable",
+  "block.tmmod.battery_block": "Accumulator",
 
   "container.iron_furnace": "Iron furnace",
   "container.generator": "Generator",

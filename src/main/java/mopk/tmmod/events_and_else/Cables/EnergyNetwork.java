@@ -25,7 +25,6 @@ public class EnergyNetwork {
 
         for (BlockPos pos : cablePositions) {
             BlockEntity be = level.getBlockEntity(pos);
-            // Заменяем CableBlockEntity на CableBE
             if (be instanceof CableBE cable) {
                 totalCapacity += cable.getTierCapacity();
                 minTransfer = Math.min(minTransfer, cable.getTierTransfer());

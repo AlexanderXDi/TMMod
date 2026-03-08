@@ -1,6 +1,7 @@
 package mopk.tmmod.events_and_else;
 
 import mopk.tmmod.blocks.ModBlocks;
+import mopk.tmmod.events_and_else.BatteryBlock.BatteryBlockBE;
 import mopk.tmmod.events_and_else.Cables.CableBE;
 import mopk.tmmod.events_and_else.Cables.CableTier;
 import mopk.tmmod.events_and_else.Generator.GeneratorBE;
@@ -31,6 +32,13 @@ public class ModBlockEntities {
                     () -> BlockEntityType.Builder.of(
                             GeneratorBE::new,
                             ModBlocks.GENERATOR.get()
+                    ).build(null));
+
+    public static final Supplier<BlockEntityType<BatteryBlockBE>> BATTERY_BLOCK_BE =
+            BLOCK_ENTITIES.register("battery_block_be",
+                    () -> BlockEntityType.Builder.of(
+                            BatteryBlockBE::new,
+                            ModBlocks.BATTERY_BLOCK.get()
                     ).build(null));
 
     public static final Supplier<BlockEntityType<CableBE>> CABLE_BE =

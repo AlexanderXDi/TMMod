@@ -1,5 +1,6 @@
 package mopk.tmmod.events_and_else;
 
+import mopk.tmmod.events_and_else.BatteryBlock.BatteryBlockMenu;
 import mopk.tmmod.events_and_else.Generator.GeneratorMenu;
 import mopk.tmmod.events_and_else.IronFurnace.IronFurnaceMenu;
 
@@ -18,5 +19,8 @@ public class ModMenuTypes {
 
     public static final DeferredHolder<MenuType<?>, MenuType<GeneratorMenu>> GENERATOR_MENU = MENUS.register("generator_menu",
             () -> IMenuTypeExtension.create(GeneratorMenu::new));
+
+    public static final DeferredHolder<MenuType<?>, MenuType<BatteryBlockMenu>> BATTERY_BLOCK_MENU = MENUS.register("battery_block_menu",
+            () -> IMenuTypeExtension.create(BatteryBlockMenu::new));
 }
 

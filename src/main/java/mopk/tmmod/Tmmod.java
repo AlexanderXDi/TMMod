@@ -9,11 +9,14 @@ import static mopk.tmmod.CreativeTab.CREATIVE_MODE_TABS;
 import static mopk.tmmod.CreativeTab.MOD_TAB;
 
 import mopk.tmmod.blocks.ModBlocks;
+import mopk.tmmod.events_and_else.BatteryBlock.BatteryBlockModePacket;
+import mopk.tmmod.events_and_else.BatteryBlock.BatteryBlockScreen;
 import mopk.tmmod.events_and_else.Generator.GeneratorScreen;
 import mopk.tmmod.events_and_else.IronFurnace.IronFurnaceScreen;
 import mopk.tmmod.events_and_else.ModBlockEntities;
 import mopk.tmmod.events_and_else.ModDataComponents;
 import mopk.tmmod.events_and_else.ModMenuTypes;
+import mopk.tmmod.events_and_else.ModNetwork;
 import mopk.tmmod.items.ModItems;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.resources.ResourceLocation;
@@ -24,6 +27,8 @@ import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
+import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
+import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 
 @Mod(Tmmod.MODID)
 public class Tmmod {
@@ -33,6 +38,7 @@ public class Tmmod {
         modEventBus.addListener(this::commonSetup);
         modEventBus.addListener(this::registerScreens);
         modEventBus.addListener(this::registerCapabilities);
+        modEventBus.addListener(this::registerNetworking);
 
         BLOCK_ENTITIES.register(modEventBus);
         ITEMS.register(modEventBus);
@@ -42,6 +48,16 @@ public class Tmmod {
         COMPONENTS.register(modEventBus);
 
         modEventBus.addListener(this::buildCreativeTabs);
+    }
+
+    private void registerNetworking(final RegisterPayloadHandlersEvent event) {
+        final PayloadRegistrar registrar = event.registrar("tmmod");
+
+        registrar.playToServer(
+                BatteryBlockModePacket.TYPE,
+                BatteryBlockModePacket.CODEC,
+                ModNetwork::handleBatteryMode
+        );
     }
 
     private void registerCapabilities(RegisterCapabilitiesEvent event) {
@@ -56,6 +72,12 @@ public class Tmmod {
                 Capabilities.EnergyStorage.BLOCK,
                 ModBlockEntities.CABLE_BE.get(),
                 (blockEntity, direction) -> blockEntity.getEnergyStorage()
+        );
+
+        event.registerBlockEntity(
+                Capabilities.EnergyStorage.BLOCK,
+                ModBlockEntities.BATTERY_BLOCK_BE.get(),
+                (blockEntity, dir) -> blockEntity.getEnergyStorage(dir)
         );
     }
 
@@ -74,6 +96,7 @@ public class Tmmod {
     private void registerScreens(RegisterMenuScreensEvent event) {
         event.register(ModMenuTypes.IRON_FURNACE_MENU.get(), IronFurnaceScreen::new);
         event.register(ModMenuTypes.GENERATOR_MENU.get(), GeneratorScreen::new);
+        event.register(ModMenuTypes.BATTERY_BLOCK_MENU.get(), BatteryBlockScreen::new);
     }
 
     private void buildCreativeTabs(final BuildCreativeModeTabContentsEvent event) {
@@ -86,6 +109,7 @@ public class Tmmod {
             ModBlocks.CABLES.values().forEach(cableBlock -> {
                 event.accept(cableBlock.get());
             });
+            event.accept(BATTERY_BLOCK.get());
         }
     }
 }

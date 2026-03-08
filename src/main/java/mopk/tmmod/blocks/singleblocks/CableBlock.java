@@ -13,6 +13,8 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.SimpleWaterloggedBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -73,7 +75,6 @@ public class CableBlock extends Block implements EntityBlock, SimpleWaterloggedB
 
     @Override
     public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
-        // Начинаем всегда с центрального кубика
         VoxelShape shape = SHAPE_CORE;
 
         // В 1.21.1 используем Shapes.or() вместо VoxelShapes.or()
@@ -131,4 +132,5 @@ public class CableBlock extends Block implements EntityBlock, SimpleWaterloggedB
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
         return new CableBE(pos, state, this.tier);
     }
+
 }
