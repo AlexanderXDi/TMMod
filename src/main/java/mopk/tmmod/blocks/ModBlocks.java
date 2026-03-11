@@ -1,18 +1,16 @@
 package mopk.tmmod.blocks;
 
 import mopk.tmmod.Tmmod;
-import mopk.tmmod.blocks.singleblocks.BatteryBlock;
-import mopk.tmmod.blocks.singleblocks.CableBlock;
-import mopk.tmmod.blocks.singleblocks.Generator;
-import mopk.tmmod.blocks.singleblocks.IronFurnace;
-import mopk.tmmod.events_and_else.Cables.CableTier;
-import mopk.tmmod.items.ModItems.*;
+import mopk.tmmod.blocks.singleblocks.*;
+import mopk.tmmod.etc.Cables.CableTier;
+
 import static mopk.tmmod.items.ModItems.ITEMS;
 
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredItem;
@@ -23,10 +21,7 @@ import java.util.Map;
 import java.util.function.Supplier;
 
 public class ModBlocks {
-
-    public static final DeferredRegister.Blocks BLOCKS =
-            DeferredRegister.createBlocks(Tmmod.MODID);
-
+    public static final DeferredRegister.Blocks BLOCKS = DeferredRegister.createBlocks(Tmmod.MODID);
     public static final Map<CableTier, DeferredBlock<CableBlock>> CABLES = new EnumMap<>(CableTier.class);
 
     static {
@@ -42,13 +37,16 @@ public class ModBlocks {
     }
 
     public static final DeferredBlock<Block> IRON_FURNACE = registerBlock("iron_furnace",
-            () -> new IronFurnace(BlockBehaviour.Properties.ofFullCopy(Blocks.COBBLESTONE)));
+            () -> new IronFurnace(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK)));
 
     public static final DeferredBlock<Block> GENERATOR = registerBlock("generator",
-            () -> new Generator(BlockBehaviour.Properties.ofFullCopy(Blocks.COBBLESTONE)));
+            () -> new Generator(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK)));
 
     public static final DeferredBlock<Block> BATTERY_BLOCK = registerBlock("battery_block",
-            () -> new BatteryBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.COBBLESTONE)));
+            () -> new BatteryBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK)));
+
+    public static final DeferredBlock<Block> CRUSHER = registerBlock("crusher",
+            () -> new Crusher(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK)));
 
 
     private static <T extends Block> DeferredBlock<T> registerBlock(String name, Supplier<T> block) {

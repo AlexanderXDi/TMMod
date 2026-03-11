@@ -8,9 +8,12 @@
   "block.tmmod.gold_cable": "Золотой провод",
   "block.tmmod.diamond_cable": "Алмазный провод",
   "block.tmmod.battery_block": "Аккумулятор",
+  "block.tmmod.crusher": "Дробитель",
 
   "container.iron_furnace": "Железная печь",
   "container.generator": "Генератор",
+  "container.battery_block": "Аккумулятор",
+  "container.crusher": "Дробитель",
 
   "item.tmmod.iron_hammer": "Молот",
   "item.tmmod.steel_ingot": "Стальной слиток",

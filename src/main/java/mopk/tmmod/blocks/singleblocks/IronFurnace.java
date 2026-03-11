@@ -1,10 +1,11 @@
 package mopk.tmmod.blocks.singleblocks;
 
-import static mopk.tmmod.events_and_else.ModBlockEntities.IRON_FURNACE_BE;
+import static mopk.tmmod.etc.ModBlockEntities.IRON_FURNACE_BE;
 
-import mopk.tmmod.events_and_else.IronFurnace.IronFurnaceBE;
-import mopk.tmmod.events_and_else.ModBlockEntities;
+import mopk.tmmod.etc.IronFurnace.IronFurnaceBE;
+import mopk.tmmod.etc.ModBlockEntities;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.MenuProvider;

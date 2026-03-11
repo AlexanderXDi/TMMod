@@ -8,9 +8,14 @@
   "block.tmmod.gold_cable": "Gold cable",
   "block.tmmod.diamond_cable": "Diamond cable",
   "block.tmmod.battery_block": "Accumulator",
+  "block.tmmod.crusher": "Crusher",
 
   "container.iron_furnace": "Iron furnace",
   "container.generator": "Generator",
+  "container.battery_block": "Accumulator",
+  "container.crusher": "Crusher",
+
+  "subtitles.tmmod.crusher_hum": "Crusher hum",
 
   "item.tmmod.iron_hammer": "Hammer",
   "item.tmmod.steel_ingot": "Steel ingot",

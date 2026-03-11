@@ -1,10 +1,9 @@
 package mopk.tmmod.blocks.singleblocks;
 
-import mopk.tmmod.etc.Generator.GeneratorBE;
-import mopk.tmmod.etc.ModBlockEntities;
 import mopk.tmmod.etc.ModSounds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionResult;
@@ -14,6 +13,7 @@ import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.EntityBlock;
+import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -23,26 +23,27 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.phys.BlockHitResult;
+import mopk.tmmod.etc.Crusher.CrusherBE;
 
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 
 
-public class Generator extends Block implements EntityBlock {
+public class Crusher extends Block implements EntityBlock {
     public static final BooleanProperty LIT = BlockStateProperties.LIT;
-    public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
+    public static final DirectionProperty FACING = BlockStateProperties.FACING;
 
-    public Generator(Properties properties) {
+    public Crusher(Properties properties) {
         super(properties);
         this.registerDefaultState(this.stateDefinition.any()
-                .setValue(LIT, false)
-                .setValue(FACING, Direction.NORTH)
+                .setValue(BlockStateProperties.LIT, false)
+                .setValue(BlockStateProperties.FACING, Direction.NORTH)
         );
     }
 
     @Nullable
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
-        return new GeneratorBE(pos, state);
+        return new CrusherBE(pos, state);
     }
 
     @Override
@@ -58,41 +59,33 @@ public class Generator extends Block implements EntityBlock {
     }
 
     @Override
-    protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hitResult) {
+    protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit) {
         if (!level.isClientSide) {
             BlockEntity be = level.getBlockEntity(pos);
+
             if (be instanceof MenuProvider menuProvider) {
                 player.openMenu(menuProvider, pos);
             }
         }
-        return InteractionResult.SUCCESS;
+        return InteractionResult.sidedSuccess(level.isClientSide);
     }
 
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
-        if (level.isClientSide) {
-            return null;
-        }
-
-        if (type != ModBlockEntities.GENERATOR_BE.get()) {
-            return null;
-        }
-
-        return (lvl, pos, st, be) -> {
-            if (be instanceof GeneratorBE generator) {
-                generator.tick(lvl, pos, st);
-            }
+        return level.isClientSide ? null : (lvl, pos, st, be) -> {
+            if (be instanceof CrusherBE crusher) crusher.tick(lvl, pos, st);
         };
     }
 
     @Override
     public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random) {
-        if (state.getValue(LIT) && random.nextDouble() < 0.1D) {
+        if (state.getValue(LIT) && random.nextDouble() < 0.5D) {
             level.playLocalSound(pos.getX(), pos.getY(), pos.getZ(),
-                    ModSounds.GENERATOR_HUM.get(),
+                    ModSounds.CRUSHER_HUM.get(),
                     SoundSource.BLOCKS,
                     100F, 1.0F, false);
         }
     }
 }
+

@@ -1,0 +1,12 @@
+{
+  "type": "tmmod:crushing",
+  "input": {
+    "item": "minecraft:iron_ore"
+  },
+  "output": {
+    "count": 2,
+    "id": "tmmod:iron_furnace"
+  },
+  "energyPerTick": 5,
+  "time": 100
+}

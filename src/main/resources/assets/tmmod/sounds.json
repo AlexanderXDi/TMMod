@@ -1,0 +1,20 @@
+{
+  "generator_hum": {
+    "subtitle": "subtitles.tmmod.generator_hum",
+    "sounds": [
+      "tmmod:generator_hum"
+    ]
+  },
+  "crusher_hum": {
+    "subtitle": "subtitles.tmmod.crusher_hum",
+    "sounds": [
+      "tmmod:crusher_hum"
+    ]
+  },
+  "battery_block_hum": {
+    "subtitle": "subtitles.tmmod.battery_block_hum",
+    "sounds": [
+      "tmmod:battery_block_hum"
+    ]
+  }
+}
