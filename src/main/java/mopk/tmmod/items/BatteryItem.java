@@ -1,6 +1,6 @@
 package mopk.tmmod.items;
 
-import mopk.tmmod.etc.ModDataComponents;
+import mopk.tmmod.registration.ModDataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -18,7 +18,7 @@ public class BatteryItem extends Item {
         int currentEnergy = stack.getOrDefault(ModDataComponents.CHARGE.get(), 0);
         int maxEnergy = 10000;
 
-        tooltipComponents.add(Component.literal("§eЭнергия: §f" + currentEnergy + " / " + maxEnergy + " FE"));
+        tooltipComponents.add(Component.literal(currentEnergy + " / " + maxEnergy + " EU"));
 
         super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
     }

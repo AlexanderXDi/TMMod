@@ -1,27 +1,29 @@
 package mopk.tmmod;
 
-import static mopk.tmmod.etc.ModBlockEntities.BLOCK_ENTITIES;
-import static mopk.tmmod.etc.ModDataComponents.DATA_COMPONENTS;
-import static mopk.tmmod.etc.ModMenuTypes.MENUS;
-import static mopk.tmmod.etc.ModRecipes.RECIPE_TYPES;
-import static mopk.tmmod.etc.ModRecipes.SERIALIZERS;
-import static mopk.tmmod.etc.ModSounds.SOUND_EVENTS;
-import static mopk.tmmod.items.ModItems.*;
-import static mopk.tmmod.blocks.ModBlocks.*;
-import static mopk.tmmod.CreativeTab.CREATIVE_MODE_TABS;
-import static mopk.tmmod.CreativeTab.MOD_TAB;
+import static mopk.tmmod.registration.ModBlockEntities.BLOCK_ENTITIES;
+import static mopk.tmmod.registration.ModDataComponents.DATA_COMPONENTS;
+import static mopk.tmmod.registration.ModMenuTypes.MENUS;
+import static mopk.tmmod.registration.ModRecipes.RECIPE_TYPES;
+import static mopk.tmmod.registration.ModRecipes.SERIALIZERS;
+import static mopk.tmmod.registration.ModSounds.SOUND_EVENTS;
+import static mopk.tmmod.registration.ModItems.*;
+import static mopk.tmmod.registration.ModBlocks.*;
+import static mopk.tmmod.registration.CreativeTab.CREATIVE_MODE_TABS;
+import static mopk.tmmod.registration.CreativeTab.MOD_TAB;
 
-import mopk.tmmod.blocks.ModBlocks;
-import mopk.tmmod.etc.BatteryBlock.BatteryBlockModePacket;
-import mopk.tmmod.etc.BatteryBlock.BatteryBlockScreen;
-import mopk.tmmod.etc.Crusher.CrusherScreen;
-import mopk.tmmod.etc.Generator.GeneratorScreen;
-import mopk.tmmod.etc.IronFurnace.IronFurnaceScreen;
-import mopk.tmmod.etc.ModBlockEntities;
-import mopk.tmmod.etc.ModDataComponents;
-import mopk.tmmod.etc.ModMenuTypes;
-import mopk.tmmod.etc.ModNetwork;
-import mopk.tmmod.items.ModItems;
+import mopk.tmmod.registration.ModBlocks;
+import mopk.tmmod.registration.CustomCapabilities;
+import mopk.tmmod.block_func.BatteryBlock.BatteryBlockModePacket;
+import mopk.tmmod.block_func.BatteryBlock.BatteryBlockScreen;
+import mopk.tmmod.block_func.Crusher.CrusherScreen;
+import mopk.tmmod.block_func.ElectricFurnace.ElectricFurnaceScreen;
+import mopk.tmmod.block_func.Generator.GeneratorScreen;
+import mopk.tmmod.block_func.IronFurnace.IronFurnaceScreen;
+import mopk.tmmod.registration.ModBlockEntities;
+import mopk.tmmod.registration.ModDataComponents;
+import mopk.tmmod.registration.ModMenuTypes;
+import mopk.tmmod.block_func.BatteryBlock.ModNetwork;
+import mopk.tmmod.registration.ModItems;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.bus.api.IEventBus;
@@ -74,9 +76,9 @@ public class Tmmod {
         );
 
         event.registerBlockEntity(
-                Capabilities.EnergyStorage.BLOCK,
+                CustomCapabilities.ENERGY,
                 ModBlockEntities.CABLE_BE.get(),
-                (blockEntity, direction) -> blockEntity.getEnergyStorage()
+                (blockEntity, direction) -> blockEntity.getEnergyStorage(direction)
         );
 
         event.registerBlockEntity(
@@ -86,9 +88,15 @@ public class Tmmod {
         );
 
         event.registerBlockEntity(
-                Capabilities.EnergyStorage.BLOCK,
+                CustomCapabilities.ENERGY,
                 ModBlockEntities.CRUSHER_BE.get(),
-                (blockEntity, direction) -> blockEntity.getEnergyStorage()
+                (blockEntity, direction) -> blockEntity.getEnergyStorage(direction)
+        );
+
+        event.registerBlockEntity(
+                CustomCapabilities.ENERGY,
+                ModBlockEntities.ELECTRIC_FURNACE_BE.get(),
+                (blockEntity, direction) -> blockEntity.getEnergyStorage(direction)
         );
     }
 
@@ -109,6 +117,7 @@ public class Tmmod {
         event.register(ModMenuTypes.GENERATOR_MENU.get(), GeneratorScreen::new);
         event.register(ModMenuTypes.BATTERY_BLOCK_MENU.get(), BatteryBlockScreen::new);
         event.register(ModMenuTypes.CRUSHER_MENU.get(), CrusherScreen::new);
+        event.register(ModMenuTypes.ELECTRIC_FURNACE_MENU.get(), ElectricFurnaceScreen::new);
     }
 
     private void buildCreativeTabs(final BuildCreativeModeTabContentsEvent event) {
@@ -123,6 +132,10 @@ public class Tmmod {
             });
             event.accept(BATTERY_BLOCK.get());
             event.accept(CRUSHER.get());
+            event.accept(ELECTRIC_FURNACE.get());
+            event.accept(OVERCLOCKER_UPGRADE.get());
+            event.accept(ACCUMULATOR_UPGRADE.get());
+            event.accept(TRANSFORMER_UPGRADE.get());
         }
     }
 }

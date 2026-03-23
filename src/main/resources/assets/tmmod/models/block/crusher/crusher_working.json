@@ -1,7 +1,7 @@
 {
    "parent": "minecraft:block/orientable",
    "textures": {
-      "top": "tmmod:block/crusher/crusher_top",
+      "top": "tmmod:block/crusher/crusher_top_working",
       "front": "tmmod:block/crusher/crusher_working",
       "side": "tmmod:block/crusher/crusher_side"
    }

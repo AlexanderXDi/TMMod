@@ -16,5 +16,11 @@
     "sounds": [
       "tmmod:battery_block_hum"
     ]
+  },
+  "electric_furnace_hum": {
+    "subtitle": "subtitles.tmmod.electric_furnace_hum",
+    "sounds": [
+      "tmmod:electric_furnace_hum"
+    ]
   }
 }

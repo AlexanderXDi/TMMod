@@ -1,0 +1,20 @@
+{
+  "parent": "block/block",
+  "textures": {
+    "particle": "tmmod:block/cables/glass_cable/glass_cable",
+    "texture": "tmmod:block/cables/glass_cable/glass_cable"
+  },
+  "elements": [
+    {
+      "from": [0, 6, 6],
+      "to": [6, 10, 10],
+      "faces": {
+        "north": {"uv": [10, 6, 16, 10], "texture": "#texture"},
+        "south": {"uv": [10, 6, 16, 10], "texture": "#texture"},
+        "west": {"uv": [6, 0, 10, 6], "texture": "#texture", "cullface": "west"},
+        "up": {"uv": [10, 6, 16, 10], "texture": "#texture"},
+        "down": {"uv": [10, 6, 16, 10], "texture": "#texture"}
+      }
+    }
+  ]
+}

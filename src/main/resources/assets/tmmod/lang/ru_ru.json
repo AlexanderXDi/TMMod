@@ -6,16 +6,38 @@
   "block.tmmod.copper_cable": "Медный провод",
   "block.tmmod.iron_cable": "Железный провод",
   "block.tmmod.gold_cable": "Золотой провод",
-  "block.tmmod.diamond_cable": "Алмазный провод",
+  "block.tmmod.glass_cable": "Стеклянный провод",
+  "block.tmmod.tin_cable": "Оловяный провод",
   "block.tmmod.battery_block": "Аккумулятор",
   "block.tmmod.crusher": "Дробитель",
+  "block.tmmod.electric_furnace": "Электрическая печь",
 
   "container.iron_furnace": "Железная печь",
   "container.generator": "Генератор",
   "container.battery_block": "Аккумулятор",
   "container.crusher": "Дробитель",
+  "container.electric_furnace": "Электрическая печь",
+
+  "subtitles.tmmod.generator_hum": "Шум генератора",
+  "subtitles.tmmod.battery_block_hum": "Шум аккумулятора",
+  "subtitles.tmmod.electric_furnace_hum": "Шум электрической печи",
+  "subtitles.tmmod.crusher_hum": "Шум дробителя",
 
   "item.tmmod.iron_hammer": "Молот",
   "item.tmmod.steel_ingot": "Стальной слиток",
-  "item.tmmod.battery": "Батарея"
+  "item.tmmod.battery": "Батарея",
+  "item.tmmod.overclocker_upgrade": "Улучшение 'Ускоритель'",
+  "item.tmmod.accumulator_upgrade": "Улучшение 'Аккумулятор'",
+  "item.tmmod.transformer_upgrade": "Улучшение 'Трансформатор'",
+
+  "gui.tmmod.battery_block.mode_text": "Режим: %s",
+  "gui.tmmod.battery_block.mode.both": "Смешанный",
+  "gui.tmmod.battery_block.mode.input": "Прием",
+  "gui.tmmod.battery_block.mode.output": "Отдача",
+  "gui.tmmod.battery_block.energy_text": "Энергия: ",
+  "gui.tmmod.battery_block.button_mode_text": "Режим",
+
+  "gui.tmmod.overclocker_upgrade.text": "скорость",
+  "gui.tmmod.accumulator_upgrade.text": " доп. EU в хранилище",
+  "gui.tmmod.transformer_upgrade.text": "уровень энергоприема"
 }

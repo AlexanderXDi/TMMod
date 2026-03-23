@@ -1,23 +1,44 @@
 ﻿{
-  "creativetab.tmmod.mod_tab": "Creative tab icon",
+  "creativetab.tmmod.mod_tab": "IC2 Reborn",
 
   "block.tmmod.iron_furnace": "Iron furnace",
   "block.tmmod.generator": "Generator",
   "block.tmmod.copper_cable": "Copper cable",
   "block.tmmod.iron_cable": "Iron cable",
   "block.tmmod.gold_cable": "Gold cable",
-  "block.tmmod.diamond_cable": "Diamond cable",
+  "block.tmmod.glass_cable": "Glass cable",
+  "block.tmmod.tin_cable": "Tin cable",
   "block.tmmod.battery_block": "Accumulator",
   "block.tmmod.crusher": "Crusher",
+  "block.tmmod.electric_furnace": "Electric furnace",
 
   "container.iron_furnace": "Iron furnace",
   "container.generator": "Generator",
   "container.battery_block": "Accumulator",
   "container.crusher": "Crusher",
+  "container.electric_furnace": "Electric furnace",
 
+  "subtitles.tmmod.generator_hum": "Generator hum",
+  "subtitles.tmmod.battery_block_hum": "Accumulator hum",
+  "subtitles.tmmod.electric_furnace_hum": "Electric furnace",
   "subtitles.tmmod.crusher_hum": "Crusher hum",
 
   "item.tmmod.iron_hammer": "Hammer",
   "item.tmmod.steel_ingot": "Steel ingot",
-  "item.tmmod.battery": "Battery"
+  "item.tmmod.battery": "Battery",
+  "item.tmmod.overclocker_upgrade": "Overclocker upgrade",
+  "item.tmmod.accumulator_upgrade": "Accumulator upgrade",
+  "item.tmmod.transformer_upgrade": "Transformer upgrade",
+
+
+  "gui.tmmod.battery_block.mode_text": "Mode: %s",
+  "gui.tmmod.battery_block.mode.both": "Both",
+  "gui.tmmod.battery_block.mode.input": "Input",
+  "gui.tmmod.battery_block.mode.output": "Output",
+  "gui.tmmod.battery_block.energy_text": "Energy: ",
+  "gui.tmmod.battery_block.button_mode_text": "Mode",
+
+  "gui.tmmod.battery_block.overclocker_upgrade.text": "speed",
+  "gui.tmmod.accumulator_upgrade .text": " extra EU into a storage",
+  "gui.tmmod.transformer_upgrade.text": "level of energy reception"
 }
