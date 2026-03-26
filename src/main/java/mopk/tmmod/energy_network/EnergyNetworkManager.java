@@ -1,5 +1,6 @@
 package mopk.tmmod.energy_network;
 
+import mopk.tmmod.block_func.Cables.CableBE;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
@@ -8,123 +9,172 @@ import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.saveddata.SavedData;
 
 import java.util.*;
 
-//менеджер который контролирует сеть
+/**
+ * Глобальный менеджер энергетических сетей.
+ */
 public class EnergyNetworkManager extends SavedData {
     private static final String DATA_NAME = "tmmod_energy_networks";
 
-    // Реестр всех активных сетей по их уникальному ID
     private final Map<UUID, EnergyNetwork> networks = new HashMap<>();
-    // Индекс для мгновенного поиска ID сети по координате кабеля (O(1) lookup)
     private final Map<BlockPos, UUID> cableToNetworkMap = new HashMap<>();
 
     public EnergyNetworkManager() {}
 
-    /**
-     * Вызывается каждый тик из ServerTickEvent или LevelTickEvent.
-     */
     public void tick(Level level) {
         if (level.isClientSide) return;
-        // Итерируемся по всем зарегистрированным сетям и инициируем их логику
-        for (EnergyNetwork network : networks.values()) {
+        
+        // Создаем копию списка сетей, чтобы избежать ConcurrentModificationException
+        // при взрыве кабелей (который удаляет/перестраивает сети во время итерации)
+        List<EnergyNetwork> networkList = new ArrayList<>(networks.values());
+        for (EnergyNetwork network : networkList) {
+            network.setLevel(level);
             network.tick();
         }
     }
 
-    /**
-     * Логика добавления нового кабеля в систему.
-     * Выполняет автоматическое слияние (Merge) смежных сетей.
-     */
     public void onCableAdded(Level level, BlockPos pos) {
-        Set<UUID> neighboringNetworks = new HashSet<>();
+        if (cableToNetworkMap.containsKey(pos)) return;
 
-        // 1. Поиск смежных сетей во всех 6 направлениях
+        Set<UUID> neighboringNetworks = new HashSet<>();
         for (Direction dir : Direction.values()) {
-            BlockPos neighborPos = pos.relative(dir);
-            UUID networkId = cableToNetworkMap.get(neighborPos);
-            if (networkId != null) {
-                neighboringNetworks.add(networkId);
-            }
+            UUID networkId = cableToNetworkMap.get(pos.relative(dir));
+            if (networkId != null) neighboringNetworks.add(networkId);
         }
 
         EnergyNetwork targetNetwork;
-
         if (neighboringNetworks.isEmpty()) {
-            // 2а. Смежных сетей нет — создаем новую сеть
             targetNetwork = new EnergyNetwork(level, UUID.randomUUID());
             networks.put(targetNetwork.getNetworkId(), targetNetwork);
         } else {
-            // 2б. Берем первую найденную сеть как основную
             Iterator<UUID> it = neighboringNetworks.iterator();
             targetNetwork = networks.get(it.next());
-
-            // 3. Слияние (Merge) если найдено более одной сети
             while (it.hasNext()) {
-                UUID otherId = it.next();
-                EnergyNetwork otherNetwork = networks.get(otherId);
-                if (otherNetwork != null && otherNetwork != targetNetwork) {
-                    mergeNetworks(targetNetwork, otherNetwork);
-                }
-            }
-
-            // проверка на отсутствие вообще
-            if (targetNetwork == null) {
-                targetNetwork = new EnergyNetwork(level, UUID.randomUUID());
-                networks.put(targetNetwork.getNetworkId(), targetNetwork);
+                mergeNetworks(targetNetwork, networks.get(it.next()));
             }
         }
 
-        // 4. Регистрация нового кабеля в выбранной сети
         targetNetwork.addCable(pos);
         cableToNetworkMap.put(pos, targetNetwork.getNetworkId());
-        setDirty(); // Помечаем SavedData для сохранения на диск
+        
+        // Поиск и регистрация соседних механизмов
+        for (Direction dir : Direction.values()) {
+            BlockPos neighborPos = pos.relative(dir);
+            BlockEntity be = level.getBlockEntity(neighborPos);
+            if (be instanceof CustomEnergyStorage && !(be instanceof CableBE)) {
+                registerNodeInNetwork(targetNetwork, neighborPos, be, dir.getOpposite());
+            }
+        }
+        setDirty();
     }
 
-    /**
-     * Логика удаления кабеля. Инициирует проверку на разделение (Split) сети.
-     */
     public void onCableRemoved(Level level, BlockPos pos) {
         UUID networkId = cableToNetworkMap.remove(pos);
         if (networkId == null) return;
 
         EnergyNetwork network = networks.get(networkId);
         if (network != null) {
-            // В реальной реализации здесь вызывается логика разделения сети (Flood Fill)
-            // Для упрощения: если сеть пуста — удаляем её
-            // network.removeCable(pos);
-            if (/* network.isEmpty() */ false) {
+            network.removeCable(pos);
+            if (network.isEmpty()) {
                 networks.remove(networkId);
+            } else {
+                rebuildNetworksFrom(level, pos, network);
             }
             setDirty();
         }
     }
 
-    /**
-     * Объединяет две сети в одну.
-     */
+    private void rebuildNetworksFrom(Level level, BlockPos removedPos, EnergyNetwork originalNetwork) {
+        Set<BlockPos> allCables = new HashSet<>(originalNetwork.getCables());
+        for (BlockPos pos : allCables) cableToNetworkMap.remove(pos);
+        networks.remove(originalNetwork.getNetworkId());
+
+        while (!allCables.isEmpty()) {
+            BlockPos start = allCables.iterator().next();
+            EnergyNetwork newNetwork = new EnergyNetwork(level, UUID.randomUUID());
+            networks.put(newNetwork.getNetworkId(), newNetwork);
+            
+            Queue<BlockPos> queue = new LinkedList<>();
+            queue.add(start);
+            
+            while (!queue.isEmpty()) {
+                BlockPos current = queue.poll();
+                if (allCables.remove(current)) {
+                    newNetwork.addCable(current);
+                    cableToNetworkMap.put(current, newNetwork.getNetworkId());
+                    
+                    for (Direction dir : Direction.values()) {
+                        BlockPos neighbor = current.relative(dir);
+                        if (allCables.contains(neighbor)) {
+                            queue.add(neighbor);
+                        } else if (!neighbor.equals(removedPos)) {
+                            BlockEntity be = level.getBlockEntity(neighbor);
+                            if (be instanceof CustomEnergyStorage && !(be instanceof CableBE)) {
+                                registerNodeInNetwork(newNetwork, neighbor, be, dir.getOpposite());
+                            }
+                        }
+                    }
+                }
+            }
+            newNetwork.recalculateStats();
+        }
+    }
+
     private void mergeNetworks(EnergyNetwork main, EnergyNetwork secondary) {
-        // Перенос всех BlockPos из вторичной сети в основную (реализовать в EnergyNetwork)
-        // main.absorb(secondary);
-
-        // Обновляем индекс координат для всех кабелей из поглощенной сети
-        // for (BlockPos pos : secondary.getCables()) {
-        //     cableToNetworkMap.put(pos, main.getNetworkId());
-        // }
-
+        if (main == null || secondary == null || main == secondary) return;
+        for (BlockPos pos : secondary.getCables()) {
+            cableToNetworkMap.put(pos, main.getNetworkId());
+        }
+        main.absorb(secondary);
         networks.remove(secondary.getNetworkId());
     }
 
-    // --- СЕКЦИЯ СОХРАНЕНИЯ (NBT) ---
+    private void registerNodeInNetwork(EnergyNetwork net, BlockPos pos, BlockEntity be, Direction face) {
+        if (!(be instanceof CustomEnergyStorage storage)) return;
+        if (storage.canExtract(face)) net.addProducer(pos);
+        if (storage.canReceive(face)) {
+            if (storage.canExtract(face)) net.addStorage(pos);
+            else net.addConsumer(pos);
+        }
+    }
+
+    public void onNodeAdded(Level level, BlockPos pos) {
+        BlockEntity be = level.getBlockEntity(pos);
+        if (!(be instanceof CustomEnergyStorage)) return;
+        
+        boolean found = false;
+        for (Direction dir : Direction.values()) {
+            UUID netId = cableToNetworkMap.get(pos.relative(dir));
+            if (netId != null) {
+                EnergyNetwork net = networks.get(netId);
+                if (net != null) {
+                    registerNodeInNetwork(net, pos, be, dir.getOpposite());
+                    found = true;
+                }
+            }
+        }
+        if (found) setDirty();
+    }
+
+    public void onNodeRemoved(BlockPos pos) {
+        for (EnergyNetwork net : networks.values()) {
+            net.removeProducer(pos);
+            net.removeConsumer(pos);
+            net.removeStorage(pos);
+        }
+        setDirty();
+    }
 
     @Override
     public CompoundTag save(CompoundTag tag, HolderLookup.Provider registries) {
         ListTag networkList = new ListTag();
         for (EnergyNetwork network : networks.values()) {
             CompoundTag nbt = new CompoundTag();
-            // network.save(nbt); // Метод сохранения в классе EnergyNetwork
+            network.save(nbt);
             networkList.add(nbt);
         }
         tag.put("Networks", networkList);
@@ -135,17 +185,14 @@ public class EnergyNetworkManager extends SavedData {
         EnergyNetworkManager manager = new EnergyNetworkManager();
         ListTag networkList = tag.getList("Networks", Tag.TAG_COMPOUND);
         for (int i = 0; i < networkList.size(); i++) {
-            CompoundTag nbt = networkList.getCompound(i);
-            // EnergyNetwork network = EnergyNetwork.load(level, nbt);
-            // manager.networks.put(network.getNetworkId(), network);
-            // Заполнение cableToNetworkMap на основе загруженных данных...
+            EnergyNetwork network = EnergyNetwork.load(null, networkList.getCompound(i));
+            UUID id = network.getNetworkId();
+            manager.networks.put(id, network);
+            for (BlockPos pos : network.getCables()) manager.cableToNetworkMap.put(pos, id);
         }
         return manager;
     }
 
-    /**
-     * Статический метод доступа к менеджеру в конкретном мире.
-     */
     public static EnergyNetworkManager get(ServerLevel level) {
         return level.getDataStorage().computeIfAbsent(
                 new SavedData.Factory<>(EnergyNetworkManager::new, EnergyNetworkManager::load),
@@ -153,4 +200,3 @@ public class EnergyNetworkManager extends SavedData {
         );
     }
 }
-

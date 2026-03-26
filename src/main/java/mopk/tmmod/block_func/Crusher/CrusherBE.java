@@ -1,6 +1,7 @@
 package mopk.tmmod.block_func.Crusher;
 
 import mopk.tmmod.energy_network.CustomEnergyStorage;
+import mopk.tmmod.energy_network.EnergyNetworkManager;
 import mopk.tmmod.registration.ModBlockEntities;
 import mopk.tmmod.registration.ModDataComponents;
 import mopk.tmmod.registration.ModRecipes;
@@ -10,6 +11,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -305,6 +307,22 @@ public class CrusherBE extends BlockEntity implements MenuProvider, CustomEnergy
 
         if (isLit) {
             setChanged();
+        }
+    }
+
+    @Override
+    public void onLoad() {
+        super.onLoad();
+        if (level != null && !level.isClientSide()) {
+            EnergyNetworkManager.get((ServerLevel) level).onNodeAdded(level, this.worldPosition);
+        }
+    }
+
+    @Override
+    public void setRemoved() {
+        super.setRemoved();
+        if (level != null && !level.isClientSide()) {
+            EnergyNetworkManager.get((ServerLevel) level).onNodeRemoved(this.worldPosition);
         }
     }
 

@@ -29,7 +29,7 @@ public class IronFurnace extends FurnaceBlock {
     public IronFurnace(Properties properties) {
         super(properties);
         this.registerDefaultState(this.stateDefinition.any()
-                .setValue(BlockStateProperties.LIT, false)
+                .setValue(LIT, false)
         );
     }
 

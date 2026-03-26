@@ -1,6 +1,8 @@
 package mopk.tmmod.block_func.ElectricFurnace;
 
+import mopk.tmmod.energy_network.CustomEnergyItemInterface;
 import mopk.tmmod.energy_network.CustomEnergyStorage;
+import mopk.tmmod.energy_network.EnergyNetworkManager;
 import mopk.tmmod.registration.ModBlockEntities;
 import mopk.tmmod.registration.ModDataComponents;
 import net.minecraft.core.BlockPos;
@@ -8,6 +10,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -249,6 +252,8 @@ public class ElectricFurnaceBE extends BlockEntity implements MenuProvider, Cust
         if (level.isClientSide) return;
 
         boolean isLit = false;
+        boolean stateChanged = false;
+
         Optional<RecipeHolder<SmeltingRecipe>> recipeHolder = level.getRecipeManager().getRecipeFor(RecipeType.SMELTING, new SingleRecipeInput(inventory.getStackInSlot(0)), level);
 
         ItemStack chargeStack = inventory.getStackInSlot(2);
@@ -257,17 +262,21 @@ public class ElectricFurnaceBE extends BlockEntity implements MenuProvider, Cust
             if (energyStored <= getMaxEnergyStored() - energyPerRedstone) {
                 if (receiveEnergy(energyPerRedstone,1,  false) > 0) {
                     inventory.extractItem(2, 1, false);
-                    setChanged();
+                    stateChanged = true;
                 }
             }
         }
-        else if (chargeStack.has(ModDataComponents.CHARGE.get())) {
-            int itemCharge = chargeStack.getOrDefault(ModDataComponents.CHARGE.get(), 0);
-            int accepted = receiveEnergy(Math.min(itemCharge, 100),1 , false);
+        else if (!chargeStack.isEmpty() && this.energyStored < this.currentMaxEnergyStored) {
+            if (chargeStack.getItem() instanceof CustomEnergyItemInterface energyItem) {
+                int chargeSpeed = 50;
+                int energyToGive = Math.min(this.energyStored, chargeSpeed);
 
-            if (accepted > 0) {
-                chargeStack.set(ModDataComponents.CHARGE.get(), itemCharge - accepted);
-                setChanged();
+                int accepted = energyItem.extractEnergy(chargeStack, energyToGive, false);
+
+                if (accepted > 0) {
+                    this.energyStored += accepted;
+                    stateChanged = true;
+                }
             }
         }
 
@@ -306,7 +315,7 @@ public class ElectricFurnaceBE extends BlockEntity implements MenuProvider, Cust
             level.setBlock(pos, state.setValue(BlockStateProperties.LIT, isLit), 3);
         }
 
-        if (isLit) {
+        if (isLit || stateChanged) {
             setChanged();
         }
     }
@@ -323,6 +332,22 @@ public class ElectricFurnaceBE extends BlockEntity implements MenuProvider, Cust
         ItemStack result = recipe.getResultItem(level.registryAccess()).copy();
         inventory.getStackInSlot(0).shrink(1);
         inventory.insertItem(1, result, false);
+    }
+
+    @Override
+    public void onLoad() {
+        super.onLoad();
+        if (level != null && !level.isClientSide()) {
+            EnergyNetworkManager.get((ServerLevel) level).onNodeAdded(level, this.worldPosition);
+        }
+    }
+
+    @Override
+    public void setRemoved() {
+        super.setRemoved();
+        if (level != null && !level.isClientSide()) {
+            EnergyNetworkManager.get((ServerLevel) level).onNodeRemoved(this.worldPosition);
+        }
     }
 
     @Override

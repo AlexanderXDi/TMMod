@@ -13,12 +13,12 @@ public class IronFurnaceScreen extends AbstractContainerScreen<IronFurnaceMenu> 
             ResourceLocation.fromNamespaceAndPath("tmmod", "textures/gui/iron_furnace/iron_furnace_bg.png");
     private static final ResourceLocation FIRE_TEXTURE =
             ResourceLocation.fromNamespaceAndPath("tmmod", "textures/gui/iron_furnace/fire_texture.png");
+    private static final ResourceLocation FIRE_STATIC_TEXTURE =
+            ResourceLocation.fromNamespaceAndPath("tmmod", "textures/gui/iron_furnace/fire_static_texture.png");
     private static final ResourceLocation ARROW_TEXTURE =
             ResourceLocation.fromNamespaceAndPath("tmmod", "textures/gui/iron_furnace/arrow_texture.png");
     private static final ResourceLocation ARROW_STATIC_TEXTURE =
             ResourceLocation.fromNamespaceAndPath("tmmod", "textures/gui/iron_furnace/arrow_static_texture.png");
-    private static final ResourceLocation FIRE_STATIC_TEXTURE =
-            ResourceLocation.fromNamespaceAndPath("tmmod", "textures/gui/iron_furnace/fire_static_texture.png");
     private static final ResourceLocation SLOT_TEXTURE =
             ResourceLocation.fromNamespaceAndPath("tmmod", "textures/gui/slot.png");
 
@@ -26,17 +26,17 @@ public class IronFurnaceScreen extends AbstractContainerScreen<IronFurnaceMenu> 
         super(menu, inventory, title);
     }
 
-    int RTW_BG = 176;
-    int RTH_BG = 166;
+    int RTWBG = 176;
+    int RTHBG = 166;
 
-    int RTW_FIRE = 14;
-    int RTH_FIRE = 14;
+    int RTWFire = 14;
+    int RTHFire = 14;
 
-    int RTW_ARROW = 30;
-    int RTH_ARROW = 17;
+    int RTWArrow = 30;
+    int RTHArrow = 17;
 
-    int RTW_SLOT = 18;
-    int RTH_SLOT = 18;
+    int RTWSlot = 18;
+    int RTHSlot = 18;
 
     @Override
     protected void renderBg(GuiGraphics guiGraphics, float partialTick, int mouseX, int mouseY) {
@@ -45,21 +45,21 @@ public class IronFurnaceScreen extends AbstractContainerScreen<IronFurnaceMenu> 
 
         int l = menu.getBurnProgress();
 
-        guiGraphics.blit(BG_TEXTURE, x, y, 0, 0, RTW_BG, RTH_BG, RTW_BG, RTH_BG);
+        guiGraphics.blit(BG_TEXTURE, x, y, 0, 0, RTWBG, RTHBG, RTWBG, RTHBG);
 
         for (int i = 0; i < menu.slots.size(); i++) {
             Slot slot = menu.slots.get(i);
-            guiGraphics.blit(SLOT_TEXTURE, x + slot.x - 1, y + slot.y - 1, 0, 0, RTW_SLOT, RTH_SLOT, RTW_SLOT, RTH_SLOT);
+            guiGraphics.blit(SLOT_TEXTURE, x + slot.x - 1, y + slot.y - 1, 0, 0, RTWSlot, RTHSlot, RTWSlot, RTHSlot);
         }
 
-        guiGraphics.blit(FIRE_STATIC_TEXTURE, x + 57, y + 36, 176, 166, RTW_FIRE, RTH_FIRE, RTW_FIRE, RTH_FIRE);
+        guiGraphics.blit(FIRE_STATIC_TEXTURE, x + 57, y + 36, 176, 166, RTWFire, RTHFire, RTWFire, RTHFire);
         if (menu.isLit()) {
             int k = menu.getLitProgress();
-            guiGraphics.blit(FIRE_TEXTURE, x + 57, y + 49 - k, 176, 12 - k, RTW_FIRE, k + 1, RTW_FIRE, RTH_FIRE);
+            guiGraphics.blit(FIRE_TEXTURE, x + 57, y + 49 - k, 176, 12 - k, RTWFire, k + 1, RTWFire, RTHFire);
         }
 
-        guiGraphics.blit(ARROW_STATIC_TEXTURE, x + 77, y + 34, 0, 0, RTW_ARROW, RTH_ARROW, RTW_ARROW, RTH_ARROW);
-        guiGraphics.blit(ARROW_TEXTURE, x + 77, y + 34, 0, 0, l, RTH_ARROW, RTW_ARROW, RTH_ARROW);
+        guiGraphics.blit(ARROW_STATIC_TEXTURE, x + 77, y + 34, 0, 0, RTWArrow, RTHArrow, RTWArrow, RTHArrow);
+        guiGraphics.blit(ARROW_TEXTURE, x + 77, y + 34, 0, 0, l, RTHArrow, RTWArrow, RTHArrow);
     }
 
     @Override

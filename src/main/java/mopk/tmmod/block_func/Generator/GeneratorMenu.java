@@ -18,7 +18,7 @@ public class GeneratorMenu extends AbstractContainerMenu {
     private final ContainerData data;
 
     public GeneratorMenu(int containerId, Inventory inv, FriendlyByteBuf extraData) {
-        this(containerId, inv, (GeneratorBE) inv.player.level().getBlockEntity(extraData.readBlockPos()), new SimpleContainerData(2));
+        this(containerId, inv, (GeneratorBE) inv.player.level().getBlockEntity(extraData.readBlockPos()), new SimpleContainerData(4));
     }
 
     public GeneratorMenu(int containerId, Inventory inv, GeneratorBE entity, ContainerData data) {
@@ -28,8 +28,8 @@ public class GeneratorMenu extends AbstractContainerMenu {
         this.level = inv.player.level();
         this.data = data;
 
-        this.addSlot(new SlotItemHandler(entity.getInventory(), 0, 100, 50));
-        this.addSlot(new SingleItemSlot(entity.getInventory(), 1, 120, 50));
+        this.addSlot(new SlotItemHandler(entity.getInventory(), 0, 70, 35));
+        this.addSlot(new SingleItemSlot(entity.getInventory(), 1, 120, 35));
 
         addPlayerInventory(inv);
         addPlayerHotbar(inv);
@@ -57,6 +57,14 @@ public class GeneratorMenu extends AbstractContainerMenu {
 
     public int getMaxEnergy() {
         return this.data.get(1);
+    }
+
+    public int getBurningTimeRemaining() {
+        return this.data.get(2);
+    }
+
+    public int getBurnTime() {
+        return this.data.get(3);
     }
 
     @Override

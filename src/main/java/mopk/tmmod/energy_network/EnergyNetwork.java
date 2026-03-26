@@ -1,28 +1,35 @@
 package mopk.tmmod.energy_network;
 
 import mopk.tmmod.block_func.Cables.CableBE;
-
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.NbtUtils;
+import net.minecraft.nbt.Tag;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 
 import java.util.*;
 
-//класс сети(как будет работать)
+/**
+ * Оптимизированный класс энергетической сети.
+ */
 public class EnergyNetwork {
     private final UUID networkId;
-    private final Level level;
+    private Level level;
 
     private final Set<BlockPos> cables = new HashSet<>();
-    private final Set<BlockPos> producers = new HashSet<>();
-    private final Set<BlockPos> consumers = new HashSet<>();
-    private final Set<BlockPos> storages = new HashSet<>();
+    private final List<BlockPos> producers = new ArrayList<>();
+    private final List<BlockPos> consumers = new ArrayList<>();
+    private final List<BlockPos> storages = new ArrayList<>();
+
+    private int lastConsumerIndex = 0;
+    private int lastStorageIndex = 0;
 
     private int networkEnergy = 0;
     private int networkCapacity = 0;
-    private int networkTransferLimit = Integer.MAX_VALUE; // "Узкое место" по количеству (EU/t)
-    private int networkTierLimit = Integer.MAX_VALUE;     // "Узкое место" по вольтажу (Tier)
+    private int networkTransferLimit = 0;
+    private int networkTierLimit = 0;
 
     public EnergyNetwork(Level level, UUID id) {
         this.level = level;
@@ -30,85 +37,79 @@ public class EnergyNetwork {
     }
 
     public void tick() {
-        if (level.isClientSide || cables.isEmpty()) return;
+        if (level == null || level.isClientSide || cables.isEmpty()) return;
 
-        // взял энергию
-        collectEnergyFromProducers();
+        // 1. Сбор энергии
+        collectEnergy();
 
-        // 2. Проверка на критическую перегрузку (Overload Check)
-        // В IC2 энергия не "хранится" в кабелях бесконечно, если ее некуда девать и
-        // входящий вольтаж выше лимита сети — происходит выгорание.
+        // 2. Ограничение емкостью
         if (networkEnergy > networkCapacity) {
-            // Логика избыточного накопления (опционально: взрыв или потеря)
             networkEnergy = networkCapacity;
         }
 
-        // 3. Распределение энергии потребителям (Push Phase)
-        distributeEnergyToConsumers();
+        // 3. Распределение
+        if (networkEnergy > 0) {
+            distributeToNodes(consumers, true);
+            if (networkEnergy > 0) {
+                distributeToNodes(storages, false);
+            }
+        }
     }
 
-    /**
-     * Извлекает доступную энергию из всех зарегистрированных генераторов.
-     */
-    private void collectEnergyFromProducers() {
+    private void collectEnergy() {
         for (BlockPos pos : producers) {
             BlockEntity be = level.getBlockEntity(pos);
             if (be instanceof CustomEnergyStorage storage) {
-                // Проверяем тир генератора. Если он выше лимита сети — сеть выгорает.
                 if (storage.getEnergyTier() > networkTierLimit) {
                     burnoutChain();
                     return;
                 }
 
-                // Извлекаем энергию (максимум, что может пропустить сеть)
-                int available = storage.extractEnergy(networkTransferLimit, true);
-                int accepted = addEnergyToNetwork(available);
-                storage.extractEnergy(accepted, false);
+                int canExtract = storage.extractEnergy(networkTransferLimit, true);
+                int toAdd = Math.min(canExtract, networkCapacity - networkEnergy);
+                if (toAdd > 0) {
+                    int actualExtracted = storage.extractEnergy(toAdd, false);
+                    networkEnergy += actualExtracted;
+                }
             }
         }
     }
 
-    /**
-     * Распределяет накопленную в сети энергию между потребителями.
-     */
-    private void distributeEnergyToConsumers() {
-        if (networkEnergy <= 0) return;
+    private void distributeToNodes(List<BlockPos> nodes, boolean isConsumer) {
+        if (nodes.isEmpty()) return;
 
-        // Для честного распределения можно использовать список
-        List<BlockPos> consumerList = new ArrayList<>(consumers);
-        // Можно добавить перемешивание (Collections.shuffle), чтобы избежать приоритета координат
-
-        for (BlockPos pos : consumerList) {
+        int size = nodes.size();
+        int startIndex = isConsumer ? lastConsumerIndex : lastStorageIndex;
+        
+        for (int i = 0; i < size; i++) {
             if (networkEnergy <= 0) break;
-
+            
+            int currentIndex = (startIndex + i) % size;
+            BlockPos pos = nodes.get(currentIndex);
+            
             BlockEntity be = level.getBlockEntity(pos);
-            if (be instanceof CustomEnergyStorage storage && storage.canReceive(Direction.UP)) { // Direction для примера
-                // Потребитель сам решает, сколько он может принять
-                int received = storage.receiveEnergy(networkEnergy, networkTierLimit, false);
+            if (be instanceof CustomEnergyStorage storage) {
+                int received = storage.receiveEnergy(Math.min(networkEnergy, networkTransferLimit), networkTierLimit, false);
                 networkEnergy -= received;
+                
+                if (isConsumer) lastConsumerIndex = (currentIndex + 1) % size;
+                else lastStorageIndex = (currentIndex + 1) % size;
             }
         }
     }
 
-    /**
-     * Добавляет энергию в буфер сети (кабели + хранилища).
-     */
-    private int addEnergyToNetwork(int amount) {
-        int space = networkCapacity - networkEnergy;
-        int toAdd = Math.min(amount, space);
-        networkEnergy += toAdd;
-        return toAdd;
-    }
-
-    /**
-     * Полный пересчет характеристик сети при изменении её структуры.
-     */
     public void recalculateStats() {
-        int totalCapacity = 0;
+        long totalCapacity = 0;
         int minTransfer = Integer.MAX_VALUE;
         int minTier = Integer.MAX_VALUE;
 
-        // Опрашиваем только кабели для определения лимитов проводимости
+        if (cables.isEmpty()) {
+            this.networkCapacity = 0;
+            this.networkTransferLimit = 0;
+            this.networkTierLimit = 0;
+            return;
+        }
+
         for (BlockPos pos : cables) {
             BlockEntity be = level.getBlockEntity(pos);
             if (be instanceof CableBE cable) {
@@ -118,35 +119,94 @@ public class EnergyNetwork {
             }
         }
 
-        this.networkCapacity = totalCapacity;
-        this.networkTransferLimit = cables.isEmpty() ? 0 : minTransfer;
-        this.networkTierLimit = cables.isEmpty() ? 0 : minTier;
+        this.networkCapacity = (int) Math.min(totalCapacity, Integer.MAX_VALUE);
+        this.networkTransferLimit = (minTransfer == Integer.MAX_VALUE) ? 0 : minTransfer;
+        this.networkTierLimit = (minTier == Integer.MAX_VALUE) ? 0 : minTier;
     }
 
-    /**
-     * Логика катастрофического разрушения сети при перегрузке.
-     */
     private void burnoutChain() {
-        // Копируем список, так как destroyBlock вызовет изменение структуры
-        Set<BlockPos> toDestroy = new HashSet<>(cables);
-        for (BlockPos pos : toDestroy) {
+        Set<BlockPos> copy = new HashSet<>(cables);
+        cables.clear();
+        producers.clear();
+        consumers.clear();
+        storages.clear();
+        networkEnergy = 0;
+
+        for (BlockPos pos : copy) {
             level.explode(null, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5,
                     1.2f, Level.ExplosionInteraction.BLOCK);
             level.destroyBlock(pos, false);
         }
-        // Очистка данных сети после уничтожения
-        cables.clear();
-        producers.clear();
-        consumers.clear();
-        networkEnergy = 0;
     }
 
-    // Методы регистрации узлов
-    public void addCable(BlockPos pos) { cables.add(pos); recalculateStats(); }
-    public void addProducer(BlockPos pos) { producers.add(pos); }
-    public void addConsumer(BlockPos pos) { consumers.add(pos); }
+    public void absorb(EnergyNetwork other) {
+        this.cables.addAll(other.cables);
+        this.networkEnergy = (int) Math.min((long)this.networkEnergy + other.networkEnergy, networkCapacity);
+        
+        // Пересобираем списки узлов, чтобы избежать дубликатов
+        updateNodes(other.producers, producers);
+        updateNodes(other.consumers, consumers);
+        updateNodes(other.storages, storages);
+        
+        recalculateStats();
+    }
 
+    private void updateNodes(List<BlockPos> from, List<BlockPos> to) {
+        for (BlockPos pos : from) {
+            if (!to.contains(pos)) to.add(pos);
+        }
+    }
+
+    public void addCable(BlockPos pos) { if (cables.add(pos)) recalculateStats(); }
+    public void removeCable(BlockPos pos) { if (cables.remove(pos)) recalculateStats(); }
+
+    public void addProducer(BlockPos pos) { if (!producers.contains(pos)) producers.add(pos); }
+    public void removeProducer(BlockPos pos) { producers.remove(pos); }
+
+    public void addConsumer(BlockPos pos) { if (!consumers.contains(pos)) consumers.add(pos); }
+    public void removeConsumer(BlockPos pos) { consumers.remove(pos); }
+
+    public void addStorage(BlockPos pos) { if (!storages.contains(pos)) storages.add(pos); }
+    public void removeStorage(BlockPos pos) { storages.remove(pos); }
+
+    public boolean isEmpty() { return cables.isEmpty(); }
+    public Set<BlockPos> getCables() { return cables; }
     public UUID getNetworkId() { return networkId; }
+    public void setLevel(Level level) { this.level = level; }
+
+    public void save(CompoundTag tag) {
+        tag.putUUID("Id", networkId);
+        tag.putInt("Energy", networkEnergy);
+        tag.put("Cables", savePosList(new ArrayList<>(cables)));
+        tag.put("Producers", savePosList(producers));
+        tag.put("Consumers", savePosList(consumers));
+        tag.put("Storages", savePosList(storages));
+    }
+
+    private ListTag savePosList(Collection<BlockPos> positions) {
+        ListTag list = new ListTag();
+        for (BlockPos pos : positions) {
+            CompoundTag posTag = new CompoundTag();
+            posTag.put("p", NbtUtils.writeBlockPos(pos));
+            list.add(posTag);
+        }
+        return list;
+    }
+
+    public static EnergyNetwork load(Level level, CompoundTag tag) {
+        EnergyNetwork network = new EnergyNetwork(level, tag.getUUID("Id"));
+        network.networkEnergy = tag.getInt("Energy");
+        loadPosList(tag.getList("Cables", Tag.TAG_COMPOUND), network.cables);
+        loadPosList(tag.getList("Producers", Tag.TAG_COMPOUND), network.producers);
+        loadPosList(tag.getList("Consumers", Tag.TAG_COMPOUND), network.consumers);
+        loadPosList(tag.getList("Storages", Tag.TAG_COMPOUND), network.storages);
+        network.recalculateStats();
+        return network;
+    }
+
+    private static void loadPosList(ListTag list, Collection<BlockPos> target) {
+        for (int i = 0; i < list.size(); i++) {
+            NbtUtils.readBlockPos(list.getCompound(i), "p").ifPresent(target::add);
+        }
+    }
 }
-
-

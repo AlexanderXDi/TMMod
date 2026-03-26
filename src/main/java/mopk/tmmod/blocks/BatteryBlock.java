@@ -26,14 +26,14 @@ import org.jetbrains.annotations.Nullable;
 
 
 public class BatteryBlock extends Block implements EntityBlock {
-    public static final DirectionProperty FACING = BlockStateProperties.FACING;
     public static final BooleanProperty LIT = BlockStateProperties.LIT;
+    public static final DirectionProperty FACING = BlockStateProperties.FACING;
 
     public BatteryBlock(Properties properties) {
         super(properties);
         this.registerDefaultState(this.stateDefinition.any()
-                .setValue(BlockStateProperties.LIT, false)
-                .setValue(BlockStateProperties.FACING, Direction.NORTH)
+                .setValue(LIT, false)
+                .setValue(FACING, Direction.NORTH)
         );
     }
 

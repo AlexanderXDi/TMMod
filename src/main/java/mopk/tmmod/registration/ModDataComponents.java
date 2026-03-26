@@ -16,6 +16,7 @@ public class ModDataComponents {
             DATA_COMPONENTS.register("charge",
                     () -> DataComponentType.<Integer>builder()
                             .persistent(Codec.INT)
+                            .persistent(Codec.INT)
                             .build());
 
     public static final Supplier<DataComponentType<Boolean>> SPEEDBONUS =

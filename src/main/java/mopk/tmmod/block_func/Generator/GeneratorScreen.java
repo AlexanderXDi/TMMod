@@ -11,26 +11,38 @@ import java.util.List;
 
 
 public class GeneratorScreen extends AbstractContainerScreen<GeneratorMenu> {
-    private static final ResourceLocation BG_TEXTURE =
+    private static final ResourceLocation BG =
             ResourceLocation.fromNamespaceAndPath("tmmod", "textures/gui/generator/generator_bg.png");
-    private static final ResourceLocation SLOT_TEXTURE =
+    private static final ResourceLocation SLOT =
             ResourceLocation.fromNamespaceAndPath("tmmod", "textures/gui/slot.png");
     private static final ResourceLocation BAR_BG =
             ResourceLocation.fromNamespaceAndPath("tmmod", "textures/gui/bar_bg.png");
     private static final ResourceLocation BAR_PARTITION =
             ResourceLocation.fromNamespaceAndPath("tmmod", "textures/gui/bar_partition.png");
+    private static final ResourceLocation FIRE =
+            ResourceLocation.fromNamespaceAndPath("tmmod", "textures/gui/generator/fire_texture.png");
+    private static final ResourceLocation FIRE_STATIC =
+            ResourceLocation.fromNamespaceAndPath("tmmod", "textures/gui/generator/fire_static_texture.png");
+    private static final ResourceLocation ENERGY_SLOT =
+            ResourceLocation.fromNamespaceAndPath("tmmod", "textures/gui/generator/energy_slot.png");
+    private static final ResourceLocation FIRE_SLOT =
+            ResourceLocation.fromNamespaceAndPath("tmmod", "textures/gui/generator/fuel_slot.png");
 
-    int RTW_SLOT = 18;
-    int RTH_SLOT = 18;
+    int RTWSlot = 18;
+    int RTHSlot = 18;
 
-    int RTW_BG = 176;
-    int RTH_BG = 166;
+    int RTWBG = 176;
+    int RTHBG = 166;
+
+    int RTWFire = 14;
+    int RTHFire = 14;
 
     int barHeight = 62;
     int barWidth = 16;
 
     int barBGHeight = barHeight + 2;
     int barBGWidth = barWidth + 2;
+
 
     public GeneratorScreen(GeneratorMenu menu, Inventory inventory, Component title) {
         super(menu, inventory, title);
@@ -64,11 +76,30 @@ public class GeneratorScreen extends AbstractContainerScreen<GeneratorMenu> {
         int x = (width - imageWidth) / 2;
         int y = (height - imageHeight) / 2;
 
-        guiGraphics.blit(BG_TEXTURE, x, y, 0, 0, RTW_BG, RTH_BG, imageWidth, imageHeight);
+        guiGraphics.blit(BG, x, y, 0, 0, RTWBG, RTHBG, imageWidth, imageHeight);
 
         for (int i = 0; i < menu.slots.size(); i++) {
             Slot slot = menu.slots.get(i);
-            guiGraphics.blit(SLOT_TEXTURE, x + slot.x - 1, y + slot.y - 1, 0, 0, RTW_SLOT, RTH_SLOT, RTW_SLOT, RTH_SLOT);
+            if (i == 0) {
+                guiGraphics.blit(FIRE_SLOT, x + slot.x - 1, y + slot.y - 1, 0, 0, RTWSlot, RTHSlot, RTWSlot, RTHSlot);
+                continue;
+            } else if (i == 1) {
+                guiGraphics.blit(ENERGY_SLOT, x + slot.x - 1, y + slot.y - 1, 0, 0, RTWSlot, RTHSlot, RTWSlot, RTHSlot);
+                continue;
+            }
+
+            guiGraphics.blit(SLOT, x + slot.x - 1, y + slot.y - 1, 0, 0, RTWSlot, RTHSlot, RTWSlot, RTHSlot);
+        }
+
+        guiGraphics.blit(FIRE_STATIC, x + 40, y + 35, 0, 0, RTWFire, RTHFire, RTWFire, RTHFire);
+
+        int burnTime = menu.getBurnTime();
+        if (burnTime > 0) {
+            int remaining = menu.getBurningTimeRemaining();
+            int scaledFire = (remaining * RTHFire) / burnTime;
+            if (scaledFire > 0) {
+                guiGraphics.blit(FIRE, x + 40, y + 35 + (RTHFire - scaledFire), 0, RTHFire - scaledFire, RTWFire, scaledFire, RTWFire, RTHFire);
+            }
         }
     }
 

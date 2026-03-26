@@ -29,7 +29,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class Generator extends Block implements EntityBlock {
     public static final BooleanProperty LIT = BlockStateProperties.LIT;
-    public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
+    public static final DirectionProperty FACING = BlockStateProperties.FACING;
 
     public Generator(Properties properties) {
         super(properties);

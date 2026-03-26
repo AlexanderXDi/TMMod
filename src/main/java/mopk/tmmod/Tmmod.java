@@ -11,6 +11,7 @@ import static mopk.tmmod.registration.ModBlocks.*;
 import static mopk.tmmod.registration.CreativeTab.CREATIVE_MODE_TABS;
 import static mopk.tmmod.registration.CreativeTab.MOD_TAB;
 
+import mopk.tmmod.energy_network.EnergyNetworkManager;
 import mopk.tmmod.registration.ModBlocks;
 import mopk.tmmod.registration.CustomCapabilities;
 import mopk.tmmod.block_func.BatteryBlock.BatteryBlockModePacket;
@@ -26,13 +27,19 @@ import mopk.tmmod.block_func.BatteryBlock.ModNetwork;
 import mopk.tmmod.registration.ModItems;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ServerLevel;
 import net.neoforged.bus.api.IEventBus;
+import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
+import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
+import net.neoforged.neoforge.event.server.ServerAboutToStartEvent;
+import net.neoforged.neoforge.event.tick.ServerTickEvent;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 
@@ -46,6 +53,7 @@ public class Tmmod {
         modEventBus.addListener(this::registerCapabilities);
         modEventBus.addListener(this::registerNetworking);
 
+
         BLOCK_ENTITIES.register(modEventBus);
         ITEMS.register(modEventBus);
         BLOCKS.register(modEventBus);
@@ -57,6 +65,16 @@ public class Tmmod {
         SOUND_EVENTS.register(modEventBus);
 
         modEventBus.addListener(this::buildCreativeTabs);
+        
+        // Регистрация на шине Forge для событий тика
+        NeoForge.EVENT_BUS.register(this);
+    }
+
+    @SubscribeEvent
+    public void onServerTick(ServerTickEvent.Post event) {
+        for (ServerLevel level : event.getServer().getAllLevels()) {
+            EnergyNetworkManager.get(level).tick(level);
+        }
     }
 
     private void registerNetworking(final RegisterPayloadHandlersEvent event) {
@@ -70,9 +88,9 @@ public class Tmmod {
 
     private void registerCapabilities(RegisterCapabilitiesEvent event) {
         event.registerBlockEntity(
-                Capabilities.EnergyStorage.BLOCK,
+                CustomCapabilities.ENERGY,
                 ModBlockEntities.GENERATOR_BE.get(),
-                (blockEntity, direction) -> blockEntity.getEnergyStorage()
+                (blockEntity, direction) -> blockEntity.getEnergyStorage(direction)
         );
 
         event.registerBlockEntity(
@@ -82,7 +100,7 @@ public class Tmmod {
         );
 
         event.registerBlockEntity(
-                Capabilities.EnergyStorage.BLOCK,
+                CustomCapabilities.ENERGY,
                 ModBlockEntities.BATTERY_BLOCK_BE.get(),
                 (blockEntity, direction) -> blockEntity.getEnergyStorage(direction)
         );

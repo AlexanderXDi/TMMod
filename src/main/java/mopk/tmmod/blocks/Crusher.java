@@ -33,8 +33,8 @@ public class Crusher extends Block implements EntityBlock {
     public Crusher(Properties properties) {
         super(properties);
         this.registerDefaultState(this.stateDefinition.any()
-                .setValue(BlockStateProperties.LIT, false)
-                .setValue(BlockStateProperties.FACING, Direction.NORTH)
+                .setValue(LIT, false)
+                .setValue(FACING, Direction.NORTH)
         );
     }
 

@@ -1,11 +1,15 @@
 package mopk.tmmod.block_func.BatteryBlock;
 
 import mopk.tmmod.registration.ModBlockEntities;
+import mopk.tmmod.energy_network.CustomEnergyStorage;
+import mopk.tmmod.energy_network.EnergyNetworkManager;
+import mopk.tmmod.registration.CustomCapabilities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -15,87 +19,101 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.neoforged.neoforge.capabilities.Capabilities;
-import net.neoforged.neoforge.energy.EnergyStorage;
-import net.neoforged.neoforge.energy.IEnergyStorage;
 
 import javax.annotation.Nullable;
 
-
-public class BatteryBlockBE extends BlockEntity implements MenuProvider {
-
-    private final IEnergyStorage outputWrapper = new IEnergyStorage() {
-        @Override public int receiveEnergy(int maxReceive, boolean simulate) { return 0; }
-        @Override public int extractEnergy(int maxExtract, boolean simulate) { return energyStorage.extractEnergy(maxExtract, simulate); }
-        @Override public int getEnergyStored() { return energyStorage.getEnergyStored(); }
-        @Override public int getMaxEnergyStored() { return energyStorage.getMaxEnergyStored(); }
-        @Override public boolean canExtract() { return true; }
-        @Override public boolean canReceive() { return false; }
-    };
-
-    private final IEnergyStorage inputWrapper = new IEnergyStorage() {
-        @Override public int receiveEnergy(int maxReceive, boolean simulate) { return energyStorage.receiveEnergy(maxReceive, simulate); }
-        @Override public int extractEnergy(int maxExtract, boolean simulate) { return 0; }
-        @Override public int getEnergyStored() { return energyStorage.getEnergyStored(); }
-        @Override public int getMaxEnergyStored() { return energyStorage.getMaxEnergyStored(); }
-        @Override public boolean canExtract() { return false; }
-        @Override public boolean canReceive() { return true; }
-    };
-
+public class BatteryBlockBE extends BlockEntity implements MenuProvider, CustomEnergyStorage {
+    private int energyStored = 0;
+    private final int maxEnergyStored = 1000000;
+    private final int transferRate = 32;
     private BatteryBlockMode mode = BatteryBlockMode.BOTH;
 
     public BatteryBlockBE(BlockPos pos, BlockState state) {
         super(ModBlockEntities.BATTERY_BLOCK_BE.get(), pos, state);
     }
 
+    @Override
+    public int receiveEnergy(int maxReceive, int tier, boolean simulate) {
+        if (mode == BatteryBlockMode.OUTPUT) return 0;
+        int space = maxEnergyStored - energyStored;
+        int toReceive = Math.min(maxReceive, Math.min(space, transferRate));
+        if (!simulate) {
+            energyStored += toReceive;
+            setChanged();
+        }
+        return toReceive;
+    }
+
+    @Override
+    public int extractEnergy(int maxExtract, boolean simulate) {
+        if (mode == BatteryBlockMode.INPUT) return 0;
+        int toExtract = Math.min(maxExtract, Math.min(energyStored, transferRate));
+        if (!simulate) {
+            energyStored -= toExtract;
+            setChanged();
+        }
+        return toExtract;
+    }
+
+    @Override
+    public int getEnergyTier() {
+        return 1;
+    }
+
+    @Override
+    public boolean canReceive(Direction side) {
+        if (mode == BatteryBlockMode.OUTPUT) return false;
+        Direction facing = getBlockState().getValue(BlockStateProperties.FACING);
+        return side != facing;
+    }
+
+    @Override
+    public boolean canExtract(Direction side) {
+        if (mode == BatteryBlockMode.INPUT) return false;
+        Direction facing = getBlockState().getValue(BlockStateProperties.FACING);
+        return side == facing;
+    }
+
+    @Override
+    public int getEnergyStored() { return energyStored; }
+
+    @Override
+    public int getMaxEnergyStored() { return maxEnergyStored; }
+
+    public CustomEnergyStorage getEnergyStorage(@Nullable Direction side) {
+        return this;
+    }
+
+    @Override
+    public void onLoad() {
+        super.onLoad();
+        if (level != null && !level.isClientSide()) {
+            EnergyNetworkManager.get((ServerLevel) level).onNodeAdded(level, this.worldPosition);
+        }
+    }
+
+    @Override
+    public void setRemoved() {
+        super.setRemoved();
+        if (level != null && !level.isClientSide()) {
+            EnergyNetworkManager.get((ServerLevel) level).onNodeRemoved(this.worldPosition);
+        }
+    }
+
     public final ContainerData data = new ContainerData() {
         @Override
         public int get(int index) {
             return switch (index) {
-                case 0 -> energyStorage.getEnergyStored() & 0xFFFF;
-                case 1 -> (energyStorage.getEnergyStored() >> 16) & 0xFFFF;
-                case 2 -> energyStorage.getMaxEnergyStored() & 0xFFFF;
-                case 3 -> (energyStorage.getMaxEnergyStored() >> 16) & 0xFFFF;
+                case 0 -> energyStored & 0xFFFF;
+                case 1 -> (energyStored >> 16) & 0xFFFF;
+                case 2 -> maxEnergyStored & 0xFFFF;
+                case 3 -> (maxEnergyStored >> 16) & 0xFFFF;
                 case 4 -> mode.ordinal();
                 default -> 0;
             };
         }
-
-        @Override
-        public void set(int index, int value) {
-            if (index == 4) mode = BatteryBlockMode.values()[value];
-        }
-
-        @Override
-        public int getCount() {
-            return 5;
-        }
-    };
-
-    public IEnergyStorage getEnergyStorage(@Nullable Direction side) {
-        if (side == null) return energyStorage;
-
-        Direction facing = getBlockState().getValue(BlockStateProperties.FACING);
-
-        if (side == facing) {
-            return outputWrapper;
-        }
-
-        return inputWrapper;
-    }
-
-    public final EnergyStorage energyStorage = new EnergyStorage(1000000, 1000, 1000) {
-        @Override
-        public int receiveEnergy(int maxReceive, boolean simulate) {
-            if (mode == BatteryBlockMode.OUTPUT) return 0;
-            return super.receiveEnergy(maxReceive, simulate);
-        }
-
-        @Override
-        public int extractEnergy(int maxExtract, boolean simulate) {
-            if (mode == BatteryBlockMode.INPUT) return 0;
-            return super.extractEnergy(maxExtract, simulate);
-        }
+        @Override public void set(int index, int value) { if (index == 4) mode = BatteryBlockMode.values()[value]; }
+        @Override public int getCount() { return 5; }
     };
 
     @Override
@@ -113,51 +131,36 @@ public class BatteryBlockBE extends BlockEntity implements MenuProvider {
         setChanged();
     }
 
-    public BatteryBlockMode getMode() {
-        return mode;
-    }
+    public BatteryBlockMode getMode() { return mode; }
 
     public void tick(Level level, BlockPos pos, BlockState state) {
-        if (level.isClientSide || mode == BatteryBlockMode.INPUT || energyStorage.getEnergyStored() <= 0) return;
-
-        for (Direction direction : Direction.values()) {
-            IEnergyStorage target = level.getCapability(Capabilities.EnergyStorage.BLOCK, pos.relative(direction), direction.getOpposite());
-            if (target != null && target.canReceive()) {
-                int extracted = energyStorage.extractEnergy(1000, true);
-                int accepted = target.receiveEnergy(extracted, false);
-                energyStorage.extractEnergy(accepted, false);
-            }
-        }
-        if (level.isClientSide || energyStorage.getEnergyStored() <= 0) return;
+        if (level.isClientSide || mode == BatteryBlockMode.INPUT || energyStored <= 0) return;
 
         Direction facing = state.getValue(BlockStateProperties.FACING);
+        BlockPos targetPos = pos.relative(facing);
 
-        IEnergyStorage target = level.getCapability(Capabilities.EnergyStorage.BLOCK, pos.relative(facing), facing.getOpposite());
-
-        if (target != null && target.canReceive()) {
-            int extracted = energyStorage.extractEnergy(1000, true);
-            int accepted = target.receiveEnergy(extracted, false);
+        CustomEnergyStorage target = level.getCapability(CustomCapabilities.ENERGY, targetPos, facing.getOpposite());
+        if (target != null && target.canReceive(facing.getOpposite())) {
+            int toExtract = Math.min(energyStored, transferRate);
+            int accepted = target.receiveEnergy(toExtract, getEnergyTier(), false);
             if (accepted > 0) {
-                energyStorage.extractEnergy(accepted, false);
+                energyStored -= accepted;
                 setChanged();
             }
         }
     }
 
-
     @Override
     protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
         super.saveAdditional(tag, registries);
-        tag.putInt("Energy", energyStorage.getEnergyStored());
+        tag.putInt("Energy", energyStored);
         tag.putInt("Mode", mode.ordinal());
     }
 
     @Override
     protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
         super.loadAdditional(tag, registries);
-        if (tag.contains("Energy")) {
-            energyStorage.deserializeNBT(registries, tag.get("Energy"));
-        }
+        energyStored = tag.getInt("Energy");
         if (tag.contains("Mode")) mode = BatteryBlockMode.values()[tag.getInt("Mode")];
     }
 }

@@ -33,7 +33,7 @@ public class ModItems {
                     .component(ModDataComponents.TRANSFORMERBONUS.get(), true)
             ));
     public static final Supplier<Item> BATTERY = ITEMS.register("battery",
-            () -> new BatteryItem(new Item.Properties()
+            () -> new BatteryItem(10000, new Item.Properties()
                     .stacksTo(1)
                     .component(ModDataComponents.CHARGE.get(), 0)
             ));
