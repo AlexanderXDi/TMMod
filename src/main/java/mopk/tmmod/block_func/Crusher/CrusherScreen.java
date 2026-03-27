@@ -30,11 +30,11 @@ public class CrusherScreen extends AbstractContainerScreen<CrusherMenu> {
     private static final ResourceLocation MODULES_SLOT =
             ResourceLocation.fromNamespaceAndPath("tmmod", "textures/gui/crusher/modules_slot.png");
 
-    int RTWSlot = 18;
-    int RTHSlot = 18;
-
     int RTWBG = 176;
     int RTHBG = 166;
+
+    int RTWSlot = 18;
+    int RTHSlot = 18;
 
     int RTWModulesBG = 26;
     int RTHModulesBG = 80;

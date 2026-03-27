@@ -14,9 +14,11 @@ import java.util.List;
 
 
 public class BatteryBlockScreen extends AbstractContainerScreen<BatteryBlockMenu> {
-    private static final ResourceLocation BG_TEXTURE =
+    private static final ResourceLocation BG =
             ResourceLocation.fromNamespaceAndPath("tmmod", "textures/gui/battery_block/battery_block_bg.png");
-    private static final ResourceLocation SLOT_TEXTURE =
+    private static final ResourceLocation ENERGY_SLOT =
+            ResourceLocation.fromNamespaceAndPath("tmmod", "textures/gui/battery_block/energy_slot.png");
+    private static final ResourceLocation SLOT =
             ResourceLocation.fromNamespaceAndPath("tmmod", "textures/gui/slot.png");
     private static final ResourceLocation BAR_BG =
             ResourceLocation.fromNamespaceAndPath("tmmod", "textures/gui/bar_bg.png");
@@ -27,11 +29,11 @@ public class BatteryBlockScreen extends AbstractContainerScreen<BatteryBlockMenu
         super(menu, inventory, title);
     }
 
-    int RTW_BG = 176;
-    int RTH_BG = 166;
+    int RTWBG = 176;
+    int RTHBG = 166;
 
-    int RTW_SLOT = 18;
-    int RTH_SLOT = 18;
+    int RTWSlot = 18;
+    int RTHSlot = 18;
 
     int barHeight = 62;
     int barWidth = 16;
@@ -45,7 +47,7 @@ public class BatteryBlockScreen extends AbstractContainerScreen<BatteryBlockMenu
         Component buttonModeText = Component.translatable("gui.tmmod.battery_block.button_mode_text");
         this.addRenderableWidget(Button.builder(Component.literal(buttonModeText.getString()), button -> {
             PacketDistributor.sendToServer(new BatteryBlockModePacket(menu.getBlockEntity().getBlockPos()));
-        }).bounds(this.leftPos + 60, this.topPos + 50, 56, 20).build());
+        }).bounds(this.leftPos + 8, this.topPos + 50, 56, 20).build());
     }
 
     private void renderEnergyBar(GuiGraphics guiGraphics, int mouseX, int mouseY) {
@@ -74,7 +76,8 @@ public class BatteryBlockScreen extends AbstractContainerScreen<BatteryBlockMenu
     @Override
     protected void renderBg(GuiGraphics guiGraphics, float partialTick, int mouseX, int mouseY) {
         Component energyText = Component.translatable("gui.tmmod.battery_block.energy_text");
-        Component modeText  = Component.translatable("gui.tmmod.battery_block.mode_text", menu.getMode().name());
+        String modeKey = "gui.tmmod.battery_block.mode." + menu.getMode().name().toLowerCase();
+        Component modeText = Component.translatable("gui.tmmod.battery_block.mode_text", Component.translatable(modeKey));
 
         int x = (width - imageWidth) / 2;
         int y = (height - imageHeight) / 2;
@@ -85,25 +88,26 @@ public class BatteryBlockScreen extends AbstractContainerScreen<BatteryBlockMenu
         int energyFontx = x + 8;
         int energyFonty = y + 30;
 
-        guiGraphics.blit(BG_TEXTURE, x, y, 0, 0, RTW_BG, RTH_BG, imageWidth, imageHeight);
+        guiGraphics.blit(BG, x, y, 0, 0, RTWBG, RTHBG, imageWidth, imageHeight);
 
         for (int i = 0; i < menu.slots.size(); i++) {
             Slot slot = menu.slots.get(i);
-            guiGraphics.blit(SLOT_TEXTURE, x + slot.x - 1, y + slot.y - 1, 0, 0, RTW_SLOT, RTH_SLOT, RTW_SLOT, RTH_SLOT);
+            if (i == 0) {
+                guiGraphics.blit(ENERGY_SLOT, x + slot.x - 1, y + slot.y - 1, 0, 0, RTWSlot, RTHSlot, RTWSlot, RTHSlot);
+                continue;
+            }
+            guiGraphics.blit(SLOT, x + slot.x - 1, y + slot.y - 1, 0, 0, RTWSlot, RTHSlot, RTWSlot, RTHSlot);
         }
 
         guiGraphics.drawString(this.font, energyText.getString() + menu.getEnergy() + " / " + menu.getMaxEnergy(), modeFontx, modeFonty, 0x404040, false);
         guiGraphics.drawString(this.font, modeText.getString(), energyFontx, energyFonty, 0x404040, false);
 
-        renderEnergyBar(guiGraphics, x, y);
+        renderEnergyBar(guiGraphics, mouseX, mouseY);
     }
 
     @Override
     public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
         super.render(guiGraphics, mouseX, mouseY, partialTick);
         this.renderTooltip(guiGraphics, mouseX, mouseY);
-        this.renderTooltip(guiGraphics, mouseX, mouseY);
-        renderEnergyBar(guiGraphics, mouseX, mouseY);
     }
 }
-

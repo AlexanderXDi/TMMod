@@ -1,5 +1,6 @@
 package mopk.tmmod.block_func.BatteryBlock;
 
+import mopk.tmmod.energy_network.CustomEnergyItemInterface;
 import mopk.tmmod.registration.ModBlockEntities;
 import mopk.tmmod.energy_network.CustomEnergyStorage;
 import mopk.tmmod.energy_network.EnergyNetworkManager;
@@ -15,28 +16,56 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.neoforged.neoforge.items.ItemStackHandler;
 
 import javax.annotation.Nullable;
 
 public class BatteryBlockBE extends BlockEntity implements MenuProvider, CustomEnergyStorage {
     private int energyStored = 0;
     private final int maxEnergyStored = 1000000;
-    private final int transferRate = 32;
+    
+    // Тиры и скорости (Трансформатор: вход 1, выход 2)
+    private final int inputTier = 1;
+    private final int outputTier = 2;
+    private final int receiveRate = 32;   // Лимит входа для Tier 1
+    private final int extractRate = 128; // Лимит выхода для Tier 2
+    
     private BatteryBlockMode mode = BatteryBlockMode.BOTH;
+
+    private final ItemStackHandler inventory = new ItemStackHandler(1) {
+        @Override
+        protected void onContentsChanged(int slot) {
+            setChanged();
+        }
+    };
 
     public BatteryBlockBE(BlockPos pos, BlockState state) {
         super(ModBlockEntities.BATTERY_BLOCK_BE.get(), pos, state);
     }
 
+    public ItemStackHandler getInventory() {
+        return inventory;
+    }
+
     @Override
     public int receiveEnergy(int maxReceive, int tier, boolean simulate) {
         if (mode == BatteryBlockMode.OUTPUT) return 0;
+
+        // Взрыв, если входящий тир выше допустимого (1)
+        if (tier > inputTier) {
+            if (!simulate) {
+                triggerExplosion();
+            }
+            return 0;
+        }
+
         int space = maxEnergyStored - energyStored;
-        int toReceive = Math.min(maxReceive, Math.min(space, transferRate));
+        int toReceive = Math.min(maxReceive, Math.min(space, receiveRate));
         if (!simulate) {
             energyStored += toReceive;
             setChanged();
@@ -44,10 +73,24 @@ public class BatteryBlockBE extends BlockEntity implements MenuProvider, CustomE
         return toReceive;
     }
 
+    private void triggerExplosion() {
+        if (this.level != null && !this.level.isClientSide) {
+            this.level.explode(
+                    null,
+                    this.worldPosition.getX() + 0.5D,
+                    this.worldPosition.getY() + 0.5D,
+                    this.worldPosition.getZ() + 0.5D,
+                    4.0F,
+                    Level.ExplosionInteraction.TNT
+            );
+            this.level.destroyBlock(this.worldPosition, false);
+        }
+    }
+
     @Override
     public int extractEnergy(int maxExtract, boolean simulate) {
         if (mode == BatteryBlockMode.INPUT) return 0;
-        int toExtract = Math.min(maxExtract, Math.min(energyStored, transferRate));
+        int toExtract = Math.min(maxExtract, Math.min(energyStored, extractRate));
         if (!simulate) {
             energyStored -= toExtract;
             setChanged();
@@ -57,7 +100,7 @@ public class BatteryBlockBE extends BlockEntity implements MenuProvider, CustomE
 
     @Override
     public int getEnergyTier() {
-        return 1;
+        return outputTier; // Выдаем Tier 2
     }
 
     @Override
@@ -134,18 +177,36 @@ public class BatteryBlockBE extends BlockEntity implements MenuProvider, CustomE
     public BatteryBlockMode getMode() { return mode; }
 
     public void tick(Level level, BlockPos pos, BlockState state) {
-        if (level.isClientSide || mode == BatteryBlockMode.INPUT || energyStored <= 0) return;
+        if (level.isClientSide) return;
 
-        Direction facing = state.getValue(BlockStateProperties.FACING);
-        BlockPos targetPos = pos.relative(facing);
+        // 1. Зарядка предмета в слоте
+        ItemStack chargeStack = inventory.getStackInSlot(0);
+        if (!chargeStack.isEmpty() && energyStored > 0) {
+            if (chargeStack.getItem() instanceof CustomEnergyItemInterface energyItem) {
+                int chargeSpeed = 100;
+                int toGive = Math.min(energyStored, chargeSpeed);
+                int accepted = energyItem.receiveEnergy(chargeStack, toGive, false);
+                if (accepted > 0) {
+                    energyStored -= accepted;
+                    setChanged();
+                }
+            }
+        }
 
-        CustomEnergyStorage target = level.getCapability(CustomCapabilities.ENERGY, targetPos, facing.getOpposite());
-        if (target != null && target.canReceive(facing.getOpposite())) {
-            int toExtract = Math.min(energyStored, transferRate);
-            int accepted = target.receiveEnergy(toExtract, getEnergyTier(), false);
-            if (accepted > 0) {
-                energyStored -= accepted;
-                setChanged();
+        // 2. Отдача энергии в сеть/соседние блоки
+        if (mode != BatteryBlockMode.INPUT && energyStored > 0) {
+            Direction facing = state.getValue(BlockStateProperties.FACING);
+            BlockPos targetPos = pos.relative(facing);
+
+            CustomEnergyStorage target = level.getCapability(CustomCapabilities.ENERGY, targetPos, facing.getOpposite());
+            if (target != null && target.canReceive(facing.getOpposite())) {
+                // Передача по лимиту отдачи (Tier 2)
+                int toExtract = Math.min(energyStored, extractRate);
+                int accepted = target.receiveEnergy(toExtract, getEnergyTier(), false);
+                if (accepted > 0) {
+                    energyStored -= accepted;
+                    setChanged();
+                }
             }
         }
     }
@@ -153,6 +214,7 @@ public class BatteryBlockBE extends BlockEntity implements MenuProvider, CustomE
     @Override
     protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
         super.saveAdditional(tag, registries);
+        tag.put("Inventory", inventory.serializeNBT(registries));
         tag.putInt("Energy", energyStored);
         tag.putInt("Mode", mode.ordinal());
     }
@@ -160,7 +222,8 @@ public class BatteryBlockBE extends BlockEntity implements MenuProvider, CustomE
     @Override
     protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
         super.loadAdditional(tag, registries);
-        energyStored = tag.getInt("Energy");
+        inventory.deserializeNBT(registries, tag.getCompound("Inventory"));
+        energyStored = tag.getInt("energy"); // Исправлено на строчное 'energy' для совместимости
         if (tag.contains("Mode")) mode = BatteryBlockMode.values()[tag.getInt("Mode")];
     }
 }

@@ -8,6 +8,7 @@ import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.inventory.SimpleContainerData;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
+import net.neoforged.neoforge.items.SlotItemHandler;
 
 import static mopk.tmmod.registration.ModMenuTypes.BATTERY_BLOCK_MENU;
 
@@ -23,6 +24,8 @@ public class BatteryBlockMenu extends AbstractContainerMenu {
         super(BATTERY_BLOCK_MENU.get(), id);
         this.blockEntity = entity;
         this.data = data;
+
+        this.addSlot(new SlotItemHandler(entity.getInventory(), 0, 80, 50));
 
         addDataSlots(data);
 
@@ -47,8 +50,35 @@ public class BatteryBlockMenu extends AbstractContainerMenu {
     }
 
     @Override
-    public ItemStack quickMoveStack(Player playerIn, int index) {
-        return ItemStack.EMPTY;
+    public ItemStack quickMoveStack(Player player, int index) {
+        ItemStack itemstack = ItemStack.EMPTY;
+        Slot slot = this.slots.get(index);
+        if (slot != null && slot.hasItem()) {
+            ItemStack itemstack1 = slot.getItem();
+            itemstack = itemstack1.copy();
+            if (index < 1) {
+                if (!this.moveItemStackTo(itemstack1, 1, 37, true)) {
+                    return ItemStack.EMPTY;
+                }
+            } else {
+                if (!this.moveItemStackTo(itemstack1, 0, 1, false)) {
+                    return ItemStack.EMPTY;
+                }
+            }
+
+            if (itemstack1.isEmpty()) {
+                slot.setByPlayer(ItemStack.EMPTY);
+            } else {
+                slot.setChanged();
+            }
+
+            if (itemstack1.getCount() == itemstack.getCount()) {
+                return ItemStack.EMPTY;
+            }
+
+            slot.onTake(player, itemstack1);
+        }
+        return itemstack;
     }
 
     @Override
@@ -70,4 +100,3 @@ public class BatteryBlockMenu extends AbstractContainerMenu {
         }
     }
 }
-

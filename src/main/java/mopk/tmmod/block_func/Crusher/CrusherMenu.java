@@ -2,6 +2,7 @@ package mopk.tmmod.block_func.Crusher;
 
 import mopk.tmmod.registration.ModBlocks;
 import mopk.tmmod.registration.ModMenuTypes;
+import mopk.tmmod.registration.ModDataComponents;
 
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
@@ -59,7 +60,42 @@ public class CrusherMenu extends AbstractContainerMenu {
     }
 
     @Override
-    public ItemStack quickMoveStack(Player player, int index) { return ItemStack.EMPTY; }
+    public ItemStack quickMoveStack(Player player, int index) {
+        ItemStack itemstack = ItemStack.EMPTY;
+        Slot slot = this.slots.get(index);
+        if (slot != null && slot.hasItem()) {
+            ItemStack itemstack1 = slot.getItem();
+            itemstack = itemstack1.copy();
+            if (index < 7) { // Из слотов машины в инвентарь игрока
+                if (!this.moveItemStackTo(itemstack1, 7, 43, true)) {
+                    return ItemStack.EMPTY;
+                }
+            } else { // Из инвентаря игрока в машину
+                if (itemstack1.has(mopk.tmmod.registration.ModDataComponents.CHARGE.get())) {
+                    if (!this.moveItemStackTo(itemstack1, 2, 3, false)) {
+                        return ItemStack.EMPTY;
+                    }
+                } else if (!this.moveItemStackTo(itemstack1, 0, 1, false)) {
+                    if (!this.moveItemStackTo(itemstack1, 3, 7, false)) {
+                        return ItemStack.EMPTY;
+                    }
+                }
+            }
+
+            if (itemstack1.isEmpty()) {
+                slot.setByPlayer(ItemStack.EMPTY);
+            } else {
+                slot.setChanged();
+            }
+
+            if (itemstack1.getCount() == itemstack.getCount()) {
+                return ItemStack.EMPTY;
+            }
+
+            slot.onTake(player, itemstack1);
+        }
+        return itemstack;
+    }
 
     @Override
     public boolean stillValid(Player player) {

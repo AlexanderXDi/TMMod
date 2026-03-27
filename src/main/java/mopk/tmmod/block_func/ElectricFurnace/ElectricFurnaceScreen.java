@@ -99,8 +99,6 @@ public class ElectricFurnaceScreen extends AbstractContainerScreen<ElectricFurna
             guiGraphics.blit(SLOT, x + slot.x - 1, y + slot.y - 1, 0, 0, RTWSlot, RTHSlot, RTWSlot, RTHSlot);
         }
 
-
-
         guiGraphics.blit(ARROW_STATIC, x + 77, y + 34, 0, 0, RTWArrow, RTHArrow, RTWArrow, RTHArrow);
         guiGraphics.blit(ARROW, x + 77, y + 34, 0, 0, progressBar, RTHArrow, RTWArrow, RTHArrow);
     }

@@ -12,7 +12,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import java.util.*;
 
 /**
- * Оптимизированный класс энергетической сети.
+ * Исправленный класс энергетической сети с проверкой вольтажа (тира).
  */
 public class EnergyNetwork {
     private final UUID networkId;
@@ -29,7 +29,7 @@ public class EnergyNetwork {
     private int networkEnergy = 0;
     private int networkCapacity = 0;
     private int networkTransferLimit = 0;
-    private int networkTierLimit = 0;
+    private int currentHighestTier = 0; // Наивысший тир энергии в сети в данный момент
 
     public EnergyNetwork(Level level, UUID id) {
         this.level = level;
@@ -39,7 +39,8 @@ public class EnergyNetwork {
     public void tick() {
         if (level == null || level.isClientSide || cables.isEmpty()) return;
 
-        // 1. Сбор энергии
+        // 1. Сбор энергии и определение текущего тира
+        currentHighestTier = 0;
         collectEnergy();
 
         // 2. Ограничение емкостью
@@ -60,9 +61,15 @@ public class EnergyNetwork {
         for (BlockPos pos : producers) {
             BlockEntity be = level.getBlockEntity(pos);
             if (be instanceof CustomEnergyStorage storage) {
-                if (storage.getEnergyTier() > networkTierLimit) {
-                    burnoutChain();
-                    return;
+                int producerTier = storage.getEnergyTier();
+                
+                // Проверяем, выдерживают ли наши провода такой тир
+                if (producerTier > 0) {
+                    if (checkCablesForBurnout(producerTier)) {
+                        burnoutChain(); // Взрыв, если провода не тянут
+                        return;
+                    }
+                    currentHighestTier = Math.max(currentHighestTier, producerTier);
                 }
 
                 int canExtract = storage.extractEnergy(networkTransferLimit, true);
@@ -73,6 +80,21 @@ public class EnergyNetwork {
                 }
             }
         }
+    }
+
+    /**
+     * Проверяет, есть ли в сети провода, чей тир ниже переданного вольтажа.
+     */
+    private boolean checkCablesForBurnout(int voltage) {
+        for (BlockPos pos : cables) {
+            BlockEntity be = level.getBlockEntity(pos);
+            if (be instanceof CableBE cable) {
+                if (cable.getTier().getTier() < voltage) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     private void distributeToNodes(List<BlockPos> nodes, boolean isConsumer) {
@@ -89,7 +111,8 @@ public class EnergyNetwork {
             
             BlockEntity be = level.getBlockEntity(pos);
             if (be instanceof CustomEnergyStorage storage) {
-                int received = storage.receiveEnergy(Math.min(networkEnergy, networkTransferLimit), networkTierLimit, false);
+                // Передаем энергию с текущим наивысшим тиром сети
+                int received = storage.receiveEnergy(Math.min(networkEnergy, networkTransferLimit), currentHighestTier, false);
                 networkEnergy -= received;
                 
                 if (isConsumer) lastConsumerIndex = (currentIndex + 1) % size;
@@ -99,14 +122,14 @@ public class EnergyNetwork {
     }
 
     public void recalculateStats() {
+        if (level == null || level.isClientSide) return;
+
         long totalCapacity = 0;
-        int minTransfer = Integer.MAX_VALUE;
-        int minTier = Integer.MAX_VALUE;
+        int maxTransfer = 0;
 
         if (cables.isEmpty()) {
             this.networkCapacity = 0;
             this.networkTransferLimit = 0;
-            this.networkTierLimit = 0;
             return;
         }
 
@@ -114,14 +137,12 @@ public class EnergyNetwork {
             BlockEntity be = level.getBlockEntity(pos);
             if (be instanceof CableBE cable) {
                 totalCapacity += cable.getCapacity();
-                minTransfer = Math.min(minTransfer, cable.getTransfer());
-                minTier = Math.min(minTier, cable.getTier().getTier());
+                maxTransfer = Math.max(maxTransfer, cable.getTransfer());
             }
         }
 
         this.networkCapacity = (int) Math.min(totalCapacity, Integer.MAX_VALUE);
-        this.networkTransferLimit = (minTransfer == Integer.MAX_VALUE) ? 0 : minTransfer;
-        this.networkTierLimit = (minTier == Integer.MAX_VALUE) ? 0 : minTier;
+        this.networkTransferLimit = maxTransfer;
     }
 
     private void burnoutChain() {
@@ -143,7 +164,6 @@ public class EnergyNetwork {
         this.cables.addAll(other.cables);
         this.networkEnergy = (int) Math.min((long)this.networkEnergy + other.networkEnergy, networkCapacity);
         
-        // Пересобираем списки узлов, чтобы избежать дубликатов
         updateNodes(other.producers, producers);
         updateNodes(other.consumers, consumers);
         updateNodes(other.storages, storages);
