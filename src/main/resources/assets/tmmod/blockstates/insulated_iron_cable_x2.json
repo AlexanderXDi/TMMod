@@ -1,0 +1,33 @@
+{
+  "multipart": [
+    {
+      "apply": {
+        "model": "tmmod:block/cables/insulated_iron_cable_x2/insulated_iron_cable_x2_core"
+      }
+    },
+    {
+      "when": { "north": "true" },
+      "apply": { "model": "tmmod:block/cables/insulated_iron_cable_x2/insulated_iron_cable_x2_north" }
+    },
+    {
+      "when": { "east": "true" },
+      "apply": { "model": "tmmod:block/cables/insulated_iron_cable_x2/insulated_iron_cable_x2_east" }
+    },
+    {
+      "when": { "south": "true" },
+      "apply": { "model": "tmmod:block/cables/insulated_iron_cable_x2/insulated_iron_cable_x2_south" }
+    },
+    {
+      "when": { "west": "true" },
+      "apply": { "model": "tmmod:block/cables/insulated_iron_cable_x2/insulated_iron_cable_x2_west" }
+    },
+    {
+      "when": { "up": "true" },
+      "apply": { "model": "tmmod:block/cables/insulated_iron_cable_x2/insulated_iron_cable_x2_up" }
+    },
+    {
+      "when": { "down": "true" },
+      "apply": { "model": "tmmod:block/cables/insulated_iron_cable_x2/insulated_iron_cable_x2_down" }
+    }
+  ]
+}

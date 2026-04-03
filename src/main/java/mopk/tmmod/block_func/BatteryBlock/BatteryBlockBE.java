@@ -28,8 +28,7 @@ import javax.annotation.Nullable;
 public class BatteryBlockBE extends BlockEntity implements MenuProvider, CustomEnergyStorage {
     private int energyStored = 0;
     private final int maxEnergyStored = 1000000;
-    
-    // Тиры и скорости (Трансформатор: вход 1, выход 2)
+
     private final int inputTier = 1;
     private final int outputTier = 2;
     private final int receiveRate = 32;   // Лимит входа для Tier 1

@@ -4,6 +4,7 @@ import mopk.tmmod.block_func.BatteryBlock.BatteryBlockBE;
 import mopk.tmmod.block_func.Cables.CableBE;
 import mopk.tmmod.block_func.Cables.CableTier;
 import mopk.tmmod.block_func.Crusher.CrusherBE;
+import mopk.tmmod.block_func.Metalformer.MetalformerBE;
 import mopk.tmmod.block_func.ElectricFurnace.ElectricFurnaceBE;
 import mopk.tmmod.block_func.Generator.GeneratorBE;
 import mopk.tmmod.block_func.IronFurnace.IronFurnaceBE;
@@ -15,6 +16,8 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Supplier;
 
 public class ModBlockEntities {
@@ -49,6 +52,13 @@ public class ModBlockEntities {
                             ModBlocks.CRUSHER.get()
                     ).build(null));
 
+    public static final Supplier<BlockEntityType<MetalformerBE>> METALFORMER_BE =
+            BLOCK_ENTITIES.register("metalformer_be",
+                    () -> BlockEntityType.Builder.of(
+                            MetalformerBE::new,
+                            ModBlocks.METALFORMER.get()
+                    ).build(null));
+
     public static final Supplier<BlockEntityType<ElectricFurnaceBE>> ELECTRIC_FURNACE_BE =
             BLOCK_ENTITIES.register("electric_furnace_be",
                     () -> BlockEntityType.Builder.of(
@@ -58,11 +68,19 @@ public class ModBlockEntities {
 
     public static final Supplier<BlockEntityType<CableBE>> CABLE_BE =
             BLOCK_ENTITIES.register("cable_be",
-                    () -> BlockEntityType.Builder.of(
-                            (pos, state) -> {
-                                CableTier tier = ((CableBlock) state.getBlock()).getTier();
-                                return new CableBE(pos, state, tier);
-                            },
-                            ModBlocks.CABLES.values().stream().map(java.util.function.Supplier::get).toArray(Block[]::new)
-                    ).build(null));
+                    () -> {
+                        // Собираем ВСЕ блоки кабелей из всех тиров и всех уровней изоляции
+                        List<Block> allCableBlocks = new ArrayList<>();
+                        ModBlocks.ALL_CABLES.values().forEach(list -> 
+                            list.forEach(holder -> allCableBlocks.add(holder.get()))
+                        );
+                        
+                        return BlockEntityType.Builder.of(
+                                (pos, state) -> {
+                                    CableTier tier = ((CableBlock) state.getBlock()).getTier();
+                                    return new CableBE(pos, state, tier);
+                                },
+                                allCableBlocks.toArray(new Block[0])
+                        ).build(null);
+                    });
 }

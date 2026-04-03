@@ -12,26 +12,46 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.neoforged.neoforge.registries.DeferredBlock;
-import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
+import java.util.ArrayList;
 import java.util.EnumMap;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
 
 public class ModBlocks {
     public static final DeferredRegister.Blocks BLOCKS = DeferredRegister.createBlocks(Tmmod.MODID);
-    public static final Map<CableTier, DeferredBlock<CableBlock>> CABLES = new EnumMap<>(CableTier.class);
+
+    // Карта для быстрого доступа: Тир -> Список (индекс = уровень изоляции)
+    public static final Map<CableTier, List<DeferredBlock<CableBlock>>> ALL_CABLES = new EnumMap<>(CableTier.class);
 
     static {
         for (CableTier tier : CableTier.values()) {
-            String name = tier.name().toLowerCase() + "_cable";
+            List<DeferredBlock<CableBlock>> tierVariants = new ArrayList<>();
+            
+            // Регистрируем от 0 до max_insulation
+            int maxInsulation = tier.getNeedsRubber();
+            for (int i = 0; i <= maxInsulation; i++) {
+                String name;
+                if (i == 0) {
+                    name = tier.name().toLowerCase() + "_cable";
+                } else {
+                    name = "insulated_" + tier.name().toLowerCase() + "_cable_x" + i;
+                    // Для совместимости с твоими старыми названиями (если x1), можно сделать проверку:
+                    if (maxInsulation == 1 && i == 1) {
+                         name = "insulated_" + tier.name().toLowerCase() + "_cable";
+                    }
+                }
 
-            DeferredBlock<CableBlock> block = BLOCKS.register(name, () -> new CableBlock(tier, BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK).noOcclusion()));
-
-            CABLES.put(tier, block);
-
-            ITEMS.register(name, () -> new BlockItem(block.get(), new Item.Properties()));
+                final int currentInsulation = i;
+                DeferredBlock<CableBlock> block = BLOCKS.register(name, 
+                    () -> new CableBlock(tier, currentInsulation, BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK).noOcclusion()));
+                
+                tierVariants.add(block);
+                ITEMS.register(name, () -> new BlockItem(block.get(), new Item.Properties()));
+            }
+            ALL_CABLES.put(tier, tierVariants);
         }
     }
 
@@ -47,6 +67,9 @@ public class ModBlocks {
     public static final DeferredBlock<Block> CRUSHER = registerBlock("crusher",
             () -> new Crusher(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK)));
 
+    public static final DeferredBlock<Block> METALFORMER = registerBlock("metalformer",
+            () -> new Metalformer(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK)));
+
     public static final DeferredBlock<Block> ELECTRIC_FURNACE = registerBlock("electric_furnace",
             () -> new ElectricFurnace(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK)));
     
@@ -56,7 +79,7 @@ public class ModBlocks {
         return toReturn;
     }
 
-    private static <T extends Block> DeferredItem<BlockItem> registerBlockItem(String name, DeferredBlock<T> block) {
-        return ITEMS.register(name, () -> new BlockItem(block.get(), new Item.Properties()));
+    private static <T extends Block> void registerBlockItem(String name, DeferredBlock<T> block) {
+        ITEMS.register(name, () -> new BlockItem(block.get(), new Item.Properties()));
     }
 }

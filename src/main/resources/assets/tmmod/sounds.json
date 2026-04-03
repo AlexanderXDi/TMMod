@@ -11,6 +11,12 @@
       "tmmod:crusher_hum"
     ]
   },
+  "metalformer_hum": {
+    "subtitle": "subtitles.tmmod.metalformer_hum",
+    "sounds": [
+      "tmmod:metalformer_hum"
+    ]
+  },
   "battery_block_hum": {
     "subtitle": "subtitles.tmmod.battery_block_hum",
     "sounds": [

@@ -1,0 +1,21 @@
+{
+  "parent": "block/block",
+  "textures": {
+    "particle": "tmmod:block/cables/insulated_iron_cable_x3/insulated_iron_cable_x3",
+    "texture": "tmmod:block/cables/insulated_iron_cable_x3/insulated_iron_cable_x3"
+  },
+  "elements": [
+    {
+      "from": [0, 3, 3],
+      "to": [3, 13, 13],
+      "faces": {
+        "north": { "uv": [0, 3, 3, 13], "texture": "#texture" },
+        "east": { "uv": [0, 3, 3, 13], "texture": "#texture" },
+        "south": { "uv": [0, 3, 3, 13], "texture": "#texture" },
+        "west": { "uv": [0, 3, 3, 13], "texture": "#texture" },
+        "up": { "uv": [0, 3, 3, 13], "texture": "#texture" },
+        "down": { "uv": [0, 3, 3, 13], "texture": "#texture" }
+      }
+    }
+  ]
+}

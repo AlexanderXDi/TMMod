@@ -10,18 +10,21 @@
   "block.tmmod.tin_cable": "Оловяный провод",
   "block.tmmod.battery_block": "Аккумулятор",
   "block.tmmod.crusher": "Дробитель",
+  "block.tmmod.metalformer": "Металлоформовщик",
   "block.tmmod.electric_furnace": "Электрическая печь",
 
   "container.iron_furnace": "Железная печь",
   "container.generator": "Генератор",
   "container.battery_block": "Аккумулятор",
   "container.crusher": "Дробитель",
+  "container.metalformer": "Металлоформовщик",
   "container.electric_furnace": "Электрическая печь",
 
   "subtitles.tmmod.generator_hum": "Шум генератора",
   "subtitles.tmmod.battery_block_hum": "Шум аккумулятора",
   "subtitles.tmmod.electric_furnace_hum": "Шум электрической печи",
   "subtitles.tmmod.crusher_hum": "Шум дробителя",
+  "subtitles.tmmod.metalformer_hum": "Шум металлоформовщика",
 
   "item.tmmod.iron_hammer": "Молот",
   "item.tmmod.steel_ingot": "Стальной слиток",
@@ -29,6 +32,11 @@
   "item.tmmod.overclocker_upgrade": "Улучшение 'Ускоритель'",
   "item.tmmod.accumulator_upgrade": "Улучшение 'Аккумулятор'",
   "item.tmmod.transformer_upgrade": "Улучшение 'Трансформатор'",
+  "item.tmmod.sticky_resin": "Латекс",
+  "item.tmmod.rubber": "Резина",
+  "item.tmmod.coil": "Катушка",
+  "item.tmmod.electric_motor": "Моторчик",
+  "item.tmmod.electronic_circuit": "Микросхема",
 
   "gui.tmmod.battery_block.mode_text": "Режим: %s",
   "gui.tmmod.battery_block.mode.both": "Смешанный",
@@ -36,6 +44,12 @@
   "gui.tmmod.battery_block.mode.output": "Отдача",
   "gui.tmmod.battery_block.energy_text": "Энергия: ",
   "gui.tmmod.battery_block.button_mode_text": "Режим",
+
+  "gui.tmmod.metalformer.mode_text": "Режим: %s",
+  "gui.tmmod.metalformer.mode.forging": "Ковка",
+  "gui.tmmod.metalformer.mode.cutting": "Резка",
+  "gui.tmmod.metalformer.mode.squeezing": "Сжатие",
+  "gui.tmmod.metalformer.button_mode_text": "Режим",
 
   "gui.tmmod.overclocker_upgrade.text": "скорость",
   "gui.tmmod.accumulator_upgrade.text": " доп. EU в хранилище",

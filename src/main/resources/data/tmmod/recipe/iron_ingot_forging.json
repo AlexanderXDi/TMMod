@@ -1,0 +1,12 @@
+{
+  "type": "tmmod:forging",
+  "input": {
+    "item": "minecraft:iron_ingot"
+  },
+  "output": {
+    "count": 2,
+    "id": "tmmod:iron_cable"
+  },
+  "energyPerTick": 5,
+  "time": 100
+}

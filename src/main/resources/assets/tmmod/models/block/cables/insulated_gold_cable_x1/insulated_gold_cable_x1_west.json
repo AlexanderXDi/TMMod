@@ -1,0 +1,21 @@
+{
+  "parent": "block/block",
+  "textures": {
+    "particle": "tmmod:block/cables/insulated_gold_cable_x1/insulated_gold_cable_x1",
+    "texture": "tmmod:block/cables/insulated_gold_cable_x1/insulated_gold_cable_x1"
+  },
+  "elements": [
+    {
+      "from": [0, 5, 5],
+      "to": [5, 11, 11],
+      "faces": {
+        "north": { "uv": [0, 5, 5, 11], "texture": "#texture" },
+        "east": { "uv": [0, 5, 5, 11], "texture": "#texture" },
+        "south": { "uv": [0, 5, 5, 11], "texture": "#texture" },
+        "west": { "uv": [0, 5, 5, 11], "texture": "#texture" },
+        "up": { "uv": [0, 5, 5, 11], "texture": "#texture" },
+        "down": { "uv": [0, 5, 5, 11], "texture": "#texture" }
+      }
+    }
+  ]
+}

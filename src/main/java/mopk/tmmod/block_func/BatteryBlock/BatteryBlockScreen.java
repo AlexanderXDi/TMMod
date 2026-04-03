@@ -99,8 +99,8 @@ public class BatteryBlockScreen extends AbstractContainerScreen<BatteryBlockMenu
             guiGraphics.blit(SLOT, x + slot.x - 1, y + slot.y - 1, 0, 0, RTWSlot, RTHSlot, RTWSlot, RTHSlot);
         }
 
-        guiGraphics.drawString(this.font, energyText.getString() + menu.getEnergy() + " / " + menu.getMaxEnergy(), modeFontx, modeFonty, 0x404040, false);
-        guiGraphics.drawString(this.font, modeText.getString(), energyFontx, energyFonty, 0x404040, false);
+        guiGraphics.drawString(this.font, energyText.getString() + menu.getEnergy() + " / " + menu.getMaxEnergy(), energyFontx, energyFonty, 0x404040, false);
+        guiGraphics.drawString(this.font, modeText.getString(), modeFontx, modeFonty, 0x404040, false);
 
         renderEnergyBar(guiGraphics, mouseX, mouseY);
     }

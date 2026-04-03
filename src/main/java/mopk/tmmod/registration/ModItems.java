@@ -20,6 +20,16 @@ public class ModItems {
             () -> new Item(new Item.Properties()));
     public static final DeferredItem<Item> STEEL_INGOT = ITEMS.register("steel_ingot",
             () -> new Item(new Item.Properties()));
+    public static final DeferredItem<Item> STICKY_RESIN = ITEMS.register("sticky_resin",
+            () -> new Item(new Item.Properties()));
+    public static final DeferredItem<Item> COIL = ITEMS.register("coil",
+            () -> new Item(new Item.Properties()));
+    public static final DeferredItem<Item> ELECTRIC_MOTOR = ITEMS.register("electric_motor",
+            () -> new Item(new Item.Properties()));
+    public static final DeferredItem<Item> RUBBER = ITEMS.register("rubber",
+            () -> new Item(new Item.Properties()));
+    public static final DeferredItem<Item> ELECTRONIC_CIRCUIT = ITEMS.register("electronic_circuit",
+            () -> new Item(new Item.Properties()));
     public static final DeferredItem<Item> OVERCLOCKER_UPGRADE = ITEMS.register("overclocker_upgrade",
             () -> new OverclockerUpgrade(new Item.Properties()
                     .component(ModDataComponents.SPEEDBONUS.get(), true)

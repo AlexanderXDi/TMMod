@@ -2,6 +2,7 @@ package mopk.tmmod.registration;
 
 import mopk.tmmod.block_func.BatteryBlock.BatteryBlockMenu;
 import mopk.tmmod.block_func.Crusher.CrusherMenu;
+import mopk.tmmod.block_func.Metalformer.MetalformerMenu;
 import mopk.tmmod.block_func.ElectricFurnace.ElectricFurnaceMenu;
 import mopk.tmmod.block_func.Generator.GeneratorMenu;
 import mopk.tmmod.block_func.IronFurnace.IronFurnaceMenu;
@@ -27,6 +28,9 @@ public class ModMenuTypes {
 
     public static final DeferredHolder<MenuType<?>, MenuType<CrusherMenu>> CRUSHER_MENU = MENUS.register("crusher_menu",
             () -> IMenuTypeExtension.create(CrusherMenu::new));
+
+    public static final DeferredHolder<MenuType<?>, MenuType<MetalformerMenu>> METALFORMER_MENU = MENUS.register("metalformer_menu",
+            () -> IMenuTypeExtension.create(MetalformerMenu::new));
 
     public static final DeferredHolder<MenuType<?>, MenuType<ElectricFurnaceMenu>> ELECTRIC_FURNACE_MENU = MENUS.register("electric_furnace_menu",
             () -> IMenuTypeExtension.create(ElectricFurnaceMenu::new));

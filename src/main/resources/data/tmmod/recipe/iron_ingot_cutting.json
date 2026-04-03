@@ -1,0 +1,12 @@
+{
+  "type": "tmmod:cutting",
+  "input": {
+    "item": "minecraft:iron_ingot"
+  },
+  "output": {
+    "count": 2,
+    "id": "tmmod:crusher"
+  },
+  "energyPerTick": 5,
+  "time": 100
+}

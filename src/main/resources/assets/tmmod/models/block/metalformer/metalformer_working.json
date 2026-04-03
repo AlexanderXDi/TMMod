@@ -1,0 +1,8 @@
+{
+   "parent": "minecraft:block/orientable",
+   "textures": {
+      "top": "tmmod:block/metalformer/metalformer_top_working",
+      "front": "tmmod:block/metalformer/metalformer_working",
+      "side": "tmmod:block/metalformer/metalformer_side"
+   }
+}

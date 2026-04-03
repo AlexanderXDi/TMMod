@@ -18,6 +18,10 @@ public class ModSounds {
             SOUND_EVENTS.register("crusher_hum",
                     () -> SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath("tmmod", "crusher_hum")));
 
+    public static final DeferredHolder<SoundEvent, SoundEvent> METALFORMER_HUM =
+            SOUND_EVENTS.register("metalformer_hum",
+                    () -> SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath("tmmod", "metalformer_hum")));
+
     public static final DeferredHolder<SoundEvent, SoundEvent> BATTERY_BLOCK_HUM =
             SOUND_EVENTS.register("battery_block_hum",
                     () -> SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath("tmmod", "battery_block_hum")));

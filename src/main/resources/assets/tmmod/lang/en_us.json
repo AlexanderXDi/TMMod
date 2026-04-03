@@ -10,18 +10,21 @@
   "block.tmmod.tin_cable": "Tin cable",
   "block.tmmod.battery_block": "Accumulator",
   "block.tmmod.crusher": "Crusher",
+  "block.tmmod.metalformer": "Metalformer",
   "block.tmmod.electric_furnace": "Electric furnace",
 
   "container.iron_furnace": "Iron furnace",
   "container.generator": "Generator",
   "container.battery_block": "Accumulator",
   "container.crusher": "Crusher",
+  "container.metalformer": "Metalformer",
   "container.electric_furnace": "Electric furnace",
 
   "subtitles.tmmod.generator_hum": "Generator hum",
   "subtitles.tmmod.battery_block_hum": "Accumulator hum",
   "subtitles.tmmod.electric_furnace_hum": "Electric furnace",
   "subtitles.tmmod.crusher_hum": "Crusher hum",
+  "subtitles.tmmod.metalformer_hum": "Metalformer hum",
 
   "item.tmmod.iron_hammer": "Hammer",
   "item.tmmod.steel_ingot": "Steel ingot",
@@ -29,6 +32,11 @@
   "item.tmmod.overclocker_upgrade": "Overclocker upgrade",
   "item.tmmod.accumulator_upgrade": "Accumulator upgrade",
   "item.tmmod.transformer_upgrade": "Transformer upgrade",
+  "item.tmmod.sticky_resin": "Latex",
+  "item.tmmod.rubber": "Rubber",
+  "item.tmmod.coil": "Coil",
+  "item.tmmod.electric_motor": "Electric motor",
+  "item.tmmod.electronic_circuit": "Circuit",
 
 
   "gui.tmmod.battery_block.mode_text": "Mode: %s",
@@ -37,6 +45,12 @@
   "gui.tmmod.battery_block.mode.output": "Output",
   "gui.tmmod.battery_block.energy_text": "Energy: ",
   "gui.tmmod.battery_block.button_mode_text": "Mode",
+
+  "gui.tmmod.metalformer.mode_text": "Mode: %s",
+  "gui.tmmod.metalformer.mode.forging": "Forging",
+  "gui.tmmod.metalformer.mode.cutting": "Cutting",
+  "gui.tmmod.metalformer.mode.squeezing": "Squeezing",
+  "gui.tmmod.metalformer.button_mode_text": "Mode",
 
   "gui.tmmod.battery_block.overclocker_upgrade.text": "speed",
   "gui.tmmod.accumulator_upgrade .text": " extra EU into a storage",

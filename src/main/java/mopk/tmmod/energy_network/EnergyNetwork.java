@@ -29,7 +29,7 @@ public class EnergyNetwork {
     private int networkEnergy = 0;
     private int networkCapacity = 0;
     private int networkTransferLimit = 0;
-    private int currentHighestTier = 0; // Наивысший тир энергии в сети в данный момент
+    private int currentHighestTier = 0;
 
     public EnergyNetwork(Level level, UUID id) {
         this.level = level;
@@ -39,7 +39,7 @@ public class EnergyNetwork {
     public void tick() {
         if (level == null || level.isClientSide || cables.isEmpty()) return;
 
-        // 1. Сбор энергии и определение текущего тира
+        // 1. Сбор энергии
         currentHighestTier = 0;
         collectEnergy();
 

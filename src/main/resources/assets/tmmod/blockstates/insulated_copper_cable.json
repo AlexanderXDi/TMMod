@@ -1,0 +1,33 @@
+{
+  "multipart": [
+    {
+      "apply": {
+        "model": "tmmod:block/cables/insulated_copper_cable/insulated_copper_cable_core"
+      }
+    },
+    {
+      "when": { "north": "true" },
+      "apply": { "model": "tmmod:block/cables/insulated_copper_cable/insulated_copper_cable_north" }
+    },
+    {
+      "when": { "east": "true" },
+      "apply": { "model": "tmmod:block/cables/insulated_copper_cable/insulated_copper_cable_east" }
+    },
+    {
+      "when": { "south": "true" },
+      "apply": { "model": "tmmod:block/cables/insulated_copper_cable/insulated_copper_cable_south" }
+    },
+    {
+      "when": { "west": "true" },
+      "apply": { "model": "tmmod:block/cables/insulated_copper_cable/insulated_copper_cable_west" }
+    },
+    {
+      "when": { "up": "true" },
+      "apply": { "model": "tmmod:block/cables/insulated_copper_cable/insulated_copper_cable_up" }
+    },
+    {
+      "when": { "down": "true" },
+      "apply": { "model": "tmmod:block/cables/insulated_copper_cable/insulated_copper_cable_down" }
+    }
+  ]
+}

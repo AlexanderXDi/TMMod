@@ -3,9 +3,12 @@ package mopk.tmmod.blocks;
 import mopk.tmmod.block_func.Cables.CableBE;
 import mopk.tmmod.block_func.Cables.CableTier;
 
+import mopk.tmmod.energy_network.EnergyNetworkManager;
 import mopk.tmmod.registration.CustomCapabilities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -14,6 +17,8 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.SimpleWaterloggedBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -34,19 +39,13 @@ public class CableBlock extends Block implements EntityBlock, SimpleWaterloggedB
     public static final BooleanProperty DOWN = BlockStateProperties.DOWN;
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 
-    private static final VoxelShape SHAPE_CORE = Block.box(6, 6, 6, 10, 10, 10);
-    private static final VoxelShape SHAPE_NORTH = Block.box(6, 6, 0, 10, 10, 6);
-    private static final VoxelShape SHAPE_SOUTH = Block.box(6, 6, 10, 10, 10, 16);
-    private static final VoxelShape SHAPE_WEST = Block.box(0, 6, 6, 6, 10, 10);
-    private static final VoxelShape SHAPE_EAST = Block.box(10, 6, 6, 16, 10, 10);
-    private static final VoxelShape SHAPE_UP = Block.box(6, 10, 6, 10, 16, 10);
-    private static final VoxelShape SHAPE_DOWN = Block.box(6, 0, 6, 10, 6, 10);
-
     private final CableTier tier;
+    private final int insulationLevel;
 
-    public CableBlock(CableTier tier, Properties properties) {
+    public CableBlock(CableTier tier, int insulationLevel, Properties properties) {
         super(properties);
         this.tier = tier;
+        this.insulationLevel = insulationLevel;
         this.registerDefaultState(this.stateDefinition.any()
                 .setValue(NORTH, false).setValue(SOUTH, false)
                 .setValue(EAST, false).setValue(WEST, false)
@@ -74,26 +73,19 @@ public class CableBlock extends Block implements EntityBlock, SimpleWaterloggedB
 
     @Override
     public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
-        VoxelShape shape = SHAPE_CORE;
+        // Размер кабеля зависит от уровня изоляции (0 уровень - самый тонкий)
+        double size = 2.0 + (insulationLevel * 1.0); // Базовый 4x4, +1 к радиусу за каждый уровень
+        double min = 8.0 - size;
+        double max = 8.0 + size;
 
-        if (state.getValue(UP)) {
-            shape = Shapes.or(shape, SHAPE_UP);
-        }
-        if (state.getValue(DOWN)) {
-            shape = Shapes.or(shape, SHAPE_DOWN);
-        }
-        if (state.getValue(NORTH)) {
-            shape = Shapes.or(shape, SHAPE_NORTH);
-        }
-        if (state.getValue(SOUTH)) {
-            shape = Shapes.or(shape, SHAPE_SOUTH);
-        }
-        if (state.getValue(EAST)) {
-            shape = Shapes.or(shape, SHAPE_EAST);
-        }
-        if (state.getValue(WEST)) {
-            shape = Shapes.or(shape, SHAPE_WEST);
-        }
+        VoxelShape shape = Block.box(min, min, min, max, max, max);
+
+        if (state.getValue(UP)) shape = Shapes.or(shape, Block.box(min, max, min, max, 16, max));
+        if (state.getValue(DOWN)) shape = Shapes.or(shape, Block.box(min, 0, min, max, min, max));
+        if (state.getValue(NORTH)) shape = Shapes.or(shape, Block.box(min, min, 0, max, max, min));
+        if (state.getValue(SOUTH)) shape = Shapes.or(shape, Block.box(min, min, max, max, max, 16));
+        if (state.getValue(WEST)) shape = Shapes.or(shape, Block.box(0, min, min, min, max, max));
+        if (state.getValue(EAST)) shape = Shapes.or(shape, Block.box(max, min, min, 16, max, max));
 
         return shape;
     }
@@ -109,7 +101,8 @@ public class CableBlock extends Block implements EntityBlock, SimpleWaterloggedB
     }
 
     private boolean canConnectTo(Level level, BlockPos neighborPos, Direction side) {
-        return level.getCapability(CustomCapabilities.ENERGY, neighborPos, side) != null;
+        return level.getCapability(CustomCapabilities.ENERGY, neighborPos, side) != null ||
+               level.getCapability(Capabilities.EnergyStorage.BLOCK, neighborPos, side) != null;
     }
 
     private BooleanProperty getConnectionProperty(Direction direction) {
@@ -124,11 +117,11 @@ public class CableBlock extends Block implements EntityBlock, SimpleWaterloggedB
     }
 
     public CableTier getTier() { return tier; }
+    public int getInsulationLevel() { return insulationLevel; }
 
     @Nullable
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
         return new CableBE(pos, state, this.tier);
     }
-
 }

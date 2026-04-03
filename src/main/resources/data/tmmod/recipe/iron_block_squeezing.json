@@ -1,0 +1,12 @@
+{
+  "type": "tmmod:squeezing",
+  "input": {
+    "item": "minecraft:iron_block"
+  },
+  "output": {
+    "count": 2,
+    "id": "tmmod:iron_furnace"
+  },
+  "energyPerTick": 5,
+  "time": 100
+}

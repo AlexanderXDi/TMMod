@@ -11,34 +11,31 @@ import static mopk.tmmod.registration.ModBlocks.*;
 import static mopk.tmmod.registration.CreativeTab.CREATIVE_MODE_TABS;
 import static mopk.tmmod.registration.CreativeTab.MOD_TAB;
 
+import mopk.tmmod.block_func.Metalformer.MetalformerModePacket;
 import mopk.tmmod.energy_network.EnergyNetworkManager;
-import mopk.tmmod.registration.ModBlocks;
-import mopk.tmmod.registration.CustomCapabilities;
+import mopk.tmmod.registration.*;
 import mopk.tmmod.block_func.BatteryBlock.BatteryBlockModePacket;
 import mopk.tmmod.block_func.BatteryBlock.BatteryBlockScreen;
 import mopk.tmmod.block_func.Crusher.CrusherScreen;
+import mopk.tmmod.block_func.Metalformer.MetalformerScreen;
 import mopk.tmmod.block_func.ElectricFurnace.ElectricFurnaceScreen;
 import mopk.tmmod.block_func.Generator.GeneratorScreen;
 import mopk.tmmod.block_func.IronFurnace.IronFurnaceScreen;
-import mopk.tmmod.registration.ModBlockEntities;
-import mopk.tmmod.registration.ModDataComponents;
-import mopk.tmmod.registration.ModMenuTypes;
-import mopk.tmmod.block_func.BatteryBlock.ModNetwork;
-import mopk.tmmod.registration.ModItems;
+import mopk.tmmod.registration.ModNetwork;
 import net.minecraft.client.renderer.item.ItemProperties;
+import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
-import net.neoforged.neoforge.event.server.ServerAboutToStartEvent;
 import net.neoforged.neoforge.event.tick.ServerTickEvent;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
@@ -51,7 +48,9 @@ public class Tmmod {
         modEventBus.addListener(this::commonSetup);
         modEventBus.addListener(this::registerScreens);
         modEventBus.addListener(this::registerCapabilities);
-        modEventBus.addListener(this::registerNetworking);
+        modEventBus.addListener(this::registerBatteryNetworking);
+        modEventBus.addListener(this::registerMetalformerNetworking);
+        modEventBus.addListener(this::gatherData);
 
 
         BLOCK_ENTITIES.register(modEventBus);
@@ -65,8 +64,7 @@ public class Tmmod {
         SOUND_EVENTS.register(modEventBus);
 
         modEventBus.addListener(this::buildCreativeTabs);
-        
-        // Регистрация на шине Forge для событий тика
+
         NeoForge.EVENT_BUS.register(this);
     }
 
@@ -77,12 +75,32 @@ public class Tmmod {
         }
     }
 
-    private void registerNetworking(final RegisterPayloadHandlersEvent event) {
+    private void registerBatteryNetworking(final RegisterPayloadHandlersEvent event) {
         final PayloadRegistrar registrar = event.registrar("tmmod");
         registrar.playToServer(
                 BatteryBlockModePacket.TYPE,
                 BatteryBlockModePacket.CODEC,
                 ModNetwork::handleBatteryMode
+
+        );
+    }
+
+    private void registerMetalformerNetworking(final RegisterPayloadHandlersEvent event) {
+        final PayloadRegistrar registrar = event.registrar("tmmod");
+        registrar.playToServer(
+                MetalformerModePacket.TYPE,
+                MetalformerModePacket.CODEC,
+                ModNetwork::handleMetalformerMode
+        );
+    }
+
+    public void gatherData(GatherDataEvent event) {
+        DataGenerator generator = event.getGenerator();
+        PackOutput packOutput = generator.getPackOutput();
+
+        generator.addProvider(
+                event.includeServer(),
+                new ModRecipeProvider(packOutput, event.getLookupProvider())
         );
     }
 
@@ -113,6 +131,12 @@ public class Tmmod {
 
         event.registerBlockEntity(
                 CustomCapabilities.ENERGY,
+                ModBlockEntities.METALFORMER_BE.get(),
+                (blockEntity, direction) -> blockEntity.getEnergyStorage(direction)
+        );
+
+        event.registerBlockEntity(
+                CustomCapabilities.ENERGY,
                 ModBlockEntities.ELECTRIC_FURNACE_BE.get(),
                 (blockEntity, direction) -> blockEntity.getEnergyStorage(direction)
         );
@@ -135,6 +159,7 @@ public class Tmmod {
         event.register(ModMenuTypes.GENERATOR_MENU.get(), GeneratorScreen::new);
         event.register(ModMenuTypes.BATTERY_BLOCK_MENU.get(), BatteryBlockScreen::new);
         event.register(ModMenuTypes.CRUSHER_MENU.get(), CrusherScreen::new);
+        event.register(ModMenuTypes.METALFORMER_MENU.get(), MetalformerScreen::new);
         event.register(ModMenuTypes.ELECTRIC_FURNACE_MENU.get(), ElectricFurnaceScreen::new);
     }
 
@@ -145,15 +170,22 @@ public class Tmmod {
             event.accept(IRON_FURNACE.get());
             event.accept(GENERATOR.get());
             event.accept(BATTERY.get());
-            ModBlocks.CABLES.values().forEach(cableBlock -> {
-                event.accept(cableBlock.get());
+            
+            ModBlocks.ALL_CABLES.values().forEach(variants -> {
+                variants.forEach(cableBlock -> event.accept(cableBlock.get()));
             });
+
             event.accept(BATTERY_BLOCK.get());
             event.accept(CRUSHER.get());
-            event.accept(ELECTRIC_FURNACE.get());
+            event.accept(METALFORMER.get());
             event.accept(OVERCLOCKER_UPGRADE.get());
             event.accept(ACCUMULATOR_UPGRADE.get());
             event.accept(TRANSFORMER_UPGRADE.get());
-        }
-    }
+            event.accept(STICKY_RESIN.get());
+            event.accept(COIL.get());
+            event.accept(ELECTRIC_MOTOR.get());
+            event.accept(RUBBER.get());
+            event.accept(ELECTRONIC_CIRCUIT.get());
+         }
+     }
 }
