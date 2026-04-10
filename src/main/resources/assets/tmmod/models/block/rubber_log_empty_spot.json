@@ -1,0 +1,12 @@
+{
+  "parent": "minecraft:block/cube",
+  "textures": {
+    "particle": "tmmod:block/rubber_tree/rubber_log",
+    "up": "tmmod:block/rubber_tree/rubber_log_top",
+    "down": "tmmod:block/rubber_tree/rubber_log_top",
+    "north": "tmmod:block/rubber_tree/rubber_log_empty",
+    "south": "tmmod:block/rubber_tree/rubber_log",
+    "east": "tmmod:block/rubber_tree/rubber_log",
+    "west": "tmmod:block/rubber_tree/rubber_log"
+  }
+}

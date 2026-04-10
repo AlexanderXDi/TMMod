@@ -3,6 +3,9 @@
 
   "block.tmmod.iron_furnace": "Iron furnace",
   "block.tmmod.generator": "Generator",
+  "block.tmmod.rubber_log": "Rubber Log",
+  "block.tmmod.rubber_leaves": "Rubber Leaves",
+  "block.tmmod.rubber_sapling": "Rubber Sapling",
   "block.tmmod.copper_cable": "Copper cable",
   "block.tmmod.iron_cable": "Iron cable",
   "block.tmmod.gold_cable": "Gold cable",
@@ -26,6 +29,7 @@
   "subtitles.tmmod.crusher_hum": "Crusher hum",
   "subtitles.tmmod.metalformer_hum": "Metalformer hum",
 
+  "item.tmmod.treetap": "Treetap",
   "item.tmmod.iron_hammer": "Hammer",
   "item.tmmod.steel_ingot": "Steel ingot",
   "item.tmmod.battery": "Battery",

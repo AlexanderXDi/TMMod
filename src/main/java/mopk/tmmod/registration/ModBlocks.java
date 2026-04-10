@@ -20,8 +20,22 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
 
+import net.minecraft.world.level.block.LeavesBlock;
+import net.minecraft.world.level.block.RotatedPillarBlock;
+import net.minecraft.world.level.block.SaplingBlock;
+import mopk.tmmod.worldgen.RubberTreeGrower;
+
 public class ModBlocks {
     public static final DeferredRegister.Blocks BLOCKS = DeferredRegister.createBlocks(Tmmod.MODID);
+
+    public static final DeferredBlock<Block> RUBBER_LOG = registerBlock("rubber_log",
+            () -> new RubberLogBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_LOG)));
+
+    public static final DeferredBlock<Block> RUBBER_LEAVES = registerBlock("rubber_leaves",
+            () -> new LeavesBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_LEAVES)));
+
+    public static final DeferredBlock<Block> RUBBER_SAPLING = registerBlock("rubber_sapling",
+            () -> new SaplingBlock(RubberTreeGrower.RUBBER_TREE, BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_SAPLING)));
 
     // Карта для быстрого доступа: Тир -> Список (индекс = уровень изоляции)
     public static final Map<CableTier, List<DeferredBlock<CableBlock>>> ALL_CABLES = new EnumMap<>(CableTier.class);

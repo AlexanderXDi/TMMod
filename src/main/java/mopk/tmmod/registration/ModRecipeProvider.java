@@ -17,6 +17,10 @@ import net.neoforged.neoforge.registries.DeferredBlock;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
+import net.minecraft.data.recipes.ShapedRecipeBuilder;
+import net.minecraft.world.item.Items;
+import net.minecraft.tags.ItemTags;
+
 public class ModRecipeProvider extends RecipeProvider {
 
     public ModRecipeProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {

@@ -1,0 +1,28 @@
+{
+  "variants": {
+    "axis=y,facing=north,resin_state=none": { "model": "tmmod:block/rubber_log" },
+    "axis=y,facing=south,resin_state=none": { "model": "tmmod:block/rubber_log" },
+    "axis=y,facing=east,resin_state=none": { "model": "tmmod:block/rubber_log" },
+    "axis=y,facing=west,resin_state=none": { "model": "tmmod:block/rubber_log" },
+    
+    "axis=x,facing=north,resin_state=none": { "model": "tmmod:block/rubber_log", "x": 90, "y": 90 },
+    "axis=x,facing=south,resin_state=none": { "model": "tmmod:block/rubber_log", "x": 90, "y": 90 },
+    "axis=x,facing=east,resin_state=none": { "model": "tmmod:block/rubber_log", "x": 90, "y": 90 },
+    "axis=x,facing=west,resin_state=none": { "model": "tmmod:block/rubber_log", "x": 90, "y": 90 },
+    
+    "axis=z,facing=north,resin_state=none": { "model": "tmmod:block/rubber_log", "x": 90 },
+    "axis=z,facing=south,resin_state=none": { "model": "tmmod:block/rubber_log", "x": 90 },
+    "axis=z,facing=east,resin_state=none": { "model": "tmmod:block/rubber_log", "x": 90 },
+    "axis=z,facing=west,resin_state=none": { "model": "tmmod:block/rubber_log", "x": 90 },
+
+    "resin_state=empty,facing=north": { "model": "tmmod:block/rubber_log_empty_spot" },
+    "resin_state=empty,facing=south": { "model": "tmmod:block/rubber_log_empty_spot", "y": 180 },
+    "resin_state=empty,facing=east": { "model": "tmmod:block/rubber_log_empty_spot", "y": 90 },
+    "resin_state=empty,facing=west": { "model": "tmmod:block/rubber_log_empty_spot", "y": 270 },
+
+    "resin_state=full,facing=north": { "model": "tmmod:block/rubber_log_with_resin" },
+    "resin_state=full,facing=south": { "model": "tmmod:block/rubber_log_with_resin", "y": 180 },
+    "resin_state=full,facing=east": { "model": "tmmod:block/rubber_log_with_resin", "y": 90 },
+    "resin_state=full,facing=west": { "model": "tmmod:block/rubber_log_with_resin", "y": 270 }
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/leaves",
+  "textures": {
+    "all": "tmmod:block/rubber_tree/rubber_leaves"
+  }
+}

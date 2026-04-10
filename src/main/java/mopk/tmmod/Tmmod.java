@@ -38,10 +38,12 @@ import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 import net.neoforged.neoforge.event.tick.ServerTickEvent;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
+import mopk.tmmod.worldgen.ModTreeDecorators;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 
 @Mod(Tmmod.MODID)
 public class Tmmod {
+
     public static final String MODID = "tmmod";
 
     public Tmmod(IEventBus modEventBus) {
@@ -62,6 +64,7 @@ public class Tmmod {
         SERIALIZERS.register(modEventBus);
         RECIPE_TYPES.register(modEventBus);
         SOUND_EVENTS.register(modEventBus);
+        ModTreeDecorators.TREE_DECORATORS.register(modEventBus);
 
         modEventBus.addListener(this::buildCreativeTabs);
 
@@ -165,6 +168,7 @@ public class Tmmod {
 
     private void buildCreativeTabs(final BuildCreativeModeTabContentsEvent event) {
         if (event.getTabKey() == MOD_TAB.getKey()) {
+            event.accept(TREETAP.get());
             event.accept(IRON_HAMMER.get());
             event.accept(STEEL_INGOT.get());
             event.accept(IRON_FURNACE.get());
@@ -185,6 +189,9 @@ public class Tmmod {
             event.accept(COIL.get());
             event.accept(ELECTRIC_MOTOR.get());
             event.accept(RUBBER.get());
+            event.accept(RUBBER_LOG.get());
+            event.accept(RUBBER_LEAVES.get());
+            event.accept(RUBBER_SAPLING.get());
             event.accept(ELECTRONIC_CIRCUIT.get());
          }
      }

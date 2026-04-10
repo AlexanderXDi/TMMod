@@ -12,9 +12,14 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 
 import java.util.function.Supplier;
 
+import mopk.tmmod.items.TreetapItem;
+
 public class ModItems {
     public static final DeferredRegister.Items ITEMS =
             DeferredRegister.createItems(Tmmod.MODID);
+
+    public static final DeferredItem<Item> TREETAP = ITEMS.register("treetap",
+            () -> new TreetapItem(new Item.Properties().durability(50)));
 
     public static final DeferredItem<Item> IRON_HAMMER = ITEMS.register("iron_hammer",
             () -> new Item(new Item.Properties()));

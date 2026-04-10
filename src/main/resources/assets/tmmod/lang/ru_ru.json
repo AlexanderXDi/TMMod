@@ -3,6 +3,9 @@
 
   "block.tmmod.iron_furnace": "Железная печь",
   "block.tmmod.generator": "Генератор",
+  "block.tmmod.rubber_log": "Бревно гивеи",
+  "block.tmmod.rubber_leaves": "Листва гивеи",
+  "block.tmmod.rubber_sapling": "Саженец гивеи",
   "block.tmmod.copper_cable": "Медный провод",
   "block.tmmod.iron_cable": "Железный провод",
   "block.tmmod.gold_cable": "Золотой провод",
@@ -26,6 +29,7 @@
   "subtitles.tmmod.crusher_hum": "Шум дробителя",
   "subtitles.tmmod.metalformer_hum": "Шум металлоформовщика",
 
+  "item.tmmod.treetap": "Краник",
   "item.tmmod.iron_hammer": "Молот",
   "item.tmmod.steel_ingot": "Стальной слиток",
   "item.tmmod.battery": "Батарея",
