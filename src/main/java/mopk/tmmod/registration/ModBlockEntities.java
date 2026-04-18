@@ -1,6 +1,5 @@
 package mopk.tmmod.registration;
 
-import mopk.tmmod.block_func.BatteryBlock.BatteryBlockBE;
 import mopk.tmmod.block_func.Cables.CableBE;
 import mopk.tmmod.block_func.Cables.CableTier;
 import mopk.tmmod.block_func.Crusher.CrusherBE;
@@ -38,13 +37,6 @@ public class ModBlockEntities {
                             ModBlocks.GENERATOR.get()
                     ).build(null));
 
-    public static final Supplier<BlockEntityType<BatteryBlockBE>> BATTERY_BLOCK_BE =
-            BLOCK_ENTITIES.register("battery_block_be",
-                    () -> BlockEntityType.Builder.of(
-                            BatteryBlockBE::new,
-                            ModBlocks.BATTERY_BLOCK.get()
-                    ).build(null));
-
     public static final Supplier<BlockEntityType<CrusherBE>> CRUSHER_BE =
             BLOCK_ENTITIES.register("crusher_be",
                     () -> BlockEntityType.Builder.of(
@@ -65,6 +57,37 @@ public class ModBlockEntities {
                             ElectricFurnaceBE::new,
                             ModBlocks.ELECTRIC_FURNACE.get()
                     ).build(null));
+
+    public static final Supplier<BlockEntityType<mopk.tmmod.block_func.Accumulators.AccumulatorBE>> ACCUMULATOR_BE =
+            BLOCK_ENTITIES.register("accumulator_be",
+                    () -> {
+                        List<Block> blocks = new ArrayList<>();
+                        ModBlocks.ALL_ACCUMULATORS.values().forEach(pair -> {
+                            blocks.add(pair.get(0).get());
+                            blocks.add(pair.get(1).get());
+                        });
+                        return BlockEntityType.Builder.of(
+                                (pos, state) -> {
+                                    mopk.tmmod.blocks.AccumulatorBlock block = (mopk.tmmod.blocks.AccumulatorBlock) state.getBlock();
+                                    return new mopk.tmmod.block_func.Accumulators.AccumulatorBE(pos, state, block.getTier(), block.isChargePad());
+                                },
+                                blocks.toArray(new Block[0])
+                        ).build(null);
+                    });
+
+    public static final Supplier<BlockEntityType<mopk.tmmod.block_func.Transformers.TransformerBE>> TRANSFORMER_BE =
+            BLOCK_ENTITIES.register("transformer_be",
+                    () -> {
+                        List<Block> blocks = new ArrayList<>();
+                        ModBlocks.ALL_TRANSFORMERS.values().forEach(holder -> blocks.add(holder.get()));
+                        return BlockEntityType.Builder.of(
+                                (pos, state) -> {
+                                    mopk.tmmod.blocks.TransformerBlock block = (mopk.tmmod.blocks.TransformerBlock) state.getBlock();
+                                    return new mopk.tmmod.block_func.Transformers.TransformerBE(pos, state, block.getTier());
+                                },
+                                blocks.toArray(new Block[0])
+                        ).build(null);
+                    });
 
     public static final Supplier<BlockEntityType<CableBE>> CABLE_BE =
             BLOCK_ENTITIES.register("cable_be",

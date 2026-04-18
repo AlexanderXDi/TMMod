@@ -1,0 +1,10 @@
+﻿{
+  "variants": {
+    "facing=north": { "model": "tmmod:block/mfe/mfe" },
+    "facing=south": { "model": "tmmod:block/mfe/mfe", "y": 180 },
+    "facing=west": { "model": "tmmod:block/mfe/mfe", "y": 270 },
+    "facing=east": { "model": "tmmod:block/mfe/mfe", "y": 90 },
+    "facing=up": { "model": "tmmod:block/mfe/mfe", "x": 270 },
+    "facing=down": { "model": "tmmod:block/mfe/mfe", "x": 90 }
+  }
+}

@@ -1,0 +1,10 @@
+﻿{
+  "variants": {
+    "facing=north": { "model": "tmmod:block/mfe_charge_pad/mfe_charge_pad" },
+    "facing=south": { "model": "tmmod:block/mfe_charge_pad/mfe_charge_pad", "y": 180 },
+    "facing=west": { "model": "tmmod:block/mfe_charge_pad/mfe_charge_pad", "y": 270 },
+    "facing=east": { "model": "tmmod:block/mfe_charge_pad/mfe_charge_pad", "y": 90 },
+    "facing=up": { "model": "tmmod:block/mfe_charge_pad/mfe_charge_pad", "x": 270 },
+    "facing=down": { "model": "tmmod:block/mfe_charge_pad/mfe_charge_pad", "x": 90 }
+  }
+}

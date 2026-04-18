@@ -1,0 +1,8 @@
+﻿{
+  "parent": "minecraft:block/orientable",
+  "textures": {
+    "top": "tmmod:block/lv_transformer/lv_transformer_top",
+    "front": "tmmod:block/lv_transformer/lv_transformer",
+    "side": "tmmod:block/lv_transformer/lv_transformer_side"
+  }
+}

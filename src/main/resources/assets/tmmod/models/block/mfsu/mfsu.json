@@ -1,0 +1,8 @@
+﻿{
+  "parent": "minecraft:block/orientable",
+  "textures": {
+    "top": "tmmod:block/mfsu/mfsu_top",
+    "front": "tmmod:block/mfsu/mfsu",
+    "side": "tmmod:block/mfsu/mfsu_side"
+  }
+}

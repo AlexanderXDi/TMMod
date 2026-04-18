@@ -1,10 +1,7 @@
 package mopk.tmmod.block_func.Metalformer;
 
-import mopk.tmmod.block_func.BatteryBlock.BatteryBlockBE;
-import mopk.tmmod.block_func.BatteryBlock.BatteryBlockMode;
 import mopk.tmmod.registration.ModBlocks;
 import mopk.tmmod.registration.ModMenuTypes;
-import mopk.tmmod.registration.ModDataComponents;
 
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;

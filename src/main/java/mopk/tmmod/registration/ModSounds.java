@@ -22,9 +22,9 @@ public class ModSounds {
             SOUND_EVENTS.register("metalformer_hum",
                     () -> SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath("tmmod", "metalformer_hum")));
 
-    public static final DeferredHolder<SoundEvent, SoundEvent> BATTERY_BLOCK_HUM =
-            SOUND_EVENTS.register("battery_block_hum",
-                    () -> SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath("tmmod", "battery_block_hum")));
+    public static final DeferredHolder<SoundEvent, SoundEvent> ACCUMULATOR_HUM =
+            SOUND_EVENTS.register("accumulator_hum",
+                    () -> SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath("tmmod", "accumulator_hum")));
 
     public static final DeferredHolder<SoundEvent, SoundEvent> ELECTRIC_FURNACE_HUM =
             SOUND_EVENTS.register("electric_furnace_hum",

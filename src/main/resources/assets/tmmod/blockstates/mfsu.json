@@ -1,0 +1,10 @@
+﻿{
+  "variants": {
+    "facing=north": { "model": "tmmod:block/mfsu/mfsu" },
+    "facing=south": { "model": "tmmod:block/mfsu/mfsu", "y": 180 },
+    "facing=west": { "model": "tmmod:block/mfsu/mfsu", "y": 270 },
+    "facing=east": { "model": "tmmod:block/mfsu/mfsu", "y": 90 },
+    "facing=up": { "model": "tmmod:block/mfsu/mfsu", "x": 270 },
+    "facing=down": { "model": "tmmod:block/mfsu/mfsu", "x": 90 }
+  }
+}

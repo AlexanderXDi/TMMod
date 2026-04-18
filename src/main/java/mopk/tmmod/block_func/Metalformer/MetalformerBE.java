@@ -1,6 +1,5 @@
 package mopk.tmmod.block_func.Metalformer;
 
-import mopk.tmmod.block_func.BatteryBlock.BatteryBlockMode;
 import mopk.tmmod.energy_network.CustomEnergyStorage;
 import mopk.tmmod.energy_network.EnergyNetworkManager;
 import mopk.tmmod.registration.ModBlockEntities;

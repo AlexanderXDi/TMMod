@@ -1,0 +1,10 @@
+﻿{
+  "variants": {
+    "facing=north": { "model": "tmmod:block/hv_transformer/hv_transformer" },
+    "facing=south": { "model": "tmmod:block/hv_transformer/hv_transformer", "y": 180 },
+    "facing=west": { "model": "tmmod:block/hv_transformer/hv_transformer", "y": 270 },
+    "facing=east": { "model": "tmmod:block/hv_transformer/hv_transformer", "y": 90 },
+    "facing=up": { "model": "tmmod:block/hv_transformer/hv_transformer", "x": 270 },
+    "facing=down": { "model": "tmmod:block/hv_transformer/hv_transformer", "x": 90 }
+  }
+}

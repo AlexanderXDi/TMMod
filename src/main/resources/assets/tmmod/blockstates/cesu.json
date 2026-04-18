@@ -1,0 +1,10 @@
+﻿{
+  "variants": {
+    "facing=north": { "model": "tmmod:block/cesu/cesu" },
+    "facing=south": { "model": "tmmod:block/cesu/cesu", "y": 180 },
+    "facing=west": { "model": "tmmod:block/cesu/cesu", "y": 270 },
+    "facing=east": { "model": "tmmod:block/cesu/cesu", "y": 90 },
+    "facing=up": { "model": "tmmod:block/cesu/cesu", "x": 270 },
+    "facing=down": { "model": "tmmod:block/cesu/cesu", "x": 90 }
+  }
+}

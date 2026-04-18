@@ -14,13 +14,14 @@ import static mopk.tmmod.registration.CreativeTab.MOD_TAB;
 import mopk.tmmod.block_func.Metalformer.MetalformerModePacket;
 import mopk.tmmod.energy_network.EnergyNetworkManager;
 import mopk.tmmod.registration.*;
-import mopk.tmmod.block_func.BatteryBlock.BatteryBlockModePacket;
-import mopk.tmmod.block_func.BatteryBlock.BatteryBlockScreen;
 import mopk.tmmod.block_func.Crusher.CrusherScreen;
 import mopk.tmmod.block_func.Metalformer.MetalformerScreen;
 import mopk.tmmod.block_func.ElectricFurnace.ElectricFurnaceScreen;
 import mopk.tmmod.block_func.Generator.GeneratorScreen;
 import mopk.tmmod.block_func.IronFurnace.IronFurnaceScreen;
+import mopk.tmmod.block_func.Accumulators.AccumulatorScreen;
+import mopk.tmmod.block_func.Transformers.TransformerModePacket;
+import mopk.tmmod.block_func.Transformers.TransformerScreen;
 import mopk.tmmod.registration.ModNetwork;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.data.DataGenerator;
@@ -50,8 +51,8 @@ public class Tmmod {
         modEventBus.addListener(this::commonSetup);
         modEventBus.addListener(this::registerScreens);
         modEventBus.addListener(this::registerCapabilities);
-        modEventBus.addListener(this::registerBatteryNetworking);
         modEventBus.addListener(this::registerMetalformerNetworking);
+        modEventBus.addListener(this::registerTransformerNetworking);
         modEventBus.addListener(this::gatherData);
 
 
@@ -78,22 +79,21 @@ public class Tmmod {
         }
     }
 
-    private void registerBatteryNetworking(final RegisterPayloadHandlersEvent event) {
-        final PayloadRegistrar registrar = event.registrar("tmmod");
-        registrar.playToServer(
-                BatteryBlockModePacket.TYPE,
-                BatteryBlockModePacket.CODEC,
-                ModNetwork::handleBatteryMode
-
-        );
-    }
-
     private void registerMetalformerNetworking(final RegisterPayloadHandlersEvent event) {
         final PayloadRegistrar registrar = event.registrar("tmmod");
         registrar.playToServer(
                 MetalformerModePacket.TYPE,
                 MetalformerModePacket.CODEC,
                 ModNetwork::handleMetalformerMode
+        );
+    }
+
+    private void registerTransformerNetworking(final RegisterPayloadHandlersEvent event) {
+        final PayloadRegistrar registrar = event.registrar("tmmod");
+        registrar.playToServer(
+                TransformerModePacket.TYPE,
+                TransformerModePacket.CODEC,
+                ModNetwork::handleTransformerMode
         );
     }
 
@@ -122,8 +122,14 @@ public class Tmmod {
 
         event.registerBlockEntity(
                 CustomCapabilities.ENERGY,
-                ModBlockEntities.BATTERY_BLOCK_BE.get(),
-                (blockEntity, direction) -> blockEntity.getEnergyStorage(direction)
+                ModBlockEntities.ACCUMULATOR_BE.get(),
+                (blockEntity, direction) -> blockEntity
+        );
+
+        event.registerBlockEntity(
+                CustomCapabilities.ENERGY,
+                ModBlockEntities.TRANSFORMER_BE.get(),
+                (blockEntity, direction) -> blockEntity
         );
 
         event.registerBlockEntity(
@@ -160,7 +166,8 @@ public class Tmmod {
     private void registerScreens(RegisterMenuScreensEvent event) {
         event.register(ModMenuTypes.IRON_FURNACE_MENU.get(), IronFurnaceScreen::new);
         event.register(ModMenuTypes.GENERATOR_MENU.get(), GeneratorScreen::new);
-        event.register(ModMenuTypes.BATTERY_BLOCK_MENU.get(), BatteryBlockScreen::new);
+        event.register(ModMenuTypes.ACCUMULATOR_MENU.get(), AccumulatorScreen::new);
+        event.register(ModMenuTypes.TRANSFORMER_MENU.get(), TransformerScreen::new);
         event.register(ModMenuTypes.CRUSHER_MENU.get(), CrusherScreen::new);
         event.register(ModMenuTypes.METALFORMER_MENU.get(), MetalformerScreen::new);
         event.register(ModMenuTypes.ELECTRIC_FURNACE_MENU.get(), ElectricFurnaceScreen::new);
@@ -179,7 +186,14 @@ public class Tmmod {
                 variants.forEach(cableBlock -> event.accept(cableBlock.get()));
             });
 
-            event.accept(BATTERY_BLOCK.get());
+            ModBlocks.ALL_ACCUMULATORS.values().forEach(variants -> {
+                variants.forEach(accBlock -> event.accept(accBlock.get()));
+            });
+            
+            ModBlocks.ALL_TRANSFORMERS.values().forEach(transformerBlock -> {
+                event.accept(transformerBlock.get());
+            });
+
             event.accept(CRUSHER.get());
             event.accept(METALFORMER.get());
             event.accept(OVERCLOCKER_UPGRADE.get());

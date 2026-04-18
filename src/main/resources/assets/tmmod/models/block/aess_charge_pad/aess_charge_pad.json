@@ -1,0 +1,24 @@
+﻿{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "top": "tmmod:block/aess_charge_pad/aess_charge_pad_top",
+    "bottom": "tmmod:block/aess_charge_pad/aess_charge_pad_top",
+    "front": "tmmod:block/aess_charge_pad/aess_charge_pad",
+    "side": "tmmod:block/aess_charge_pad/aess_charge_pad_side",
+    "particle": "tmmod:block/aess_charge_pad/aess_charge_pad"
+  },
+  "elements": [
+    {
+      "from": [0, 0, 0],
+      "to": [16, 15, 16],
+      "faces": {
+        "down":  { "uv": [0, 0, 16, 16], "texture": "#bottom", "cullface": "down" },
+        "up":    { "uv": [0, 0, 16, 16], "texture": "#top" },
+        "north": { "uv": [0, 1, 16, 16], "texture": "#front", "cullface": "north" },
+        "south": { "uv": [0, 1, 16, 16], "texture": "#front", "cullface": "south" },
+        "west":  { "uv": [0, 1, 16, 16], "texture": "#side", "cullface": "west" },
+        "east":  { "uv": [0, 1, 16, 16], "texture": "#side", "cullface": "east" }
+      }
+    }
+  ]
+}

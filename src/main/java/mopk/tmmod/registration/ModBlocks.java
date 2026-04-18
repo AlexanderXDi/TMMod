@@ -75,9 +75,6 @@ public class ModBlocks {
     public static final DeferredBlock<Block> GENERATOR = registerBlock("generator",
             () -> new Generator(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK)));
 
-    public static final DeferredBlock<Block> BATTERY_BLOCK = registerBlock("battery_block",
-            () -> new BatteryBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK)));
-
     public static final DeferredBlock<Block> CRUSHER = registerBlock("crusher",
             () -> new Crusher(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK)));
 
@@ -86,6 +83,35 @@ public class ModBlocks {
 
     public static final DeferredBlock<Block> ELECTRIC_FURNACE = registerBlock("electric_furnace",
             () -> new ElectricFurnace(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK)));
+
+    public static final Map<mopk.tmmod.block_func.Accumulators.AccumulatorTier, List<DeferredBlock<AccumulatorBlock>>> ALL_ACCUMULATORS = new EnumMap<>(mopk.tmmod.block_func.Accumulators.AccumulatorTier.class);
+    public static final Map<mopk.tmmod.block_func.Transformers.TransformerTier, DeferredBlock<TransformerBlock>> ALL_TRANSFORMERS = new EnumMap<>(mopk.tmmod.block_func.Transformers.TransformerTier.class);
+
+    static {
+        for (mopk.tmmod.block_func.Accumulators.AccumulatorTier tier : mopk.tmmod.block_func.Accumulators.AccumulatorTier.values()) {
+            List<DeferredBlock<AccumulatorBlock>> variants = new ArrayList<>();
+            
+            // Обычный
+            String baseName = tier.getName();
+            DeferredBlock<AccumulatorBlock> baseBlock = registerBlock(baseName, 
+                () -> new AccumulatorBlock(tier, false, BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK)));
+            variants.add(baseBlock);
+            
+            // Charge Pad
+            String chargePadName = baseName + "_charge_pad";
+            DeferredBlock<AccumulatorBlock> chargePadBlock = registerBlock(chargePadName, 
+                () -> new AccumulatorBlock(tier, true, BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK)));
+            variants.add(chargePadBlock);
+            
+            ALL_ACCUMULATORS.put(tier, variants);
+        }
+
+        for (mopk.tmmod.block_func.Transformers.TransformerTier tier : mopk.tmmod.block_func.Transformers.TransformerTier.values()) {
+            DeferredBlock<TransformerBlock> block = registerBlock(tier.getName(), 
+                () -> new TransformerBlock(tier, BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK)));
+            ALL_TRANSFORMERS.put(tier, block);
+        }
+    }
     
     private static <T extends Block> DeferredBlock<T> registerBlock(String name, Supplier<T> block) {
         DeferredBlock<T> toReturn = BLOCKS.register(name, block);

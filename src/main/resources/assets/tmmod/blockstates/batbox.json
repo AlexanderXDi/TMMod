@@ -1,0 +1,10 @@
+﻿{
+  "variants": {
+    "facing=north": { "model": "tmmod:block/batbox/batbox" },
+    "facing=south": { "model": "tmmod:block/batbox/batbox", "y": 180 },
+    "facing=west": { "model": "tmmod:block/batbox/batbox", "y": 270 },
+    "facing=east": { "model": "tmmod:block/batbox/batbox", "y": 90 },
+    "facing=up": { "model": "tmmod:block/batbox/batbox", "x": 270 },
+    "facing=down": { "model": "tmmod:block/batbox/batbox", "x": 90 }
+  }
+}

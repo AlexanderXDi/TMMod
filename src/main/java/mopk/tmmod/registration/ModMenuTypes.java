@@ -1,6 +1,5 @@
 package mopk.tmmod.registration;
 
-import mopk.tmmod.block_func.BatteryBlock.BatteryBlockMenu;
 import mopk.tmmod.block_func.Crusher.CrusherMenu;
 import mopk.tmmod.block_func.Metalformer.MetalformerMenu;
 import mopk.tmmod.block_func.ElectricFurnace.ElectricFurnaceMenu;
@@ -23,9 +22,6 @@ public class ModMenuTypes {
     public static final DeferredHolder<MenuType<?>, MenuType<GeneratorMenu>> GENERATOR_MENU = MENUS.register("generator_menu",
             () -> IMenuTypeExtension.create(GeneratorMenu::new));
 
-    public static final DeferredHolder<MenuType<?>, MenuType<BatteryBlockMenu>> BATTERY_BLOCK_MENU = MENUS.register("battery_block_menu",
-            () -> IMenuTypeExtension.create(BatteryBlockMenu::new));
-
     public static final DeferredHolder<MenuType<?>, MenuType<CrusherMenu>> CRUSHER_MENU = MENUS.register("crusher_menu",
             () -> IMenuTypeExtension.create(CrusherMenu::new));
 
@@ -34,5 +30,11 @@ public class ModMenuTypes {
 
     public static final DeferredHolder<MenuType<?>, MenuType<ElectricFurnaceMenu>> ELECTRIC_FURNACE_MENU = MENUS.register("electric_furnace_menu",
             () -> IMenuTypeExtension.create(ElectricFurnaceMenu::new));
+
+    public static final DeferredHolder<MenuType<?>, MenuType<mopk.tmmod.block_func.Accumulators.AccumulatorMenu>> ACCUMULATOR_MENU = MENUS.register("accumulator_menu",
+            () -> IMenuTypeExtension.create(mopk.tmmod.block_func.Accumulators.AccumulatorMenu::new));
+
+    public static final DeferredHolder<MenuType<?>, MenuType<mopk.tmmod.block_func.Transformers.TransformerMenu>> TRANSFORMER_MENU = MENUS.register("transformer_menu",
+            () -> IMenuTypeExtension.create(mopk.tmmod.block_func.Transformers.TransformerMenu::new));
 }
 

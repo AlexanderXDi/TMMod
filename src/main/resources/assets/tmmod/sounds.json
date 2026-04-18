@@ -17,10 +17,10 @@
       "tmmod:metalformer_hum"
     ]
   },
-  "battery_block_hum": {
-    "subtitle": "subtitles.tmmod.battery_block_hum",
+  "accumulator_hum": {
+    "subtitle": "subtitles.tmmod.accumulator_hum",
     "sounds": [
-      "tmmod:battery_block_hum"
+      "tmmod:accumulator_hum"
     ]
   },
   "electric_furnace_hum": {

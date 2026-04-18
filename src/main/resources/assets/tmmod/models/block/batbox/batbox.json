@@ -1,0 +1,8 @@
+﻿{
+  "parent": "minecraft:block/orientable",
+  "textures": {
+    "top": "tmmod:block/batbox/batbox_top",
+    "front": "tmmod:block/batbox/batbox",
+    "side": "tmmod:block/batbox/batbox_side"
+  }
+}

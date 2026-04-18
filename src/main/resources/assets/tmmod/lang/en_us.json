@@ -1,4 +1,4 @@
-﻿{
+{
   "creativetab.tmmod.mod_tab": "IC2 Reborn",
 
   "block.tmmod.iron_furnace": "Iron furnace",
@@ -7,24 +7,53 @@
   "block.tmmod.rubber_leaves": "Rubber Leaves",
   "block.tmmod.rubber_sapling": "Rubber Sapling",
   "block.tmmod.copper_cable": "Copper cable",
-  "block.tmmod.iron_cable": "Iron cable",
+  "block.tmmod.insulated_copper_cable": "Insulated Copper Cable",
   "block.tmmod.gold_cable": "Gold cable",
+  "block.tmmod.insulated_gold_cable_x1": "Insulated Gold Cable x1",
+  "block.tmmod.insulated_gold_cable_x2": "Insulated Gold Cable x2",
+  "block.tmmod.iron_cable": "Iron cable",
+  "block.tmmod.insulated_iron_cable_x1": "Insulated Iron Cable x1",
+  "block.tmmod.insulated_iron_cable_x2": "Insulated Iron Cable x2",
+  "block.tmmod.insulated_iron_cable_x3": "Insulated Iron Cable x3",
   "block.tmmod.glass_cable": "Glass cable",
   "block.tmmod.tin_cable": "Tin cable",
-  "block.tmmod.battery_block": "Accumulator",
+  "block.tmmod.insulated_tin_cable": "Insulated Tin Cable",
   "block.tmmod.crusher": "Crusher",
   "block.tmmod.metalformer": "Metalformer",
   "block.tmmod.electric_furnace": "Electric furnace",
 
+  "block.tmmod.batbox": "BatBox",
+  "block.tmmod.cesu": "CESU",
+  "block.tmmod.mfe": "MFE",
+  "block.tmmod.mfsu": "MFSU",
+  "block.tmmod.aess": "AESS",
+  "block.tmmod.batbox_charge_pad": "BatBox Charge Pad",
+  "block.tmmod.cesu_charge_pad": "CESU Charge Pad",
+  "block.tmmod.mfe_charge_pad": "MFE Charge Pad",
+  "block.tmmod.mfsu_charge_pad": "MFSU Charge Pad",
+  "block.tmmod.aess_charge_pad": "AESS Charge Pad",
+  "block.tmmod.lv_transformer": "LV-Transformer",
+  "block.tmmod.mv_transformer": "MV-Transformer",
+  "block.tmmod.hv_transformer": "HV-Transformer",
+  "block.tmmod.ev_transformer": "EV-Transformer",
+
+  "gui.tmmod.transformer.mode_text": "Mode: %s",
+  "gui.tmmod.transformer.button_mode_text": "Mode",
+  "gui.tmmod.transformer.mode.up": "Step Up",
+  "gui.tmmod.transformer.mode.down": "Step Down",
+  "gui.tmmod.transformer.eu_in": "In: %s EU/t",
+  "gui.tmmod.transformer.eu_out": "Out: %s EU/t",
+
+  "gui.tmmod.accumulator.energy_text": "Energy: ",
+
   "container.iron_furnace": "Iron furnace",
   "container.generator": "Generator",
-  "container.battery_block": "Accumulator",
   "container.crusher": "Crusher",
   "container.metalformer": "Metalformer",
   "container.electric_furnace": "Electric furnace",
 
   "subtitles.tmmod.generator_hum": "Generator hum",
-  "subtitles.tmmod.battery_block_hum": "Accumulator hum",
+  "subtitles.tmmod.accumulator_hum": "Accumulator hum",
   "subtitles.tmmod.electric_furnace_hum": "Electric furnace",
   "subtitles.tmmod.crusher_hum": "Crusher hum",
   "subtitles.tmmod.metalformer_hum": "Metalformer hum",
@@ -43,20 +72,13 @@
   "item.tmmod.electronic_circuit": "Circuit",
 
 
-  "gui.tmmod.battery_block.mode_text": "Mode: %s",
-  "gui.tmmod.battery_block.mode.both": "Both",
-  "gui.tmmod.battery_block.mode.input": "Input",
-  "gui.tmmod.battery_block.mode.output": "Output",
-  "gui.tmmod.battery_block.energy_text": "Energy: ",
-  "gui.tmmod.battery_block.button_mode_text": "Mode",
-
   "gui.tmmod.metalformer.mode_text": "Mode: %s",
   "gui.tmmod.metalformer.mode.forging": "Forging",
   "gui.tmmod.metalformer.mode.cutting": "Cutting",
   "gui.tmmod.metalformer.mode.squeezing": "Squeezing",
   "gui.tmmod.metalformer.button_mode_text": "Mode",
 
-  "gui.tmmod.battery_block.overclocker_upgrade.text": "speed",
-  "gui.tmmod.accumulator_upgrade .text": " extra EU into a storage",
+  "gui.tmmod.overclocker_upgrade.text": "speed",
+  "gui.tmmod.accumulator_upgrade.text": " extra EU into a storage",
   "gui.tmmod.transformer_upgrade.text": "level of energy reception"
 }

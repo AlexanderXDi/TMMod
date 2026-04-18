@@ -1,0 +1,8 @@
+﻿{
+  "parent": "minecraft:block/orientable",
+  "textures": {
+    "top": "tmmod:block/aess/aess_top",
+    "front": "tmmod:block/aess/aess",
+    "side": "tmmod:block/aess/aess_side"
+  }
+}
