@@ -1,6 +1,7 @@
-package mopk.tmmod.worldgen;
+package mopk.tmmod.registration;
 
 import mopk.tmmod.Tmmod;
+import mopk.tmmod.worldgen.RubberTreeDecorator;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.levelgen.feature.treedecorators.TreeDecoratorType;
 import net.neoforged.neoforge.registries.DeferredRegister;

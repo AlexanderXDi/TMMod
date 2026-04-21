@@ -1,5 +1,6 @@
 package mopk.tmmod.worldgen;
 
+import mopk.tmmod.registration.ModConfiguredFeatures;
 import net.minecraft.world.level.block.grower.TreeGrower;
 import java.util.Optional;
 

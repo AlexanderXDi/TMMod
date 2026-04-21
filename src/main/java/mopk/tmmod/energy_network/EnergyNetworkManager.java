@@ -23,16 +23,33 @@ public class EnergyNetworkManager extends SavedData {
     private final Map<UUID, EnergyNetwork> networks = new HashMap<>();
     private final Map<BlockPos, UUID> cableToNetworkMap = new HashMap<>();
 
+    // Статистика для вольтметра
+    private final Map<BlockPos, Integer> lastTickIn = new HashMap<>();
+    private final Map<BlockPos, Integer> lastTickOut = new HashMap<>();
+    private final Map<BlockPos, long[]> historyIn = new HashMap<>(); // [0-19] values, [20] index
+    private final Map<BlockPos, long[]> historyOut = new HashMap<>();
+
     public EnergyNetworkManager() {}
+
+    public void reportIn(BlockPos pos, int amount) {
+        lastTickIn.merge(pos, amount, Integer::sum);
+    }
+
+    public void reportOut(BlockPos pos, int amount) {
+        lastTickOut.merge(pos, amount, Integer::sum);
+    }
 
     public void tick(Level level) {
         if (level.isClientSide) return;
+
+        updateAverages();
+        lastTickIn.clear();
+        lastTickOut.clear();
         
-        // Создаем копию списка сетей, чтобы избежать ConcurrentModificationException
-        // при взрыве кабелей (который удаляет/перестраивает сети во время итерации)
         List<EnergyNetwork> networkList = new ArrayList<>(networks.values());
         for (EnergyNetwork network : networkList) {
             network.setLevel(level);
+            network.recalculateStats(); // Форсируем пересчет лимитов
             network.tick();
         }
     }
@@ -135,10 +152,18 @@ public class EnergyNetworkManager extends SavedData {
 
     private void registerNodeInNetwork(EnergyNetwork net, BlockPos pos, BlockEntity be, Direction face) {
         if (!(be instanceof CustomEnergyStorage storage)) return;
-        if (storage.canExtract(face)) net.addProducer(pos);
+        
+        // В IC2 сторона либо отдает энергию, либо принимает. 
+        // Если блок может отдавать через эту сторону - он Producer.
+        // Если блок может принимать через эту сторону - он Consumer.
+        
+        if (storage.canExtract(face)) {
+            net.addProducer(pos);
+            // System.out.println("Node at " + pos + " registered as PRODUCER for side " + face);
+        }
         if (storage.canReceive(face)) {
-            if (storage.canExtract(face)) net.addStorage(pos);
-            else net.addConsumer(pos);
+            net.addConsumer(pos);
+            // System.out.println("Node at " + pos + " registered as CONSUMER for side " + face);
         }
     }
 
@@ -152,6 +177,7 @@ public class EnergyNetworkManager extends SavedData {
             if (netId != null) {
                 EnergyNetwork net = networks.get(netId);
                 if (net != null) {
+                    // face - это сторона БЛОКА, к которой присоединен кабель
                     registerNodeInNetwork(net, pos, be, dir.getOpposite());
                     found = true;
                 }
@@ -164,7 +190,6 @@ public class EnergyNetworkManager extends SavedData {
         for (EnergyNetwork net : networks.values()) {
             net.removeProducer(pos);
             net.removeConsumer(pos);
-            net.removeStorage(pos);
         }
         setDirty();
     }
@@ -198,5 +223,43 @@ public class EnergyNetworkManager extends SavedData {
                 new SavedData.Factory<>(EnergyNetworkManager::new, EnergyNetworkManager::load),
                 DATA_NAME
         );
+    }
+
+    private void updateAverages() {
+        updateMapAverages(lastTickIn, historyIn);
+        updateMapAverages(lastTickOut, historyOut);
+    }
+
+    private void updateMapAverages(Map<BlockPos, Integer> current, Map<BlockPos, long[]> history) {
+        // Добавляем текущие значения в историю
+        for (Map.Entry<BlockPos, Integer> entry : current.entrySet()) {
+            long[] hist = history.computeIfAbsent(entry.getKey(), k -> new long[21]);
+            int idx = (int) hist[20];
+            hist[idx] = entry.getValue();
+            hist[20] = (idx + 1) % 20;
+        }
+        
+        // Для тех, кто не прислал данных в этом тике, записываем 0
+        for (BlockPos pos : history.keySet()) {
+            if (!current.containsKey(pos)) {
+                long[] hist = history.get(pos);
+                int idx = (int) hist[20];
+                hist[idx] = 0;
+                hist[20] = (idx + 1) % 20;
+            }
+        }
+    }
+
+    public int getEuIn(BlockPos pos) { return lastTickIn.getOrDefault(pos, 0); }
+    public int getEuOut(BlockPos pos) { return lastTickOut.getOrDefault(pos, 0); }
+
+    public double getAvgIn(BlockPos pos) { return getAverage(historyIn.get(pos)); }
+    public double getAvgOut(BlockPos pos) { return getAverage(historyOut.get(pos)); }
+
+    private double getAverage(long[] hist) {
+        if (hist == null) return 0;
+        long sum = 0;
+        for (int i = 0; i < 20; i++) sum += hist[i];
+        return sum / 20.0;
     }
 }

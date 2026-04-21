@@ -1,0 +1,7 @@
+{
+  "replace": false,
+  "values": [
+    "tmmod:uranium_ore",
+    "tmmod:deepslate_uranium_ore"
+  ]
+}

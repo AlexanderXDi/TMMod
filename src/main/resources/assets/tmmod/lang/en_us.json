@@ -22,6 +22,15 @@
   "block.tmmod.metalformer": "Metalformer",
   "block.tmmod.electric_furnace": "Electric furnace",
 
+  "block.tmmod.uranium_ore": "Uranium Ore",
+  "block.tmmod.deepslate_uranium_ore": "Deepslate Uranium Ore",
+  "block.tmmod.tin_ore": "Tin Ore",
+  "block.tmmod.deepslate_tin_ore": "Deepslate Tin Ore",
+  "block.tmmod.copper_ore": "Copper Ore",
+  "block.tmmod.deepslate_copper_ore": "Deepslate Copper Ore",
+  "block.tmmod.lead_ore": "Lead Ore",
+  "block.tmmod.deepslate_lead_ore": "Deepslate Lead Ore",
+
   "block.tmmod.batbox": "BatBox",
   "block.tmmod.cesu": "CESU",
   "block.tmmod.mfe": "MFE",
@@ -58,11 +67,19 @@
   "subtitles.tmmod.crusher_hum": "Crusher hum",
   "subtitles.tmmod.metalformer_hum": "Metalformer hum",
 
+  "gui.tmmod.voltmeter.in": "Input: %s EU/t",
+  "gui.tmmod.voltmeter.out": "Output: %s EU/t",
+  "gui.tmmod.voltmeter.avg_in": "Average Input (1s): %s EU/t",
+  "gui.tmmod.voltmeter.avg_out": "Average Output (1s): %s EU/t",
+
   "item.tmmod.treetap": "Treetap",
+  "item.tmmod.voltmeter": "Voltmeter",
   "item.tmmod.iron_hammer": "Hammer",
   "item.tmmod.steel_ingot": "Steel ingot",
   "item.tmmod.battery": "Battery",
-  "item.tmmod.overclocker_upgrade": "Overclocker upgrade",
+  "item.tmmod.advanced_battery": "Advanced Battery",
+  "item.tmmod.energy_crystal": "Energy Crystal",
+  "item.tmmod.lapotron_crystal": "Lapotron Crystal",  "item.tmmod.overclocker_upgrade": "Overclocker upgrade",
   "item.tmmod.accumulator_upgrade": "Accumulator upgrade",
   "item.tmmod.transformer_upgrade": "Transformer upgrade",
   "item.tmmod.sticky_resin": "Latex",
@@ -71,6 +88,17 @@
   "item.tmmod.electric_motor": "Electric motor",
   "item.tmmod.electronic_circuit": "Circuit",
 
+  "item.tmmod.raw_tin": "Raw Tin",
+  "item.tmmod.raw_copper": "Raw Copper",
+  "item.tmmod.raw_lead": "Raw Lead",
+  "item.tmmod.tin_ingot": "Tin Ingot",
+  "item.tmmod.copper_ingot": "Copper Ingot",
+  "item.tmmod.lead_ingot": "Lead Ingot",
+  "item.tmmod.iron_dust": "Iron Dust",
+  "item.tmmod.gold_dust": "Gold Dust",
+  "item.tmmod.copper_dust": "Copper Dust",
+  "item.tmmod.tin_dust": "Tin Dust",
+  "item.tmmod.lead_dust": "Lead Dust",
 
   "gui.tmmod.metalformer.mode_text": "Mode: %s",
   "gui.tmmod.metalformer.mode.forging": "Forging",
@@ -78,7 +106,7 @@
   "gui.tmmod.metalformer.mode.squeezing": "Squeezing",
   "gui.tmmod.metalformer.button_mode_text": "Mode",
 
-  "gui.tmmod.overclocker_upgrade.text": "speed",
-  "gui.tmmod.accumulator_upgrade.text": " extra EU into a storage",
+  "gui.tmmod.battery_block.overclocker_upgrade.text": "speed",
+  "gui.tmmod.accumulator_upgrade .text": " extra EU into a storage",
   "gui.tmmod.transformer_upgrade.text": "level of energy reception"
 }

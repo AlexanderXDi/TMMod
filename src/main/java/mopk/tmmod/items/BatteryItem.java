@@ -11,12 +11,14 @@ import net.minecraft.world.item.TooltipFlag;
 import java.util.List;
 
 public class BatteryItem extends Item implements CustomEnergyItemInterface {
-    private final int maxEnergy;
+    private final BatteryTier tier;
 
-    public BatteryItem(int maxEnergy, Properties properties) {
+    public BatteryItem(BatteryTier tier, Properties properties) {
         // Устанавливаем значение по умолчанию для компонента заряда при создании
-        super(properties.component(ModDataComponents.CHARGE.get(), 0));
-        this.maxEnergy = maxEnergy;
+        super(properties
+                .stacksTo(64)
+                .component(ModDataComponents.CHARGE.get(), 0));
+        this.tier = tier;
     }
 
     @Override
@@ -26,7 +28,17 @@ public class BatteryItem extends Item implements CustomEnergyItemInterface {
 
     @Override
     public int getMaxEnergyStored(ItemStack stack) {
-        return this.maxEnergy;
+        return this.tier.getMaxEnergy();
+    }
+
+    @Override
+    public int getTier(ItemStack stack) {
+        return this.tier.getTier();
+    }
+
+    @Override
+    public int getTransferRate(ItemStack stack) {
+        return this.tier.getTransfer();
     }
 
     @Override

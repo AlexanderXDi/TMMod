@@ -42,6 +42,7 @@ public class ElectricFurnaceBE extends BlockEntity implements MenuProvider, Cust
     private boolean[] canExtractSides = new boolean[6];
     private int progress = 0;
     private int maxProgress = 0;
+    private int redstoneEnergyBuffer = 0;
 
     public ElectricFurnaceBE(BlockPos pos, BlockState state) {
         super(ModBlockEntities.ELECTRIC_FURNACE_BE.get(), pos, state);
@@ -257,32 +258,32 @@ public class ElectricFurnaceBE extends BlockEntity implements MenuProvider, Cust
         Optional<RecipeHolder<SmeltingRecipe>> recipeHolder = level.getRecipeManager().getRecipeFor(RecipeType.SMELTING, new SingleRecipeInput(inventory.getStackInSlot(0)), level);
 
         ItemStack chargeStack = inventory.getStackInSlot(2);
-        if (chargeStack.is(Items.REDSTONE)) {
-            int energyPerRedstone = 10;
-            if (energyStored <= getMaxEnergyStored() - energyPerRedstone) {
-                if (receiveEnergy(energyPerRedstone,1,  false) > 0) {
-                    inventory.extractItem(2, 1, false);
+        if (!chargeStack.isEmpty() && energyStored < currentMaxEnergyStored) {
+            if (chargeStack.is(Items.REDSTONE)) {
+                int energyGain = 400;
+                if (energyStored + energyGain <= currentMaxEnergyStored) {
+                    energyStored += energyGain;
+                    chargeStack.shrink(1);
                     stateChanged = true;
                 }
-            }
-        }
-        else if (!chargeStack.isEmpty() && this.energyStored < this.currentMaxEnergyStored) {
-            if (chargeStack.getItem() instanceof CustomEnergyItemInterface energyItem) {
-                int chargeSpeed = 50;
-                int energyToGive = Math.min(this.energyStored, chargeSpeed);
-
-                int accepted = energyItem.extractEnergy(chargeStack, energyToGive, false);
-
-                if (accepted > 0) {
-                    this.energyStored += accepted;
-                    stateChanged = true;
+            } else if (chargeStack.getItem() instanceof CustomEnergyItemInterface energyItem) {
+                if (energyItem.getTier(chargeStack) <= this.currentEnergyTier) {
+                    int space = currentMaxEnergyStored - energyStored;
+                    // Скорость разрядки - это минимум из скорости приема машины и скорости предмета
+                    int transferRate = Math.min(this.currentMaxReceiveAmount, energyItem.getTransferRate(chargeStack));
+                    int toExtract = Math.min(space, transferRate); 
+                    int extracted = energyItem.extractEnergy(chargeStack, toExtract, false);
+                    if (extracted > 0) {
+                        energyStored += extracted;
+                        stateChanged = true;
+                    }
                 }
             }
         }
 
         if (recipeHolder.isPresent()) {
             SmeltingRecipe recipe = recipeHolder.get().value();
-            maxProgress = recipe.getCookingTime();
+            maxProgress = (int) (recipe.getCookingTime() / 1.2);
             int energyPerTick = 10;
 
             maxProgress = (int) (maxProgress / currentSpeedMultiplier);

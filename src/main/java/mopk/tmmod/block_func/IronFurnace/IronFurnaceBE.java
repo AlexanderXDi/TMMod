@@ -1,16 +1,17 @@
 package mopk.tmmod.block_func.IronFurnace;
 
 import mopk.tmmod.registration.ModBlockEntities;
-
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.AbstractCookingRecipe;
 import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.item.crafting.SingleRecipeInput;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.AbstractFurnaceBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-
 
 public class IronFurnaceBE extends AbstractFurnaceBlockEntity {
     public IronFurnaceBE(BlockPos pos, BlockState state) {

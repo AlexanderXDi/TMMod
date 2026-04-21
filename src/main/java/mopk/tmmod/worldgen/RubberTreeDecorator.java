@@ -2,6 +2,7 @@ package mopk.tmmod.worldgen;
 
 import com.mojang.serialization.MapCodec;
 import mopk.tmmod.blocks.RubberLogBlock;
+import mopk.tmmod.registration.ModTreeDecorators;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;

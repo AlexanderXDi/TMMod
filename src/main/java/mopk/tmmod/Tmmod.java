@@ -39,7 +39,7 @@ import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 import net.neoforged.neoforge.event.tick.ServerTickEvent;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
-import mopk.tmmod.worldgen.ModTreeDecorators;
+import mopk.tmmod.registration.ModTreeDecorators;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 
 @Mod(Tmmod.MODID)
@@ -74,6 +74,7 @@ public class Tmmod {
 
     @SubscribeEvent
     public void onServerTick(ServerTickEvent.Post event) {
+        // System.out.println("Server Tick Fired!");
         for (ServerLevel level : event.getServer().getAllLevels()) {
             EnergyNetworkManager.get(level).tick(level);
         }
@@ -160,6 +161,27 @@ public class Tmmod {
                     return energy > 0 ? 1.0F : 0.0F;
                 }
             );
+            ItemProperties.register(ModItems.ADVANCED_BATTERY.get(),
+                ResourceLocation.fromNamespaceAndPath("tmmod", "charged"),
+                (stack, level, entity, seed) -> {
+                    int energy = stack.getOrDefault(ModDataComponents.CHARGE.get(), 0);
+                    return energy > 0 ? 1.0F : 0.0F;
+                }
+            );
+            ItemProperties.register(ModItems.ENERGY_CRYSTAL.get(),
+                ResourceLocation.fromNamespaceAndPath("tmmod", "charged"),
+                (stack, level, entity, seed) -> {
+                    int energy = stack.getOrDefault(ModDataComponents.CHARGE.get(), 0);
+                    return energy > 0 ? 1.0F : 0.0F;
+                }
+            );
+            ItemProperties.register(ModItems.LAPOTRON_CRYSTAL.get(),
+                ResourceLocation.fromNamespaceAndPath("tmmod", "charged"),
+                (stack, level, entity, seed) -> {
+                    int energy = stack.getOrDefault(ModDataComponents.CHARGE.get(), 0);
+                    return energy > 0 ? 1.0F : 0.0F;
+                }
+            );
         });
     }
 
@@ -176,11 +198,39 @@ public class Tmmod {
     private void buildCreativeTabs(final BuildCreativeModeTabContentsEvent event) {
         if (event.getTabKey() == MOD_TAB.getKey()) {
             event.accept(TREETAP.get());
+            event.accept(VOLTMETER.get());
             event.accept(IRON_HAMMER.get());
             event.accept(STEEL_INGOT.get());
+            
+            event.accept(TIN_INGOT.get());
+            event.accept(COPPER_INGOT.get());
+            event.accept(LEAD_INGOT.get());
+
+            event.accept(RAW_TIN.get());
+            event.accept(RAW_COPPER.get());
+            event.accept(RAW_LEAD.get());
+
+            event.accept(IRON_DUST.get());
+            event.accept(GOLD_DUST.get());
+            event.accept(COPPER_DUST.get());
+            event.accept(TIN_DUST.get());
+            event.accept(LEAD_DUST.get());
+
             event.accept(IRON_FURNACE.get());
             event.accept(GENERATOR.get());
             event.accept(BATTERY.get());
+            event.accept(ADVANCED_BATTERY.get());
+            event.accept(ENERGY_CRYSTAL.get());
+            event.accept(LAPOTRON_CRYSTAL.get());
+            
+            event.accept(URANIUM_ORE.get());
+            event.accept(DEEPSLATE_URANIUM_ORE.get());
+            event.accept(TIN_ORE.get());
+            event.accept(DEEPSLATE_TIN_ORE.get());
+            event.accept(COPPER_ORE.get());
+            event.accept(DEEPSLATE_COPPER_ORE.get());
+            event.accept(LEAD_ORE.get());
+            event.accept(DEEPSLATE_LEAD_ORE.get());
             
             ModBlocks.ALL_CABLES.values().forEach(variants -> {
                 variants.forEach(cableBlock -> event.accept(cableBlock.get()));

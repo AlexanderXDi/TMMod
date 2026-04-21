@@ -29,6 +29,8 @@ public class CrusherScreen extends AbstractContainerScreen<CrusherMenu> {
             ResourceLocation.fromNamespaceAndPath("tmmod", "textures/gui/crusher/energy_slot.png");
     private static final ResourceLocation MODULES_SLOT =
             ResourceLocation.fromNamespaceAndPath("tmmod", "textures/gui/crusher/modules_slot.png");
+    private static final ResourceLocation REDSTONE_CHARGE_SLOT =
+            ResourceLocation.fromNamespaceAndPath("tmmod", "textures/gui/accumulator/redstone_charge_slot.png");
 
     int RTWBG = 176;
     int RTHBG = 166;
@@ -90,7 +92,7 @@ public class CrusherScreen extends AbstractContainerScreen<CrusherMenu> {
         for (int i = 0; i < menu.slots.size(); i++) {
             Slot slot = menu.slots.get(i);
             if (i == 2) {
-                guiGraphics.blit(ENERGY_SLOT, x + slot.x - 1, y + slot.y - 1, 0, 0, RTWSlot, RTHSlot, RTWSlot, RTHSlot);
+                guiGraphics.blit(REDSTONE_CHARGE_SLOT, x + slot.x - 1, y + slot.y - 1, 0, 0, RTWSlot, RTHSlot, RTWSlot, RTHSlot);
                 continue;
             } else if (i >= 3 && i <= 6) {
                 guiGraphics.blit(MODULES_SLOT, x + slot.x - 1, y + slot.y - 1, 0, 0, RTWSlot, RTHSlot, RTWSlot, RTHSlot);

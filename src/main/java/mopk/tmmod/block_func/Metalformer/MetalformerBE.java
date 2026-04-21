@@ -261,22 +261,26 @@ public class MetalformerBE extends BlockEntity implements MenuProvider, CustomEn
         Optional<RecipeHolder<MetalformerRecipe>> recipeHolder = level.getRecipeManager().getRecipeFor(getCurrentRecipeType(), new SingleRecipeInput(inventory.getStackInSlot(0)), level);
 
         ItemStack chargeStack = inventory.getStackInSlot(2);
-        if (chargeStack.is(Items.REDSTONE)) {
-            int energyPerRedstone = 10;
-            if (energyStored <= getMaxEnergyStored() - energyPerRedstone) {
-                if (receiveEnergy(energyPerRedstone,1,  false) > 0) {
-                    inventory.extractItem(2, 1, false);
+        if (!chargeStack.isEmpty() && energyStored < currentMaxEnergyStored) {
+            if (chargeStack.is(Items.REDSTONE)) {
+                int energyGain = 400;
+                if (energyStored + energyGain <= currentMaxEnergyStored) {
+                    energyStored += energyGain;
+                    chargeStack.shrink(1);
                     setChanged();
                 }
-            }
-        }
-        else if (chargeStack.has(ModDataComponents.CHARGE.get())) {
-            int itemCharge = chargeStack.getOrDefault(ModDataComponents.CHARGE.get(), 0);
-            int accepted = receiveEnergy(Math.min(itemCharge, 100),1 , false);
-
-            if (accepted > 0) {
-                chargeStack.set(ModDataComponents.CHARGE.get(), itemCharge - accepted);
-                setChanged();
+            } else if (chargeStack.getItem() instanceof mopk.tmmod.energy_network.CustomEnergyItemInterface energyItem) {
+                if (energyItem.getTier(chargeStack) <= this.currentEnergyTier) {
+                    int space = currentMaxEnergyStored - energyStored;
+                    // Скорость разрядки - это минимум из скорости приема машины и скорости предмета
+                    int transferRate = Math.min(this.currentMaxReceiveAmount, energyItem.getTransferRate(chargeStack));
+                    int toExtract = Math.min(space, transferRate);
+                    int extracted = energyItem.extractEnergy(chargeStack, toExtract, false);
+                    if (extracted > 0) {
+                        energyStored += extracted;
+                        setChanged();
+                    }
+                }
             }
         }
 

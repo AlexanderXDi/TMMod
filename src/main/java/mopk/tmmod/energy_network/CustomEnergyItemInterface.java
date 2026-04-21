@@ -7,6 +7,10 @@ public interface CustomEnergyItemInterface {
 
     int getMaxEnergyStored(ItemStack stack);
 
+    int getTier(ItemStack stack);
+
+    int getTransferRate(ItemStack stack);
+
     int receiveEnergy(ItemStack stack, int amount, boolean simulate);
 
     int extractEnergy(ItemStack stack, int amount, boolean simulate);

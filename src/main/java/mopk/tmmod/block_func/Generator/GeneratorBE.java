@@ -209,17 +209,20 @@ public class GeneratorBE extends BlockEntity implements MenuProvider, CustomEner
         ItemStack chargeStack = inventory.getStackInSlot(1);
         if (!chargeStack.isEmpty() && this.energyStored > 0) {
             if (chargeStack.getItem() instanceof CustomEnergyItemInterface energyItem) {
-                int chargeSpeed = 50; // Базовая скорость зарядки предмета
-                // Сколько энергии мы реально можем отдать
-                int energyToGive = Math.min(this.energyStored, chargeSpeed);
+                // Проверяем тир предмета - Генератор (Т1) не должен заряжать предметы выше Т1
+                if (energyItem.getTier(chargeStack) <= this.currentEnergyTier) {
+                    int chargeSpeed = 32; // Стандартная скорость зарядки для Т1
+                    // Сколько энергии мы реально можем отдать
+                    int energyToGive = Math.min(this.energyStored, chargeSpeed);
 
-                // Пытаемся передать энергию предмету (симуляция отключена - передаем реально)
-                int accepted = energyItem.receiveEnergy(chargeStack, energyToGive, false);
+                    // Пытаемся передать энергию предмету (симуляция отключена - передаем реально)
+                    int accepted = energyItem.receiveEnergy(chargeStack, energyToGive, false);
 
-                if (accepted > 0) {
-                    // Если предмет принял энергию, вычитаем её из буфера генератора
-                    this.energyStored -= accepted;
-                    stateChanged = true;
+                    if (accepted > 0) {
+                        // Если предмет принял энергию, вычитаем её из буфера генератора
+                        this.energyStored -= accepted;
+                        stateChanged = true;
+                    }
                 }
             }
         }

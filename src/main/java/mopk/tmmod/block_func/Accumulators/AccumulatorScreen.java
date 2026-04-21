@@ -16,7 +16,7 @@ public class AccumulatorScreen extends AbstractContainerScreen<AccumulatorMenu> 
     private static final ResourceLocation CHESTPLATE_SLOT = ResourceLocation.fromNamespaceAndPath("tmmod", "textures/gui/accumulator/chestplate_slot.png");
     private static final ResourceLocation LEGGINGS_SLOT = ResourceLocation.fromNamespaceAndPath("tmmod", "textures/gui/accumulator/leggings_slot.png");
     private static final ResourceLocation BOOTS_SLOT = ResourceLocation.fromNamespaceAndPath("tmmod", "textures/gui/accumulator/boots_slot.png");
-    private static final ResourceLocation REDSTONE_SLOT = ResourceLocation.fromNamespaceAndPath("tmmod", "textures/gui/accumulator/redstone_slot.png");
+    private static final ResourceLocation REDSTONE_SLOT = ResourceLocation.fromNamespaceAndPath("tmmod", "textures/gui/accumulator/redstone_charge_slot.png");
     private static final ResourceLocation SLOT = ResourceLocation.fromNamespaceAndPath("tmmod", "textures/gui/slot.png");
     private static final ResourceLocation BAR_BG = ResourceLocation.fromNamespaceAndPath("tmmod", "textures/gui/bar_bg.png");
     private static final ResourceLocation BAR_PARTITION = ResourceLocation.fromNamespaceAndPath("tmmod", "textures/gui/bar_partition.png");

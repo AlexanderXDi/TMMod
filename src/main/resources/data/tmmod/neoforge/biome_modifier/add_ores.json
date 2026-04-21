@@ -1,0 +1,11 @@
+{
+  "type": "neoforge:add_features",
+  "biomes": "#minecraft:is_overworld",
+  "features": [
+    "tmmod:uranium_ore",
+    "tmmod:tin_ore",
+    "tmmod:copper_ore",
+    "tmmod:lead_ore"
+  ],
+  "step": "underground_ores"
+}

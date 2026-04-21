@@ -149,40 +149,41 @@ public class AccumulatorBE extends BlockEntity implements MenuProvider, CustomEn
             ItemStack chargeStack = inventory.getStackInSlot(i);
             if (!chargeStack.isEmpty() && energyStored > 0) {
                 if (chargeStack.getItem() instanceof CustomEnergyItemInterface energyItem) {
-                    int toGive = Math.min(energyStored, tier.getTransfer());
-                    int accepted = energyItem.receiveEnergy(chargeStack, toGive, false);
-                    if (accepted > 0) {
-                        energyStored -= accepted;
-                        setChanged();
+                    if (energyItem.getTier(chargeStack) <= this.tier.getTier()) {
+                        // Скорость зарядки - это минимум из скорости блока и скорости предмета
+                        int transferRate = Math.min(tier.getTransfer(), energyItem.getTransferRate(chargeStack));
+                        int toGive = Math.min(energyStored, transferRate);
+                        int accepted = energyItem.receiveEnergy(chargeStack, toGive, false);
+                        if (accepted > 0) {
+                            energyStored -= accepted;
+                            setChanged();
+                        }
                     }
                 }
             }
         }
 
-        // 2. Charge block from redstone or items (slot 5)
+        // 2. Charge block from items (slot 5)
         ItemStack chargeInStack = inventory.getStackInSlot(5);
         if (!chargeInStack.isEmpty() && energyStored < tier.getCapacity()) {
             if (chargeInStack.is(Items.REDSTONE)) {
-                int energyGain = 500;
-                if (energyStored + energyGain <= tier.getCapacity()) {
-                    energyStored += energyGain;
-                    chargeInStack.shrink(1);
-                    setChanged();
-                }
-            } else if (chargeInStack.is(Items.REDSTONE_BLOCK)) {
-                int energyGain = 4500;
+                int energyGain = 400;
                 if (energyStored + energyGain <= tier.getCapacity()) {
                     energyStored += energyGain;
                     chargeInStack.shrink(1);
                     setChanged();
                 }
             } else if (chargeInStack.getItem() instanceof CustomEnergyItemInterface energyItem) {
-                int space = tier.getCapacity() - energyStored;
-                int toExtract = Math.min(space, tier.getTransfer());
-                int extracted = energyItem.extractEnergy(chargeInStack, toExtract, false);
-                if (extracted > 0) {
-                    energyStored += extracted;
-                    setChanged();
+                if (energyItem.getTier(chargeInStack) <= this.tier.getTier()) {
+                    // Скорость разрядки - это минимум из скорости блока и скорости предмета
+                    int transferRate = Math.min(tier.getTransfer(), energyItem.getTransferRate(chargeInStack));
+                    int space = tier.getCapacity() - energyStored;
+                    int toExtract = Math.min(space, transferRate);
+                    int extracted = energyItem.extractEnergy(chargeInStack, toExtract, false);
+                    if (extracted > 0) {
+                        energyStored += extracted;
+                        setChanged();
+                    }
                 }
             }
         }
@@ -196,28 +197,16 @@ public class AccumulatorBE extends BlockEntity implements MenuProvider, CustomEn
                     if (energyStored <= 0) break;
                     ItemStack stack = player.getInventory().getItem(i);
                     if (!stack.isEmpty() && stack.getItem() instanceof CustomEnergyItemInterface energyItem) {
-                        int toGive = Math.min(energyStored, tier.getTransfer());
-                        int accepted = energyItem.receiveEnergy(stack, toGive, false);
-                        if (accepted > 0) {
-                            energyStored -= accepted;
-                            setChanged();
+                        if (energyItem.getTier(stack) <= this.tier.getTier()) {
+                            int transferRate = Math.min(tier.getTransfer(), energyItem.getTransferRate(stack));
+                            int toGive = Math.min(energyStored, transferRate);
+                            int accepted = energyItem.receiveEnergy(stack, toGive, false);
+                            if (accepted > 0) {
+                                energyStored -= accepted;
+                                setChanged();
+                            }
                         }
                     }
-                }
-            }
-        }
-
-        // 5. Output energy to facing side
-        if (energyStored > 0) {
-            Direction facing = state.getValue(BlockStateProperties.FACING);
-            BlockPos targetPos = pos.relative(facing);
-            CustomEnergyStorage target = level.getCapability(CustomCapabilities.ENERGY, targetPos, facing.getOpposite());
-            if (target != null && target.canReceive(facing.getOpposite())) {
-                int toExtract = Math.min(energyStored, tier.getTransfer());
-                int accepted = target.receiveEnergy(toExtract, getEnergyTier(), false);
-                if (accepted > 0) {
-                    energyStored -= accepted;
-                    setChanged();
                 }
             }
         }

@@ -1,0 +1,14 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "tmmod:item/lapotron_crystal_uncharged"
+  },
+  "overrides": [
+    {
+      "predicate": {
+        "tmmod:charged": 1.0
+      },
+      "model": "tmmod:item/lapotron_crystal_charged"
+    }
+  ]
+}

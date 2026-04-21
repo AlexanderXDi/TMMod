@@ -1,6 +1,14 @@
 {
   "replace": false,
   "values": [
-    "tmmod:iron_furnace"
+    "tmmod:iron_furnace",
+    "tmmod:uranium_ore",
+    "tmmod:deepslate_uranium_ore",
+    "tmmod:tin_ore",
+    "tmmod:deepslate_tin_ore",
+    "tmmod:lead_ore",
+    "tmmod:deepslate_lead_ore",
+    "tmmod:copper_ore",
+    "tmmod:deepslate_copper_ore"
   ]
 }

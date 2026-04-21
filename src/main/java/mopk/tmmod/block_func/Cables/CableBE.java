@@ -15,7 +15,6 @@ import net.minecraft.world.level.block.state.BlockState;
 
 public class CableBE extends BlockEntity implements CustomEnergyStorage {
     private final CableTier tier;
-    private int energyStored = 0;
 
     public CableBE(BlockPos pos, BlockState state, CableTier tier) {
         super(CABLE_BE.get(), pos, state);
@@ -34,18 +33,14 @@ public class CableBE extends BlockEntity implements CustomEnergyStorage {
         return this.tier.getTransfer();
     }
 
-    public int getCapacity() {
-        return this.tier.getCapacity();
-    }
-
     @Override
     public int getEnergyStored() {
-        return this.energyStored;
+        return 0; // Кабель больше не хранит энергию
     }
 
     @Override
     public int getMaxEnergyStored() {
-        return this.tier.getCapacity();
+        return 0; // Кабель больше не имеет емкости
     }
 
     @Override
@@ -61,40 +56,14 @@ public class CableBE extends BlockEntity implements CustomEnergyStorage {
             if (!simulate) {
                 burnout();
             }
-            return 0; // Энергия не принята, кабель уничтожен
         }
-
-        // 2. ПРОВЕРКА ПРОПУСКНОЙ СПОСОБНОСТИ:
-        // Кабель не может принять за один раз больше, чем его параметр transfer.
-        int actualReceiveLimit = Math.min(maxReceive, this.tier.getTransfer());
-
-        // 3. РАСЧЕТ СВОБОДНОГО МЕСТА:
-        int spaceRemaining = getMaxEnergyStored() - this.energyStored;
-        int energyAccepted = Math.min(actualReceiveLimit, spaceRemaining);
-
-        // 4. ПРИМЕНЕНИЕ ИЗМЕНЕНИЙ (если это не симуляция):
-        if (!simulate && energyAccepted > 0) {
-            this.energyStored += energyAccepted;
-            setChanged(); // Отмечаем, что данные изменились и их нужно сохранить
-        }
-
-        return energyAccepted;
+        // Кабель не может принимать энергию напрямую, всё делает сеть в один клик.
+        return 0; 
     }
 
     @Override
     public int extractEnergy(int maxExtract, boolean simulate) {
-        // Ограничиваем извлечение пропускной способностью кабеля (transfer)
-        int actualExtractLimit = Math.min(maxExtract, this.tier.getTransfer());
-
-        // Сколько реально можно забрать из буфера
-        int energyExtracted = Math.min(actualExtractLimit, this.energyStored);
-
-        if (!simulate && energyExtracted > 0) {
-            this.energyStored -= energyExtracted;
-            setChanged();
-        }
-
-        return energyExtracted;
+        return 0; // В кабеле больше нет энергии, которую можно было бы извлечь
     }
 
     @Override
@@ -138,12 +107,10 @@ public class CableBE extends BlockEntity implements CustomEnergyStorage {
     @Override
     protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
         super.saveAdditional(tag, registries);
-        tag.putInt("energy", this.energyStored);
     }
 
     @Override
     protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
         super.loadAdditional(tag, registries);
-        this.energyStored = tag.getInt("energy");
     }
 }
