@@ -1,0 +1,12 @@
+{
+  "variants": {
+    "facing=north,lit=false": { "model": "tmmod:block/compressor" },
+    "facing=east,lit=false": { "model": "tmmod:block/compressor", "y": 90 },
+    "facing=south,lit=false": { "model": "tmmod:block/compressor", "y": 180 },
+    "facing=west,lit=false": { "model": "tmmod:block/compressor", "y": 270 },
+    "facing=north,lit=true": { "model": "tmmod:block/compressor_on" },
+    "facing=east,lit=true": { "model": "tmmod:block/compressor_on", "y": 90 },
+    "facing=south,lit=true": { "model": "tmmod:block/compressor_on", "y": 180 },
+    "facing=west,lit=true": { "model": "tmmod:block/compressor_on", "y": 270 }
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "type": "tmmod:compressing",
+  "input": { "count": 9, "item": "tmmod:lead_plate" },
+  "output": { "item": "tmmod:dense_lead_plate" },
+  "energyPerTick": 10,
+  "time": 400
+}

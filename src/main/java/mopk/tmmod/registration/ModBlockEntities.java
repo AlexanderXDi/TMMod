@@ -2,7 +2,9 @@ package mopk.tmmod.registration;
 
 import mopk.tmmod.block_func.Cables.CableBE;
 import mopk.tmmod.block_func.Cables.CableTier;
+import mopk.tmmod.block_func.Compressor.CompressorBE;
 import mopk.tmmod.block_func.Crusher.CrusherBE;
+import mopk.tmmod.block_func.Extractor.ExtractorBE;
 import mopk.tmmod.block_func.Metalformer.MetalformerBE;
 import mopk.tmmod.block_func.ElectricFurnace.ElectricFurnaceBE;
 import mopk.tmmod.block_func.Generator.GeneratorBE;
@@ -42,6 +44,20 @@ public class ModBlockEntities {
                     () -> BlockEntityType.Builder.of(
                             CrusherBE::new,
                             ModBlocks.CRUSHER.get()
+                    ).build(null));
+
+    public static final Supplier<BlockEntityType<ExtractorBE>> EXTRACTOR_BE =
+            BLOCK_ENTITIES.register("extractor_be",
+                    () -> BlockEntityType.Builder.of(
+                            ExtractorBE::new,
+                            ModBlocks.EXTRACTOR.get()
+                    ).build(null));
+
+    public static final Supplier<BlockEntityType<CompressorBE>> COMPRESSOR_BE =
+            BLOCK_ENTITIES.register("compressor_be",
+                    () -> BlockEntityType.Builder.of(
+                            CompressorBE::new,
+                            ModBlocks.COMPRESSOR.get()
                     ).build(null));
 
     public static final Supplier<BlockEntityType<MetalformerBE>> METALFORMER_BE =

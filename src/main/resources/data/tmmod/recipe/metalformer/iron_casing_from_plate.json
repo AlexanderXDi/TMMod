@@ -1,0 +1,7 @@
+{
+  "type": "tmmod:forging",
+  "input": { "item": "tmmod:iron_plate" },
+  "output": { "count": 2, "item": "tmmod:iron_casing" },
+  "energyPerTick": 10,
+  "time": 200
+}

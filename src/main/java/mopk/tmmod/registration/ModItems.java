@@ -47,6 +47,10 @@ public class ModItems {
             () -> new Item(new Item.Properties()));
     public static final DeferredItem<Item> LEAD_INGOT = ITEMS.register("lead_ingot",
             () -> new Item(new Item.Properties()));
+    public static final DeferredItem<Item> BRONZE_INGOT = ITEMS.register("bronze_ingot",
+            () -> new Item(new Item.Properties()));
+    public static final DeferredItem<Item> COMPOSITE_INGOT = ITEMS.register("composite_ingot",
+            () -> new Item(new Item.Properties()));
 
     public static final DeferredItem<Item> IRON_DUST = ITEMS.register("iron_dust",
             () -> new Item(new Item.Properties()));
@@ -57,6 +61,72 @@ public class ModItems {
     public static final DeferredItem<Item> TIN_DUST = ITEMS.register("tin_dust",
             () -> new Item(new Item.Properties()));
     public static final DeferredItem<Item> LEAD_DUST = ITEMS.register("lead_dust",
+            () -> new Item(new Item.Properties()));
+    public static final DeferredItem<Item> BRONZE_DUST = ITEMS.register("bronze_dust",
+            () -> new Item(new Item.Properties()));
+    public static final DeferredItem<Item> STEEL_DUST = ITEMS.register("steel_dust",
+            () -> new Item(new Item.Properties()));
+
+    public static final DeferredItem<Item> TINY_IRON_DUST = ITEMS.register("tiny_iron_dust",
+            () -> new Item(new Item.Properties()));
+    public static final DeferredItem<Item> TINY_GOLD_DUST = ITEMS.register("tiny_gold_dust",
+            () -> new Item(new Item.Properties()));
+    public static final DeferredItem<Item> TINY_COPPER_DUST = ITEMS.register("tiny_copper_dust",
+            () -> new Item(new Item.Properties()));
+    public static final DeferredItem<Item> TINY_TIN_DUST = ITEMS.register("tiny_tin_dust",
+            () -> new Item(new Item.Properties()));
+    public static final DeferredItem<Item> TINY_LEAD_DUST = ITEMS.register("tiny_lead_dust",
+            () -> new Item(new Item.Properties()));
+    public static final DeferredItem<Item> TINY_BRONZE_DUST = ITEMS.register("tiny_bronze_dust",
+            () -> new Item(new Item.Properties()));
+    public static final DeferredItem<Item> TINY_STEEL_DUST = ITEMS.register("tiny_steel_dust",
+            () -> new Item(new Item.Properties()));
+
+    public static final DeferredItem<Item> IRON_PLATE = ITEMS.register("iron_plate",
+            () -> new Item(new Item.Properties()));
+    public static final DeferredItem<Item> GOLD_PLATE = ITEMS.register("gold_plate",
+            () -> new Item(new Item.Properties()));
+    public static final DeferredItem<Item> COPPER_PLATE = ITEMS.register("copper_plate",
+            () -> new Item(new Item.Properties()));
+    public static final DeferredItem<Item> TIN_PLATE = ITEMS.register("tin_plate",
+            () -> new Item(new Item.Properties()));
+    public static final DeferredItem<Item> LEAD_PLATE = ITEMS.register("lead_plate",
+            () -> new Item(new Item.Properties()));
+    public static final DeferredItem<Item> BRONZE_PLATE = ITEMS.register("bronze_plate",
+            () -> new Item(new Item.Properties()));
+    public static final DeferredItem<Item> STEEL_PLATE = ITEMS.register("steel_plate",
+            () -> new Item(new Item.Properties()));
+    public static final DeferredItem<Item> COMPOSITE = ITEMS.register("composite",
+            () -> new Item(new Item.Properties()));
+
+    public static final DeferredItem<Item> DENSE_IRON_PLATE = ITEMS.register("dense_iron_plate",
+            () -> new Item(new Item.Properties()));
+    public static final DeferredItem<Item> DENSE_GOLD_PLATE = ITEMS.register("dense_gold_plate",
+            () -> new Item(new Item.Properties()));
+    public static final DeferredItem<Item> DENSE_COPPER_PLATE = ITEMS.register("dense_copper_plate",
+            () -> new Item(new Item.Properties()));
+    public static final DeferredItem<Item> DENSE_TIN_PLATE = ITEMS.register("dense_tin_plate",
+            () -> new Item(new Item.Properties()));
+    public static final DeferredItem<Item> DENSE_LEAD_PLATE = ITEMS.register("dense_lead_plate",
+            () -> new Item(new Item.Properties()));
+    public static final DeferredItem<Item> DENSE_BRONZE_PLATE = ITEMS.register("dense_bronze_plate",
+            () -> new Item(new Item.Properties()));
+    public static final DeferredItem<Item> DENSE_STEEL_PLATE = ITEMS.register("dense_steel_plate",
+            () -> new Item(new Item.Properties()));
+
+    public static final DeferredItem<Item> IRON_CASING = ITEMS.register("iron_casing",
+            () -> new Item(new Item.Properties()));
+    public static final DeferredItem<Item> GOLD_CASING = ITEMS.register("gold_casing",
+            () -> new Item(new Item.Properties()));
+    public static final DeferredItem<Item> COPPER_CASING = ITEMS.register("copper_casing",
+            () -> new Item(new Item.Properties()));
+    public static final DeferredItem<Item> TIN_CASING = ITEMS.register("tin_casing",
+            () -> new Item(new Item.Properties()));
+    public static final DeferredItem<Item> LEAD_CASING = ITEMS.register("lead_casing",
+            () -> new Item(new Item.Properties()));
+    public static final DeferredItem<Item> BRONZE_CASING = ITEMS.register("bronze_casing",
+            () -> new Item(new Item.Properties()));
+    public static final DeferredItem<Item> STEEL_CASING = ITEMS.register("steel_casing",
             () -> new Item(new Item.Properties()));
 
     public static final DeferredItem<Item> OVERCLOCKER_UPGRADE = ITEMS.register("overclocker_upgrade",

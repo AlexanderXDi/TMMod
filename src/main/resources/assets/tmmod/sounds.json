@@ -25,8 +25,14 @@
   },
   "electric_furnace_hum": {
     "subtitle": "subtitles.tmmod.electric_furnace_hum",
-    "sounds": [
-      "tmmod:electric_furnace_hum"
-    ]
+    "sounds": [ "tmmod:electric_furnace_hum" ]
+  },
+  "extractor_hum": {
+    "subtitle": "subtitles.tmmod.extractor_hum",
+    "sounds": [ "tmmod:extractor_hum" ]
+  },
+  "compressor_hum": {
+    "subtitle": "subtitles.tmmod.compressor_hum",
+    "sounds": [ "tmmod:compressor_hum" ]
   }
-}
+  }

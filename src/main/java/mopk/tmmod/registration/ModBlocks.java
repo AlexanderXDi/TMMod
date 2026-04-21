@@ -78,6 +78,12 @@ public class ModBlocks {
     public static final DeferredBlock<Block> CRUSHER = registerBlock("crusher",
             () -> new Crusher(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK)));
 
+    public static final DeferredBlock<Block> EXTRACTOR = registerBlock("extractor",
+            () -> new Extractor(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK)));
+
+    public static final DeferredBlock<Block> COMPRESSOR = registerBlock("compressor",
+            () -> new Compressor(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK)));
+
     public static final DeferredBlock<Block> METALFORMER = registerBlock("metalformer",
             () -> new Metalformer(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK)));
 
@@ -103,6 +109,15 @@ public class ModBlocks {
             () -> new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_ORE)));
     public static final DeferredBlock<Block> DEEPSLATE_LEAD_ORE = registerBlock("deepslate_lead_ore",
             () -> new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.DEEPSLATE_IRON_ORE)));
+
+    public static final DeferredBlock<Block> TIN_BLOCK = registerBlock("tin_block",
+            () -> new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK)));
+    public static final DeferredBlock<Block> LEAD_BLOCK = registerBlock("lead_block",
+            () -> new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK)));
+    public static final DeferredBlock<Block> BRONZE_BLOCK = registerBlock("bronze_block",
+            () -> new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK)));
+    public static final DeferredBlock<Block> STEEL_BLOCK = registerBlock("steel_block",
+            () -> new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK)));
 
     public static final Map<mopk.tmmod.block_func.Accumulators.AccumulatorTier, List<DeferredBlock<AccumulatorBlock>>> ALL_ACCUMULATORS = new EnumMap<>(mopk.tmmod.block_func.Accumulators.AccumulatorTier.class);
     public static final Map<mopk.tmmod.block_func.Transformers.TransformerTier, DeferredBlock<TransformerBlock>> ALL_TRANSFORMERS = new EnumMap<>(mopk.tmmod.block_func.Transformers.TransformerTier.class);

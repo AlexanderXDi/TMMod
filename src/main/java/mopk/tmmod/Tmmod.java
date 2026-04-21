@@ -74,7 +74,6 @@ public class Tmmod {
 
     @SubscribeEvent
     public void onServerTick(ServerTickEvent.Post event) {
-        // System.out.println("Server Tick Fired!");
         for (ServerLevel level : event.getServer().getAllLevels()) {
             EnergyNetworkManager.get(level).tick(level);
         }
@@ -200,21 +199,63 @@ public class Tmmod {
             event.accept(TREETAP.get());
             event.accept(VOLTMETER.get());
             event.accept(IRON_HAMMER.get());
-            event.accept(STEEL_INGOT.get());
             
+            event.accept(TIN_BLOCK.get());
+            event.accept(LEAD_BLOCK.get());
+            event.accept(BRONZE_BLOCK.get());
+            event.accept(STEEL_BLOCK.get());
+
             event.accept(TIN_INGOT.get());
             event.accept(COPPER_INGOT.get());
             event.accept(LEAD_INGOT.get());
+            event.accept(BRONZE_INGOT.get());
+            event.accept(STEEL_INGOT.get());
+            event.accept(COMPOSITE_INGOT.get());
 
             event.accept(RAW_TIN.get());
             event.accept(RAW_COPPER.get());
             event.accept(RAW_LEAD.get());
+
+            event.accept(IRON_PLATE.get());
+            event.accept(GOLD_PLATE.get());
+            event.accept(COPPER_PLATE.get());
+            event.accept(TIN_PLATE.get());
+            event.accept(LEAD_PLATE.get());
+            event.accept(BRONZE_PLATE.get());
+            event.accept(STEEL_PLATE.get());
+            event.accept(COMPOSITE.get());
+
+            event.accept(DENSE_IRON_PLATE.get());
+            event.accept(DENSE_GOLD_PLATE.get());
+            event.accept(DENSE_COPPER_PLATE.get());
+            event.accept(DENSE_TIN_PLATE.get());
+            event.accept(DENSE_LEAD_PLATE.get());
+            event.accept(DENSE_BRONZE_PLATE.get());
+            event.accept(DENSE_STEEL_PLATE.get());
+
+            event.accept(IRON_CASING.get());
+            event.accept(GOLD_CASING.get());
+            event.accept(COPPER_CASING.get());
+            event.accept(TIN_CASING.get());
+            event.accept(LEAD_CASING.get());
+            event.accept(BRONZE_CASING.get());
+            event.accept(STEEL_CASING.get());
 
             event.accept(IRON_DUST.get());
             event.accept(GOLD_DUST.get());
             event.accept(COPPER_DUST.get());
             event.accept(TIN_DUST.get());
             event.accept(LEAD_DUST.get());
+            event.accept(BRONZE_DUST.get());
+            event.accept(STEEL_DUST.get());
+
+            event.accept(TINY_IRON_DUST.get());
+            event.accept(TINY_GOLD_DUST.get());
+            event.accept(TINY_COPPER_DUST.get());
+            event.accept(TINY_TIN_DUST.get());
+            event.accept(TINY_LEAD_DUST.get());
+            event.accept(TINY_BRONZE_DUST.get());
+            event.accept(TINY_STEEL_DUST.get());
 
             event.accept(IRON_FURNACE.get());
             event.accept(GENERATOR.get());
@@ -245,6 +286,8 @@ public class Tmmod {
             });
 
             event.accept(CRUSHER.get());
+            event.accept(EXTRACTOR.get());
+            event.accept(COMPRESSOR.get());
             event.accept(METALFORMER.get());
             event.accept(OVERCLOCKER_UPGRADE.get());
             event.accept(ACCUMULATOR_UPGRADE.get());

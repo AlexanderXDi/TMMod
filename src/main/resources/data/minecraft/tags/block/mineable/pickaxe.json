@@ -2,6 +2,9 @@
   "replace": false,
   "values": [
     "tmmod:iron_furnace",
+    "tmmod:crusher",
+    "tmmod:extractor",
+    "tmmod:compressor",
     "tmmod:uranium_ore",
     "tmmod:deepslate_uranium_ore",
     "tmmod:tin_ore",

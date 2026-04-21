@@ -1,0 +1,7 @@
+{
+  "type": "tmmod:forging",
+  "input": { "item": "tmmod:copper_plate" },
+  "output": { "count": 2, "item": "tmmod:copper_casing" },
+  "energyPerTick": 10,
+  "time": 200
+}

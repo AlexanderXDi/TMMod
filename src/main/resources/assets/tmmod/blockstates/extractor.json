@@ -1,0 +1,12 @@
+{
+  "variants": {
+    "facing=north,lit=false": { "model": "tmmod:block/extractor" },
+    "facing=east,lit=false": { "model": "tmmod:block/extractor", "y": 90 },
+    "facing=south,lit=false": { "model": "tmmod:block/extractor", "y": 180 },
+    "facing=west,lit=false": { "model": "tmmod:block/extractor", "y": 270 },
+    "facing=north,lit=true": { "model": "tmmod:block/extractor_on" },
+    "facing=east,lit=true": { "model": "tmmod:block/extractor_on", "y": 90 },
+    "facing=south,lit=true": { "model": "tmmod:block/extractor_on", "y": 180 },
+    "facing=west,lit=true": { "model": "tmmod:block/extractor_on", "y": 270 }
+  }
+}

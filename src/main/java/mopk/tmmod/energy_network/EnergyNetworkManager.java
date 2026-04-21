@@ -49,7 +49,6 @@ public class EnergyNetworkManager extends SavedData {
         List<EnergyNetwork> networkList = new ArrayList<>(networks.values());
         for (EnergyNetwork network : networkList) {
             network.setLevel(level);
-            network.recalculateStats(); // Форсируем пересчет лимитов
             network.tick();
         }
     }
@@ -153,17 +152,11 @@ public class EnergyNetworkManager extends SavedData {
     private void registerNodeInNetwork(EnergyNetwork net, BlockPos pos, BlockEntity be, Direction face) {
         if (!(be instanceof CustomEnergyStorage storage)) return;
         
-        // В IC2 сторона либо отдает энергию, либо принимает. 
-        // Если блок может отдавать через эту сторону - он Producer.
-        // Если блок может принимать через эту сторону - он Consumer.
-        
         if (storage.canExtract(face)) {
             net.addProducer(pos);
-            // System.out.println("Node at " + pos + " registered as PRODUCER for side " + face);
         }
         if (storage.canReceive(face)) {
             net.addConsumer(pos);
-            // System.out.println("Node at " + pos + " registered as CONSUMER for side " + face);
         }
     }
 

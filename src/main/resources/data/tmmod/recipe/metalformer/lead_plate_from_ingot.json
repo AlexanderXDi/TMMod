@@ -1,0 +1,7 @@
+{
+  "type": "tmmod:forging",
+  "input": { "item": "tmmod:lead_ingot" },
+  "output": { "item": "tmmod:lead_plate" },
+  "energyPerTick": 10,
+  "time": 200
+}
