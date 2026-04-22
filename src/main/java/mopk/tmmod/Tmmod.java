@@ -66,6 +66,9 @@ public class Tmmod {
         RECIPE_TYPES.register(modEventBus);
         SOUND_EVENTS.register(modEventBus);
         ModTreeDecorators.TREE_DECORATORS.register(modEventBus);
+        
+        mopk.tmmod.registration.ModFluids.FLUID_TYPES.register(modEventBus);
+        mopk.tmmod.registration.ModFluids.FLUIDS.register(modEventBus);
 
         modEventBus.addListener(this::buildCreativeTabs);
 
@@ -256,6 +259,20 @@ public class Tmmod {
             event.accept(TINY_LEAD_DUST.get());
             event.accept(TINY_BRONZE_DUST.get());
             event.accept(TINY_STEEL_DUST.get());
+
+            event.accept(net.minecraft.world.item.Items.WATER_BUCKET);
+            event.accept(net.minecraft.world.item.Items.LAVA_BUCKET);
+            event.accept(mopk.tmmod.registration.ModFluids.UU_MATTER.bucket.get());
+            event.accept(mopk.tmmod.registration.ModFluids.CONSTRUCTION_FOAM.bucket.get());
+            event.accept(mopk.tmmod.registration.ModFluids.COOLANT.bucket.get());
+            event.accept(mopk.tmmod.registration.ModFluids.HOT_COOLANT.bucket.get());
+            event.accept(mopk.tmmod.registration.ModFluids.PAHOEHOE_LAVA.bucket.get());
+            event.accept(mopk.tmmod.registration.ModFluids.BIOMASS.bucket.get());
+            event.accept(mopk.tmmod.registration.ModFluids.PESTICIDE.bucket.get());
+            event.accept(mopk.tmmod.registration.ModFluids.DISTILLED_WATER.bucket.get());
+            event.accept(mopk.tmmod.registration.ModFluids.HOT_WATER.bucket.get());
+            event.accept(mopk.tmmod.registration.ModFluids.CREOSOTE.bucket.get());
+            event.accept(mopk.tmmod.registration.ModFluids.MILK.bucket.get());
 
             event.accept(IRON_FURNACE.get());
             event.accept(GENERATOR.get());
