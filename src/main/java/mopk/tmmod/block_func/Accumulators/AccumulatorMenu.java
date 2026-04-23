@@ -1,5 +1,6 @@
 package mopk.tmmod.block_func.Accumulators;
 
+import mopk.tmmod.registration.OneItemSlot;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -26,18 +27,18 @@ public class AccumulatorMenu extends AbstractContainerMenu {
         this.data = data;
 
         // Main charging slot
-        this.addSlot(new SlotItemHandler(entity.getInventory(), 0, 80, 50));
+        this.addSlot(new OneItemSlot(entity.getInventory(), 0, 80, 50));
         
         // Armor slots (only for ordinary accumulators)
         if (!entity.isChargePad()) {
-            this.addSlot(new SlotItemHandler(entity.getInventory(), 1, 8, 10)); // Helmet
-            this.addSlot(new SlotItemHandler(entity.getInventory(), 2, 8, 28)); // Chestplate
-            this.addSlot(new SlotItemHandler(entity.getInventory(), 3, 8, 46)); // Leggings
-            this.addSlot(new SlotItemHandler(entity.getInventory(), 4, 8, 64)); // Boots
+            this.addSlot(new OneItemSlot(entity.getInventory(), 1, 8, 10)); // Helmet
+            this.addSlot(new OneItemSlot(entity.getInventory(), 2, 8, 28)); // Chestplate
+            this.addSlot(new OneItemSlot(entity.getInventory(), 3, 8, 46)); // Leggings
+            this.addSlot(new OneItemSlot(entity.getInventory(), 4, 8, 64)); // Boots
         }
 
         // Redstone charging slot
-        this.addSlot(new SlotItemHandler(entity.getInventory(), 5, 80, 10));
+        this.addSlot(new OneItemSlot(entity.getInventory(), 5, 80, 10));
 
         addDataSlots(data);
 

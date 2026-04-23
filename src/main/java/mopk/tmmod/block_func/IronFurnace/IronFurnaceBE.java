@@ -20,7 +20,7 @@ public class IronFurnaceBE extends AbstractFurnaceBlockEntity {
 
     @Override
     protected Component getDefaultName() {
-        return Component.translatable("container.iron_furnace");
+        return Component.translatable("container.tmmod.iron_furnace");
     }
 
     @Override

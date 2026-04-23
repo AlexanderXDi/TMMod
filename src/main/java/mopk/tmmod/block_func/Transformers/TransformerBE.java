@@ -60,7 +60,7 @@ public class TransformerBE extends BlockEntity implements MenuProvider, CustomEn
 
     @Override
     public Component getDisplayName() {
-        return Component.translatable("block.tmmod." + tier.getName());
+        return Component.translatable("container.tmmod." + tier.getName() + "_transformer");
     }
 
     @Nullable

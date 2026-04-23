@@ -2,6 +2,7 @@ package mopk.tmmod.block_func.ElectricHeatGenerator;
 
 import mopk.tmmod.registration.ModBlocks;
 import mopk.tmmod.registration.ModMenuTypes;
+import mopk.tmmod.registration.OneItemSlot;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -21,30 +22,33 @@ public class ElectricHeatGeneratorMenu extends AbstractContainerMenu {
 
     public ElectricHeatGeneratorMenu(int containerId, Inventory inv, ElectricHeatGeneratorBE entity, ContainerData data) {
         super(ModMenuTypes.ELECTRIC_HEAT_GENERATOR_MENU.get(), containerId);
+
         this.blockEntity = entity;
         this.level = inv.player.level();
         this.data = data;
 
         // Слот 0: Зарядка (слева)
-        this.addSlot(new SlotItemHandler(entity.inventory, 0, 8, 53));
+        this.addSlot(new OneItemSlot(entity.inventory, 0, 8, 53));
 
         // Слоты 1-10: Катушки (центр, 5 колонок х 2 строки)
         for (int row = 0; row < 2; row++) {
             for (int col = 0; col < 5; col++) {
-                this.addSlot(new SlotItemHandler(entity.inventory, 1 + col + (row * 5), 44 + (col * 18), 26 + (row * 18)));
+                this.addSlot(new OneItemSlot(entity.inventory, 1 + col + (row * 5), 44 + (col * 18), 26 + (row * 18)));
             }
         }
 
-        // Слоты 11-12: Улучшения (справа)
-        this.addSlot(new SlotItemHandler(entity.inventory, 11, 152, 26));
-        this.addSlot(new SlotItemHandler(entity.inventory, 12, 152, 44));
+        // Слоты 11-12: Улучшения (справа в боковой панели)
+        this.addSlot(new SlotItemHandler(entity.inventory, 11, 180, 26));
+        this.addSlot(new SlotItemHandler(entity.inventory, 12, 180, 44));
 
         addPlayerInventory(inv);
         addPlayerHotbar(inv);
+
         this.addDataSlots(data);
     }
 
     public int getEnergy() { return this.data.get(0); }
+
     public int getMaxEnergy() { return this.data.get(1); }
 
     @Override
@@ -78,9 +82,16 @@ public class ElectricHeatGeneratorMenu extends AbstractContainerMenu {
     @Override public boolean stillValid(Player player) { return stillValid(ContainerLevelAccess.create(level, blockEntity.getBlockPos()), player, ModBlocks.ELECTRIC_HEAT_GENERATOR.get()); }
 
     private void addPlayerInventory(Inventory playerInv) {
-        for (int row = 0; row < 3; ++row) for (int col = 0; col < 9; ++col) this.addSlot(new Slot(playerInv, col + row * 9 + 9, 8 + col * 18, 84 + row * 18));
+        for (int row = 0; row < 3; ++row) {
+            for (int col = 0; col < 9; ++col) {
+                this.addSlot(new Slot(playerInv, col + row * 9 + 9, 8 + col * 18, 84 + row * 18));
+            }
+        }
     }
+
     private void addPlayerHotbar(Inventory playerInv) {
-        for (int col = 0; col < 9; ++col) this.addSlot(new Slot(playerInv, col, 8 + col * 18, 142));
+        for (int col = 0; col < 9; ++col) {
+            this.addSlot(new Slot(playerInv, col, 8 + col * 18, 142));
+        }
     }
 }

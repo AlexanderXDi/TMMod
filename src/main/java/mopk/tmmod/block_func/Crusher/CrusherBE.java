@@ -129,11 +129,6 @@ public class CrusherBE extends BlockEntity implements MenuProvider, CustomEnergy
                 if (stack.has(ModDataComponents.SPEEDBONUS.get())) {
                     totalSpeedModules += stack.getCount();
                 }
-                // Если есть отдельный компонент для maxReceive
-                /*
-                if (stack.has(ModDataComponents.MAXRECEIVEBONUS.get())) {
-                    totalMaxReceiveModules += stack.getCount();
-                }*/
             }
         }
 
@@ -159,13 +154,12 @@ public class CrusherBE extends BlockEntity implements MenuProvider, CustomEnergy
         int newMaxReceiveAmount = 32;
         if (totalMaxReceiveModules > 0) {
             newMaxReceiveAmount = 32 + (16 * totalMaxReceiveModules);
-        } else if (totalTransformerModules > 0) { // Если нет отдельных модулей, свяжем с тиром //////////////////////////////////    добавить модули на макс входящую(если мы поставим много проводов слабых место одного сильного)
+        } else if (totalTransformerModules > 0) {
             newMaxReceiveAmount = (int) (32 * Math.pow(4, this.currentEnergyTier - 1));
         }
         this.currentMaxReceiveAmount = newMaxReceiveAmount;
 
         if (this.energyStored > this.currentMaxEnergyStored) {
-            //если убавили макс ёмкость то снимаем энергию
             this.energyStored = this.currentMaxEnergyStored;
         }
 
@@ -210,9 +204,6 @@ public class CrusherBE extends BlockEntity implements MenuProvider, CustomEnergy
 
         @Override
         public void set(int index, int value) {
-            // Здесь можно установить значения, если это необходимо для GUI
-            // Например, ElectricFurnaceBE.this.energyStored = value;
-            // Но обычно GUI только читает, а не пишет напрямую
         }
 
         @Override
@@ -220,9 +211,10 @@ public class CrusherBE extends BlockEntity implements MenuProvider, CustomEnergy
             return 4;
         }
     };
+
     @Override
     public Component getDisplayName() {
-        return Component.translatable("container.crusher");
+        return Component.translatable("container.tmmod.crusher");
     }
 
     @Nullable
@@ -263,7 +255,6 @@ public class CrusherBE extends BlockEntity implements MenuProvider, CustomEnergy
             } else if (chargeStack.getItem() instanceof mopk.tmmod.energy_network.CustomEnergyItemInterface energyItem) {
                 if (energyItem.getTier(chargeStack) <= this.currentEnergyTier) {
                     int space = currentMaxEnergyStored - energyStored;
-                    // Скорость разрядки - это минимум из скорости приема машины и скорости предмета
                     int transferRate = Math.min(this.currentMaxReceiveAmount, energyItem.getTransferRate(chargeStack));
                     int toExtract = Math.min(space, transferRate);
                     int extracted = energyItem.extractEnergy(chargeStack, toExtract, false);

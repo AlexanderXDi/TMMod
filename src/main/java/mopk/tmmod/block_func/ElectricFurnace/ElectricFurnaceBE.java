@@ -226,7 +226,7 @@ public class ElectricFurnaceBE extends BlockEntity implements MenuProvider, Cust
 
     @Override
     public Component getDisplayName() {
-        return Component.translatable("container.electric_furnace");
+        return Component.translatable("container.tmmod.electric_furnace");
     }
 
     @Nullable

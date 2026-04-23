@@ -1,6 +1,5 @@
 package mopk.tmmod.blocks;
 
-import mopk.tmmod.block_func.Extractor.ExtractorBE;
 import mopk.tmmod.registration.ModSounds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -22,8 +21,10 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.phys.BlockHitResult;
+import mopk.tmmod.block_func.Extractor.ExtractorBE;
 
 import javax.annotation.Nullable;
+
 
 public class Extractor extends Block implements EntityBlock {
     public static final BooleanProperty LIT = BlockStateProperties.LIT;
@@ -59,6 +60,7 @@ public class Extractor extends Block implements EntityBlock {
     protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit) {
         if (!level.isClientSide) {
             BlockEntity be = level.getBlockEntity(pos);
+
             if (be instanceof MenuProvider menuProvider) {
                 player.openMenu(menuProvider, pos);
             }

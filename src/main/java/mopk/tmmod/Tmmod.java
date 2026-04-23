@@ -11,6 +11,8 @@ import static mopk.tmmod.registration.ModBlocks.*;
 import static mopk.tmmod.registration.CreativeTab.CREATIVE_MODE_TABS;
 import static mopk.tmmod.registration.CreativeTab.MOD_TAB;
 
+import mopk.tmmod.block_func.Compressor.CompressorScreen;
+import mopk.tmmod.block_func.Extractor.ExtractorScreen;
 import mopk.tmmod.block_func.Metalformer.MetalformerModePacket;
 import mopk.tmmod.energy_network.EnergyNetworkManager;
 import mopk.tmmod.registration.*;
@@ -143,6 +145,12 @@ public class Tmmod {
 
         event.registerBlockEntity(
                 CustomCapabilities.ENERGY,
+                ModBlockEntities.COMPRESSOR_BE.get(),
+                (blockEntity, direction) -> blockEntity.getEnergyStorage(direction)
+        );
+
+        event.registerBlockEntity(
+                CustomCapabilities.ENERGY,
                 ModBlockEntities.METALFORMER_BE.get(),
                 (blockEntity, direction) -> blockEntity.getEnergyStorage(direction)
         );
@@ -160,8 +168,20 @@ public class Tmmod {
         );
 
         event.registerBlockEntity(
+                CustomCapabilities.ENERGY,
+                ModBlockEntities.EXTRACTOR_BE.get(),
+                (blockEntity, direction) -> blockEntity.getEnergyStorage(direction)
+        );
+
+        event.registerBlockEntity(
                 CustomCapabilities.HEAT,
                 ModBlockEntities.INDUCTION_FURNACE_BE.get(),
+                (blockEntity, direction) -> blockEntity.getHeatStorage(direction)
+        );
+
+        event.registerBlockEntity(
+                CustomCapabilities.HEAT,
+                ModBlockEntities.ELECTRIC_HEAT_GENERATOR_BE.get(),
                 (blockEntity, direction) -> blockEntity.getHeatStorage(direction)
         );
     }
@@ -205,9 +225,12 @@ public class Tmmod {
         event.register(ModMenuTypes.ACCUMULATOR_MENU.get(), AccumulatorScreen::new);
         event.register(ModMenuTypes.TRANSFORMER_MENU.get(), TransformerScreen::new);
         event.register(ModMenuTypes.CRUSHER_MENU.get(), CrusherScreen::new);
+        event.register(ModMenuTypes.COMPRESSOR_MENU.get(), CompressorScreen::new);
+        event.register(ModMenuTypes.EXTRACTOR_MENU.get(), ExtractorScreen::new);
         event.register(ModMenuTypes.ELECTRIC_HEAT_GENERATOR_MENU.get(), mopk.tmmod.block_func.ElectricHeatGenerator.ElectricHeatGeneratorScreen::new);
         event.register(ModMenuTypes.METALFORMER_MENU.get(), MetalformerScreen::new);
         event.register(ModMenuTypes.ELECTRIC_FURNACE_MENU.get(), ElectricFurnaceScreen::new);
+        event.register(ModMenuTypes.INDUCTION_FURNACE_MENU.get(), mopk.tmmod.block_func.InductionFurnace.InductionFurnaceScreen::new);
     }
 
     private void buildCreativeTabs(final BuildCreativeModeTabContentsEvent event) {

@@ -2,6 +2,7 @@ package mopk.tmmod.block_func.Generator;
 
 import mopk.tmmod.registration.ModBlocks;
 import mopk.tmmod.registration.ModMenuTypes;
+import mopk.tmmod.registration.OneItemSlot;
 
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
@@ -29,26 +30,12 @@ public class GeneratorMenu extends AbstractContainerMenu {
         this.data = data;
 
         this.addSlot(new SlotItemHandler(entity.getInventory(), 0, 70, 35));
-        this.addSlot(new SingleItemSlot(entity.getInventory(), 1, 120, 35));
+        this.addSlot(new OneItemSlot(entity.getInventory(), 1, 120, 35));
 
         addPlayerInventory(inv);
         addPlayerHotbar(inv);
 
         this.addDataSlots(data);
-    }
-
-    private static class SingleItemSlot extends SlotItemHandler {
-        public SingleItemSlot(IItemHandler itemHandler, int index, int xPosition, int yPosition) {
-            super(itemHandler, index, xPosition, yPosition);
-        }
-        @Override
-        public int getMaxStackSize() {
-            return 1;
-        }
-        @Override
-        public int getMaxStackSize(ItemStack stack) {
-            return 1;
-        }
     }
 
     public int getEnergy() {

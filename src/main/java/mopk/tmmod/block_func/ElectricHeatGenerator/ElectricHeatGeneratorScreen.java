@@ -9,10 +9,22 @@ import net.minecraft.world.inventory.Slot;
 import java.util.List;
 
 public class ElectricHeatGeneratorScreen extends AbstractContainerScreen<ElectricHeatGeneratorMenu> {
-    private static final ResourceLocation BG = ResourceLocation.fromNamespaceAndPath("tmmod", "textures/gui/crusher/crusher_bg.png"); // Используем фон от дробителя как базу
-    private static final ResourceLocation SLOT = ResourceLocation.fromNamespaceAndPath("tmmod", "textures/gui/slot.png");
-    private static final ResourceLocation BAR_BG = ResourceLocation.fromNamespaceAndPath("tmmod", "textures/gui/bar_bg.png");
-    private static final ResourceLocation BAR_PARTITION = ResourceLocation.fromNamespaceAndPath("tmmod", "textures/gui/bar_partition.png");
+    private static final ResourceLocation BG =
+            ResourceLocation.fromNamespaceAndPath("tmmod", "textures/gui/electric_heat_generator/electric_heat_generator_bg.png");
+    private static final ResourceLocation COIL_SLOT =
+            ResourceLocation.fromNamespaceAndPath("tmmod", "textures/gui/electric_heat_generator/coil_slot.png");
+    private static final ResourceLocation ENERGY_SLOT =
+            ResourceLocation.fromNamespaceAndPath("tmmod", "textures/gui/electric_heat_generator/energy_slot.png");
+    private static final ResourceLocation UPGRADE_SLOT =
+            ResourceLocation.fromNamespaceAndPath("tmmod", "textures/gui/slot.png");
+    private static final ResourceLocation MODULES_BG =
+            ResourceLocation.fromNamespaceAndPath("tmmod", "textures/gui/crusher/crusher_modules_bg.png");
+    private static final ResourceLocation MODULES_SLOT =
+            ResourceLocation.fromNamespaceAndPath("tmmod", "textures/gui/crusher/modules_slot.png");
+    private static final ResourceLocation BAR_BG =
+            ResourceLocation.fromNamespaceAndPath("tmmod", "textures/gui/bar_bg.png");
+    private static final ResourceLocation BAR_PARTITION =
+            ResourceLocation.fromNamespaceAndPath("tmmod", "textures/gui/bar_partition.png");
 
     public ElectricHeatGeneratorScreen(ElectricHeatGeneratorMenu menu, Inventory inventory, Component title) { super(menu, inventory, title); }
 
@@ -21,13 +33,32 @@ public class ElectricHeatGeneratorScreen extends AbstractContainerScreen<Electri
         int x = (width - imageWidth) / 2;
         int y = (height - imageHeight) / 2;
 
-        guiGraphics.blit(BG, x, y, 0, 0, 176, 166, imageWidth, imageHeight);
+        guiGraphics.blit(BG, x, y, 0, 0, 176, 166, 176, 166);
+        guiGraphics.blit(MODULES_BG, x + 176, y, 0, 0, 26, 80, 26, 80);
 
-        for (int i = 0; i < menu.slots.size(); i++) {
+        // Отрисовка слотов машины
+        // Слот 0: Энергия
+        Slot energySlot = menu.slots.get(0);
+        guiGraphics.blit(ENERGY_SLOT, x + energySlot.x - 1, y + energySlot.y - 1, 0, 0, 18, 18, 18, 18);
+
+        // Слоты 1-10: Катушки
+        for (int i = 1; i <= 10; i++) {
             Slot slot = menu.slots.get(i);
-            if (i < 13) { // Отрисовываем фон только для слотов машины
-                guiGraphics.blit(SLOT, x + slot.x - 1, y + slot.y - 1, 0, 0, 18, 18, 18, 18);
-            }
+            guiGraphics.blit(COIL_SLOT, x + slot.x - 1, y + slot.y - 1, 0, 0, 18, 18, 18, 18);
+        }
+
+        // Слоты 11-12: Улучшения (в боковой панели)
+        for (int i = 11; i <= 12; i++) {
+            Slot slot = menu.slots.get(i);
+            guiGraphics.blit(MODULES_SLOT, x + slot.x - 1, y + slot.y - 1, 0, 0, 18, 18, 18, 18);
+        }
+
+        // Отрисовка слотов инвентаря игрока (если они не нарисованы на BG)
+        // Обычно они есть на стандартном фоне, но если BG - копия дробителя, проверим.
+        // Для уверенности отрисуем их стандартным слотом, если на фоне их нет.
+        for (int i = 13; i < menu.slots.size(); i++) {
+            Slot slot = menu.slots.get(i);
+            guiGraphics.blit(UPGRADE_SLOT, x + slot.x - 1, y + slot.y - 1, 0, 0, 18, 18, 18, 18);
         }
     }
 

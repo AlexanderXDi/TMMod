@@ -3,6 +3,7 @@ package mopk.tmmod.block_func.ElectricFurnace;
 import mopk.tmmod.registration.ModBlocks;
 import mopk.tmmod.registration.ModMenuTypes;
 import mopk.tmmod.registration.ModDataComponents;
+import mopk.tmmod.registration.OneItemSlot;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -29,7 +30,7 @@ public class ElectricFurnaceMenu extends AbstractContainerMenu {
 
         this.addSlot(new SlotItemHandler(entity.getInventory(), 0, 56, 24));
         this.addSlot(new SlotItemHandler(entity.getInventory(), 1, 110, 35));
-        this.addSlot(new SlotItemHandler(entity.getInventory(), 2, 56, 46));
+        this.addSlot(new OneItemSlot(entity.getInventory(), 2, 56, 46));
 
         this.addSlot(new SlotItemHandler(entity.getInventory(), 3, 180, 4));
         this.addSlot(new SlotItemHandler(entity.getInventory(), 4, 180, 22));

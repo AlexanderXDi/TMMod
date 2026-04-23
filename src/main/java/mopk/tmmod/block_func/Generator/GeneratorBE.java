@@ -120,7 +120,7 @@ public class GeneratorBE extends BlockEntity implements MenuProvider, CustomEner
 
     @Override
     public Component getDisplayName() {
-        return Component.translatable("container.generator");
+        return Component.translatable("container.tmmod.generator");
     }
 
     @Nullable

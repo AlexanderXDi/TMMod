@@ -1,0 +1,7 @@
+{
+  "type": "tmmod:extracting",
+  "input": { "item": "tmmod:sticky_resin" },
+  "output": { "count": 3, "item": "tmmod:rubber" },
+  "energyPerTick": 10,
+  "time": 400
+}

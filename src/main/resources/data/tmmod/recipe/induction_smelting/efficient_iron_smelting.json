@@ -1,0 +1,8 @@
+{
+  "type": "tmmod:induction_smelting",
+  "input1": { "item": "minecraft:iron_ore" },
+  "input2": { "item": "minecraft:coal" },
+  "output1": { "count": 2, "item": "minecraft:iron_ingot" },
+  "heatPerSecond": 600,
+  "time": 300
+}

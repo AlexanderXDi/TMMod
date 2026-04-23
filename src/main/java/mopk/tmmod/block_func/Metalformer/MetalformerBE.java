@@ -224,7 +224,7 @@ public class MetalformerBE extends BlockEntity implements MenuProvider, CustomEn
     };
     @Override
     public Component getDisplayName() {
-        return Component.translatable("container.metalformer");
+        return Component.translatable("container.tmmod.metalformer");
     }
 
     @Nullable

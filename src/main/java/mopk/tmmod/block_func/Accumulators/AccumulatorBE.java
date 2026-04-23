@@ -68,7 +68,7 @@ public class AccumulatorBE extends BlockEntity implements MenuProvider, CustomEn
 
     @Override
     public Component getDisplayName() {
-        return Component.translatable("block.tmmod." + tier.getName() + (isChargePad ? "_charge_pad" : ""));
+        return Component.translatable("container.tmmod." + tier.getName() + (isChargePad ? "_charge_pad" : ""));
     }
 
     @Nullable

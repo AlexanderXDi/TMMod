@@ -1,4 +1,6 @@
-package mopk.tmmod.block_func.ElectricHeatGenerator;
+package mopk.tmmod.blocks;
+
+import mopk.tmmod.block_func.ElectricHeatGenerator.ElectricHeatGeneratorBE;
 
 import mopk.tmmod.registration.ModSounds;
 import net.minecraft.core.BlockPos;
@@ -26,7 +28,7 @@ import javax.annotation.Nullable;
 
 public class ElectricHeatGenerator extends Block implements EntityBlock {
     public static final BooleanProperty LIT = BlockStateProperties.LIT;
-    public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
+    public static final DirectionProperty FACING = BlockStateProperties.FACING;
 
     public ElectricHeatGenerator(Properties properties) {
         super(properties);
@@ -51,7 +53,7 @@ public class ElectricHeatGenerator extends Block implements EntityBlock {
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context) {
         return this.defaultBlockState()
-                .setValue(FACING, context.getHorizontalDirection().getOpposite());
+                .setValue(FACING, context.getNearestLookingDirection().getOpposite());
     }
 
     @Override

@@ -45,6 +45,9 @@ public class ModMenuTypes {
     public static final DeferredHolder<MenuType<?>, MenuType<mopk.tmmod.block_func.Accumulators.AccumulatorMenu>> ACCUMULATOR_MENU = MENUS.register("accumulator_menu",
             () -> IMenuTypeExtension.create(mopk.tmmod.block_func.Accumulators.AccumulatorMenu::new));
 
+    public static final DeferredHolder<MenuType<?>, MenuType<mopk.tmmod.block_func.InductionFurnace.InductionFurnaceMenu>> INDUCTION_FURNACE_MENU = MENUS.register("induction_furnace_menu",
+            () -> IMenuTypeExtension.create(mopk.tmmod.block_func.InductionFurnace.InductionFurnaceMenu::new));
+
     public static final DeferredHolder<MenuType<?>, MenuType<mopk.tmmod.block_func.Transformers.TransformerMenu>> TRANSFORMER_MENU = MENUS.register("transformer_menu",
             () -> IMenuTypeExtension.create(mopk.tmmod.block_func.Transformers.TransformerMenu::new));
 }

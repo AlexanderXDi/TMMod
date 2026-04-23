@@ -56,6 +56,12 @@ public class InductionFurnace extends Block implements EntityBlock {
 
     @Override
     protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit) {
+        if (!level.isClientSide) {
+            BlockEntity be = level.getBlockEntity(pos);
+            if (be instanceof net.minecraft.world.MenuProvider menuProvider) {
+                player.openMenu(menuProvider, pos);
+            }
+        }
         return InteractionResult.sidedSuccess(level.isClientSide);
     }
 
