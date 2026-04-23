@@ -113,11 +113,22 @@ public class AccumulatorBlock extends Block implements EntityBlock {
 
     @Override
     public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random) {
-        if (state.getValue(LIT) && random.nextDouble() < 0.5D) {
-            level.playLocalSound(pos.getX(), pos.getY(), pos.getZ(),
-                    ModSounds.ACCUMULATOR_HUM.get(),
-                    SoundSource.BLOCKS,
-                    100F, 1.0F, false);
+        if (state.getValue(LIT)) {
+            if (random.nextDouble() < 0.5D) {
+                level.playLocalSound(pos.getX(), pos.getY(), pos.getZ(),
+                        ModSounds.ACCUMULATOR_HUM.get(),
+                        SoundSource.BLOCKS,
+                        100F, 1.0F, false);
+            }
+
+            if (isChargePad) {
+                for (int i = 0; i < 2; i++) {
+                    double d0 = (double) pos.getX() + random.nextDouble();
+                    double d1 = (double) pos.getY() + 0.95D; // Чуть выше поверхности платформы
+                    double d2 = (double) pos.getZ() + random.nextDouble();
+                    level.addParticle(ParticleTypes.ELECTRIC_SPARK, d0, d1, d2, 0, 0.02, 0);
+                }
+            }
         }
     }
 }

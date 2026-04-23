@@ -1,0 +1,8 @@
+{
+   "parent": "minecraft:block/orientable",
+   "textures": {
+      "top": "tmmod:block/induction_furnace/electric_furnace_top",
+      "front": "tmmod:block/induction_furnace/electric_furnace",
+      "side": "tmmod:block/induction_furnace/electric_furnace_side"
+   }
+}

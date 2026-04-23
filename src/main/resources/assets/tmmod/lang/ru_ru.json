@@ -21,6 +21,8 @@
   "block.tmmod.crusher": "Дробитель",
   "block.tmmod.extractor": "Экстрактор",
   "block.tmmod.compressor": "Сжиматель",
+  "block.tmmod.electric_heat_generator": "Электрический теплогенератор",
+  "block.tmmod.induction_furnace": "Индукционная печь",
   "block.tmmod.metalformer": "Металлоформовщик",
   "block.tmmod.electric_furnace": "Электрическая печь",
 

@@ -21,6 +21,8 @@
   "block.tmmod.crusher": "Crusher",
   "block.tmmod.extractor": "Extractor",
   "block.tmmod.compressor": "Compressor",
+  "block.tmmod.electric_heat_generator": "Electric Heat Generator",
+  "block.tmmod.induction_furnace": "Induction Furnace",
   "block.tmmod.metalformer": "Metalformer",
   "block.tmmod.electric_furnace": "Electric furnace",
 

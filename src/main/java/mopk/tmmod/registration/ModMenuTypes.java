@@ -33,6 +33,9 @@ public class ModMenuTypes {
     public static final DeferredHolder<MenuType<?>, MenuType<CompressorMenu>> COMPRESSOR_MENU = MENUS.register("compressor_menu",
             () -> IMenuTypeExtension.create(CompressorMenu::new));
 
+    public static final DeferredHolder<MenuType<?>, MenuType<mopk.tmmod.block_func.ElectricHeatGenerator.ElectricHeatGeneratorMenu>> ELECTRIC_HEAT_GENERATOR_MENU = MENUS.register("electric_heat_generator_menu",
+            () -> IMenuTypeExtension.create(mopk.tmmod.block_func.ElectricHeatGenerator.ElectricHeatGeneratorMenu::new));
+
     public static final DeferredHolder<MenuType<?>, MenuType<MetalformerMenu>> METALFORMER_MENU = MENUS.register("metalformer_menu",
             () -> IMenuTypeExtension.create(MetalformerMenu::new));
 

@@ -1,6 +1,7 @@
 package mopk.tmmod.registration;
 
 import mopk.tmmod.Tmmod;
+import mopk.tmmod.block_func.ElectricHeatGenerator.ElectricHeatGenerator;
 import mopk.tmmod.blocks.*;
 import mopk.tmmod.block_func.Cables.CableTier;
 
@@ -83,6 +84,12 @@ public class ModBlocks {
 
     public static final DeferredBlock<Block> COMPRESSOR = registerBlock("compressor",
             () -> new Compressor(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK)));
+
+    public static final DeferredBlock<Block> ELECTRIC_HEAT_GENERATOR = registerBlock("electric_heat_generator",
+            () -> new ElectricHeatGenerator(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK)));
+
+    public static final DeferredBlock<Block> INDUCTION_FURNACE = registerBlock("induction_furnace",
+            () -> new InductionFurnace(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK)));
 
     public static final DeferredBlock<Block> METALFORMER = registerBlock("metalformer",
             () -> new Metalformer(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK)));

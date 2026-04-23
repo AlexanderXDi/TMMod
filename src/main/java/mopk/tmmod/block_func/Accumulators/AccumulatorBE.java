@@ -143,6 +143,8 @@ public class AccumulatorBE extends BlockEntity implements MenuProvider, CustomEn
     public void tick(Level level, BlockPos pos, BlockState state) {
         if (level.isClientSide) return;
 
+        boolean currentlyCharging = false;
+
         // 1. Charge items in slots (0 = main, 1-4 = armor)
         int numSlots = isChargePad ? 1 : 5;
         for (int i = 0; i < numSlots; i++) {
@@ -150,12 +152,12 @@ public class AccumulatorBE extends BlockEntity implements MenuProvider, CustomEn
             if (!chargeStack.isEmpty() && energyStored > 0) {
                 if (chargeStack.getItem() instanceof CustomEnergyItemInterface energyItem) {
                     if (energyItem.getTier(chargeStack) <= this.tier.getTier()) {
-                        // Скорость зарядки - это минимум из скорости блока и скорости предмета
                         int transferRate = Math.min(tier.getTransfer(), energyItem.getTransferRate(chargeStack));
                         int toGive = Math.min(energyStored, transferRate);
                         int accepted = energyItem.receiveEnergy(chargeStack, toGive, false);
                         if (accepted > 0) {
                             energyStored -= accepted;
+                            currentlyCharging = true;
                             setChanged();
                         }
                     }
@@ -175,7 +177,6 @@ public class AccumulatorBE extends BlockEntity implements MenuProvider, CustomEn
                 }
             } else if (chargeInStack.getItem() instanceof CustomEnergyItemInterface energyItem) {
                 if (energyItem.getTier(chargeInStack) <= this.tier.getTier()) {
-                    // Скорость разрядки - это минимум из скорости блока и скорости предмета
                     int transferRate = Math.min(tier.getTransfer(), energyItem.getTransferRate(chargeInStack));
                     int space = tier.getCapacity() - energyStored;
                     int toExtract = Math.min(space, transferRate);
@@ -203,12 +204,18 @@ public class AccumulatorBE extends BlockEntity implements MenuProvider, CustomEn
                             int accepted = energyItem.receiveEnergy(stack, toGive, false);
                             if (accepted > 0) {
                                 energyStored -= accepted;
+                                currentlyCharging = true;
                                 setChanged();
                             }
                         }
                     }
                 }
             }
+        }
+
+        // Update LIT state if it changed
+        if (state.getValue(net.minecraft.world.level.block.state.properties.BlockStateProperties.LIT) != currentlyCharging) {
+            level.setBlock(pos, state.setValue(net.minecraft.world.level.block.state.properties.BlockStateProperties.LIT, currentlyCharging), 3);
         }
     }
 

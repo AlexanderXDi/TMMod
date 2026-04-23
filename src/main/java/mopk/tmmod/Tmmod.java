@@ -152,6 +152,18 @@ public class Tmmod {
                 ModBlockEntities.ELECTRIC_FURNACE_BE.get(),
                 (blockEntity, direction) -> blockEntity.getEnergyStorage(direction)
         );
+
+        event.registerBlockEntity(
+                CustomCapabilities.ENERGY,
+                ModBlockEntities.ELECTRIC_HEAT_GENERATOR_BE.get(),
+                (blockEntity, direction) -> blockEntity.getEnergyStorage(direction)
+        );
+
+        event.registerBlockEntity(
+                CustomCapabilities.HEAT,
+                ModBlockEntities.INDUCTION_FURNACE_BE.get(),
+                (blockEntity, direction) -> blockEntity.getHeatStorage(direction)
+        );
     }
 
     private void commonSetup(final FMLCommonSetupEvent event) {
@@ -193,6 +205,7 @@ public class Tmmod {
         event.register(ModMenuTypes.ACCUMULATOR_MENU.get(), AccumulatorScreen::new);
         event.register(ModMenuTypes.TRANSFORMER_MENU.get(), TransformerScreen::new);
         event.register(ModMenuTypes.CRUSHER_MENU.get(), CrusherScreen::new);
+        event.register(ModMenuTypes.ELECTRIC_HEAT_GENERATOR_MENU.get(), mopk.tmmod.block_func.ElectricHeatGenerator.ElectricHeatGeneratorScreen::new);
         event.register(ModMenuTypes.METALFORMER_MENU.get(), MetalformerScreen::new);
         event.register(ModMenuTypes.ELECTRIC_FURNACE_MENU.get(), ElectricFurnaceScreen::new);
     }
@@ -306,6 +319,9 @@ public class Tmmod {
             event.accept(EXTRACTOR.get());
             event.accept(COMPRESSOR.get());
             event.accept(METALFORMER.get());
+            event.accept(ELECTRIC_FURNACE.get());
+            event.accept(INDUCTION_FURNACE.get());
+            event.accept(ELECTRIC_HEAT_GENERATOR.get());
             event.accept(OVERCLOCKER_UPGRADE.get());
             event.accept(ACCUMULATOR_UPGRADE.get());
             event.accept(TRANSFORMER_UPGRADE.get());
