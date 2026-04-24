@@ -1,7 +1,13 @@
 {
   "type": "tmmod:compressing",
-  "input": { "count": 9, "item": "tmmod:bronze_plate" },
-  "output": { "item": "tmmod:dense_bronze_plate" },
+  "input": {
+    "count": 9,
+    "item": "tmmod:bronze_plate"
+  },
+  "output": {
+    "id": "tmmod:dense_bronze_plate",
+    "count": 1
+  },
   "energyPerTick": 10,
   "time": 400
 }

@@ -1,0 +1,14 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "tmmod:item/ejector_upgrade"
+  },
+  "overrides": [
+    {
+      "predicate": {
+        "tmmod:active": 1.0
+      },
+      "model": "tmmod:item/ejector_upgrade_active"
+    }
+  ]
+}

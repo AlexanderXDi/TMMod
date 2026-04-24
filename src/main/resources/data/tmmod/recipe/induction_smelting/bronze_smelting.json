@@ -1,8 +1,15 @@
 {
   "type": "tmmod:induction_smelting",
-  "input1": { "item": "tmmod:copper_dust" },
-  "input2": { "item": "tmmod:tin_dust" },
-  "output1": { "count": 4, "item": "tmmod:bronze_ingot" },
+  "input1": {
+    "item": "tmmod:copper_dust"
+  },
+  "input2": {
+    "item": "tmmod:tin_dust"
+  },
+  "output1": {
+    "count": 4,
+    "id": "tmmod:bronze_ingot"
+  },
   "heatPerSecond": 400,
   "time": 200
 }

@@ -1,4 +1,4 @@
-package mopk.tmmod.energy_network;
+package mopk.tmmod.custom_interfaces;
 
 import mopk.tmmod.block_func.Cables.CableBE;
 import net.minecraft.core.BlockPos;
@@ -7,7 +7,9 @@ import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.nbt.Tag;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.phys.AABB;
 
 import java.util.*;
 
@@ -26,14 +28,19 @@ public class EnergyNetwork {
     private int lastConsumerIndex = 0;
     private int networkTransferLimit = 0;
     private int currentHighestTier = 0;
+    private boolean isBurning = false;
 
     public EnergyNetwork(Level level, UUID id) {
         this.level = level;
         this.networkId = id;
     }
 
+    public boolean isBurning() {
+        return isBurning;
+    }
+
     public void tick() {
-        if (level == null || level.isClientSide || cables.isEmpty()) return;
+        if (level == null || level.isClientSide || cables.isEmpty() || isBurning) return;
 
         EnergyNetworkManager manager = EnergyNetworkManager.get((net.minecraft.server.level.ServerLevel) level);
 
@@ -58,21 +65,26 @@ public class EnergyNetwork {
             BlockEntity be = level.getBlockEntity(pos);
             if (be instanceof CustomEnergyStorage storage) {
                 int producerTier = storage.getEnergyTier();
-                
-                if (producerTier > 0) {
-                    // Проверка на прогар кабелей
-                    if (checkCablesForBurnout(producerTier)) {
-                        burnoutChain();
-                        return;
-                    }
-                    currentHighestTier = Math.max(currentHighestTier, producerTier);
-                }
-
                 int needed = totalDemand - totalSupplied;
-                int extracted = storage.extractEnergy(Math.min(needed, networkTransferLimit), false);
-                if (extracted > 0) {
-                    totalSupplied += extracted;
-                    manager.reportOut(pos, extracted);
+                
+                // Проверяем, может ли генератор отдать энергию в данный момент
+                int extractedSim = storage.extractEnergy(Math.min(needed, networkTransferLimit), true);
+                
+                if (extractedSim > 0) {
+                    // Только если энергия реально будет передана, проверяем тир на прогар
+                    if (producerTier > 0) {
+                        if (checkCablesForBurnout(producerTier)) {
+                            burnoutChain();
+                            return;
+                        }
+                        currentHighestTier = Math.max(currentHighestTier, producerTier);
+                    }
+
+                    int extracted = storage.extractEnergy(Math.min(needed, networkTransferLimit), false);
+                    if (extracted > 0) {
+                        totalSupplied += extracted;
+                        manager.reportOut(pos, extracted);
+                    }
                 }
             }
         }
@@ -82,10 +94,41 @@ public class EnergyNetwork {
         // 3. Распределяем собранную энергию по потребителям
         distributeToNodes(consumers, totalSupplied, manager);
 
-        // Репортим проход через кабели (для вольтметра)
+        // Репортим проход через кабели (для вольтметра) и наносим урон
+        boolean canDamage = currentHighestTier > 0;
         for (BlockPos cablePos : cables) {
             manager.reportIn(cablePos, totalSupplied);
             manager.reportOut(cablePos, totalSupplied);
+            
+            if (canDamage) {
+                applyCableDamage(cablePos);
+            }
+        }
+    }
+
+    private void applyCableDamage(BlockPos pos) {
+        net.minecraft.world.level.block.state.BlockState state = level.getBlockState(pos);
+        if (!(state.getBlock() instanceof mopk.tmmod.blocks.CableBlock cableBlock)) return;
+
+        // Стеклянный кабель (тир 5) и изолированные кабели не наносят урон
+        if (cableBlock.getTier() == mopk.tmmod.block_func.Cables.CableTier.glass || cableBlock.getInsulationLevel() > 0) {
+            return;
+        }
+
+        // Радиус 1.5 - 2 блока
+        double radius = 1.5;
+        AABB area = new AABB(pos).inflate(radius);
+        List<LivingEntity> entities = level.getEntitiesOfClass(LivingEntity.class, area);
+
+        if (!entities.isEmpty()) {
+            // Урон зависит от тира: Tier 1 = 2.0, Tier 2 = 4.0, Tier 3 = 8.0, Tier 4 = 12.0
+            float damage = (float) (currentHighestTier * 2.0);
+            for (LivingEntity entity : entities) {
+                // Наносим урон раз в полсекунды (чтобы не убить мгновенно)
+                if (entity.tickCount % 10 == 0) {
+                    entity.hurt(level.damageSources().lightningBolt(), damage);
+                }
+            }
         }
     }
 
@@ -146,12 +189,21 @@ public class EnergyNetwork {
     }
 
     private void burnoutChain() {
+        this.isBurning = true;
+        
+        // Сначала удаляем сеть из менеджера, чтобы при разрушении блоков 
+        // не запускался процесс перестроения сетей.
+        if (level instanceof net.minecraft.server.level.ServerLevel serverLevel) {
+            EnergyNetworkManager.get(serverLevel).invalidateNetwork(this.networkId);
+        }
+
         Set<BlockPos> copy = new HashSet<>(cables);
         cables.clear();
         producers.clear();
         consumers.clear();
 
         for (BlockPos pos : copy) {
+            // Взрыв и удаление блока
             level.explode(null, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5,
                     1.2f, Level.ExplosionInteraction.BLOCK);
             level.destroyBlock(pos, false);

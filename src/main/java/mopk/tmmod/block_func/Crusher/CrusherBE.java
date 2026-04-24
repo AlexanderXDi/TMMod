@@ -1,7 +1,7 @@
 package mopk.tmmod.block_func.Crusher;
 
-import mopk.tmmod.energy_network.CustomEnergyStorage;
-import mopk.tmmod.energy_network.EnergyNetworkManager;
+import mopk.tmmod.custom_interfaces.CustomEnergyStorage;
+import mopk.tmmod.custom_interfaces.EnergyNetworkManager;
 import mopk.tmmod.registration.ModBlockEntities;
 import mopk.tmmod.registration.ModDataComponents;
 import mopk.tmmod.registration.ModRecipes;
@@ -240,6 +240,9 @@ public class CrusherBE extends BlockEntity implements MenuProvider, CustomEnergy
     public void tick(Level level, BlockPos pos, BlockState state) {
         if (level.isClientSide) return;
 
+        // Выталкивание предметов
+        mopk.tmmod.registration.InventoryUtils.handleEjection(level, pos, inventory, new int[]{3, 4, 5, 6}, new int[]{1}, level.getGameTime());
+
         boolean isLit = false;
         Optional<RecipeHolder<CrusherRecipe>> recipeHolder = level.getRecipeManager().getRecipeFor(ModRecipes.CRUSHER_TYPE.get(), new SingleRecipeInput(inventory.getStackInSlot(0)), level);
 
@@ -252,7 +255,7 @@ public class CrusherBE extends BlockEntity implements MenuProvider, CustomEnergy
                     chargeStack.shrink(1);
                     setChanged();
                 }
-            } else if (chargeStack.getItem() instanceof mopk.tmmod.energy_network.CustomEnergyItemInterface energyItem) {
+            } else if (chargeStack.getItem() instanceof mopk.tmmod.custom_interfaces.CustomEnergyItemInterface energyItem) {
                 if (energyItem.getTier(chargeStack) <= this.currentEnergyTier) {
                     int space = currentMaxEnergyStored - energyStored;
                     int transferRate = Math.min(this.currentMaxReceiveAmount, energyItem.getTransferRate(chargeStack));

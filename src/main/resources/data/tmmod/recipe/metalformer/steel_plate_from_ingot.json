@@ -1,7 +1,7 @@
 {
   "type": "tmmod:forging",
   "input": { "item": "tmmod:steel_ingot" },
-  "output": { "item": "tmmod:steel_plate" },
+  "output": { "id": "tmmod:steel_plate", "count": 1 },
   "energyPerTick": 10,
   "time": 200
 }

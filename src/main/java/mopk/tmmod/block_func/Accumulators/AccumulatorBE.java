@@ -1,9 +1,8 @@
 package mopk.tmmod.block_func.Accumulators;
 
-import mopk.tmmod.energy_network.CustomEnergyItemInterface;
-import mopk.tmmod.energy_network.CustomEnergyStorage;
-import mopk.tmmod.energy_network.EnergyNetworkManager;
-import mopk.tmmod.registration.CustomCapabilities;
+import mopk.tmmod.custom_interfaces.CustomEnergyItemInterface;
+import mopk.tmmod.custom_interfaces.CustomEnergyStorage;
+import mopk.tmmod.custom_interfaces.EnergyNetworkManager;
 import mopk.tmmod.registration.ModBlockEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;

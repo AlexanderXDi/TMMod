@@ -1,7 +1,7 @@
 package mopk.tmmod.block_func.Extractor;
 
-import mopk.tmmod.energy_network.CustomEnergyStorage;
-import mopk.tmmod.energy_network.EnergyNetworkManager;
+import mopk.tmmod.custom_interfaces.CustomEnergyStorage;
+import mopk.tmmod.custom_interfaces.EnergyNetworkManager;
 import mopk.tmmod.registration.ModBlockEntities;
 import mopk.tmmod.registration.ModDataComponents;
 import mopk.tmmod.registration.ModRecipes;
@@ -252,7 +252,7 @@ public class ExtractorBE extends BlockEntity implements MenuProvider, CustomEner
                     chargeStack.shrink(1);
                     setChanged();
                 }
-            } else if (chargeStack.getItem() instanceof mopk.tmmod.energy_network.CustomEnergyItemInterface energyItem) {
+            } else if (chargeStack.getItem() instanceof mopk.tmmod.custom_interfaces.CustomEnergyItemInterface energyItem) {
                 if (energyItem.getTier(chargeStack) <= this.currentEnergyTier) {
                     int space = currentMaxEnergyStored - energyStored;
                     int transferRate = Math.min(this.currentMaxReceiveAmount, energyItem.getTransferRate(chargeStack));

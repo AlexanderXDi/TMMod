@@ -19,6 +19,9 @@ public class ModItems {
     public static final DeferredItem<Item> VOLTMETER = ITEMS.register("voltmeter",
             () -> new VoltmeterItem(new Item.Properties().stacksTo(1)));
 
+    public static final DeferredItem<Item> WRENCH = ITEMS.register("wrench",
+            () -> new WrenchItem(new Item.Properties().stacksTo(1)));
+
     public static final DeferredItem<Item> IRON_HAMMER = ITEMS.register("iron_hammer",
             () -> new Item(new Item.Properties()));
     public static final DeferredItem<Item> STEEL_INGOT = ITEMS.register("steel_ingot",
@@ -65,6 +68,8 @@ public class ModItems {
     public static final DeferredItem<Item> BRONZE_DUST = ITEMS.register("bronze_dust",
             () -> new Item(new Item.Properties()));
     public static final DeferredItem<Item> STEEL_DUST = ITEMS.register("steel_dust",
+            () -> new Item(new Item.Properties()));
+    public static final DeferredItem<Item> COAL_DUST = ITEMS.register("coal_dust",
             () -> new Item(new Item.Properties()));
 
     public static final DeferredItem<Item> TINY_IRON_DUST = ITEMS.register("tiny_iron_dust",
@@ -140,6 +145,11 @@ public class ModItems {
     public static final DeferredItem<Item> TRANSFORMER_UPGRADE = ITEMS.register("transformer_upgrade",
             () -> new TransformerUpgrade(new Item.Properties()
                     .component(ModDataComponents.TRANSFORMERBONUS.get(), true)
+            ));
+    public static final DeferredItem<Item> EJECTOR_UPGRADE = ITEMS.register("ejector_upgrade",
+            () -> new EjectorUpgrade(new Item.Properties()
+                    .stacksTo(1)
+                    .component(ModDataComponents.EJECTOR_ACTIVE.get(), false)
             ));
     public static final DeferredItem<Item> BATTERY = ITEMS.register("battery",
             () -> new BatteryItem(BatteryTier.BATTERY, new Item.Properties()));

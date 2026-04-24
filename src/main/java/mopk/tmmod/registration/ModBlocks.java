@@ -1,7 +1,6 @@
 package mopk.tmmod.registration;
 
 import mopk.tmmod.Tmmod;
-import mopk.tmmod.block_func.ElectricHeatGenerator.ElectricHeatGenerator;
 import mopk.tmmod.blocks.*;
 import mopk.tmmod.block_func.Cables.CableTier;
 
@@ -22,9 +21,9 @@ import java.util.Map;
 import java.util.function.Supplier;
 
 import net.minecraft.world.level.block.LeavesBlock;
-import net.minecraft.world.level.block.RotatedPillarBlock;
 import net.minecraft.world.level.block.SaplingBlock;
 import mopk.tmmod.worldgen.RubberTreeGrower;
+
 
 public class ModBlocks {
     public static final DeferredRegister.Blocks BLOCKS = DeferredRegister.createBlocks(Tmmod.MODID);
@@ -124,6 +123,9 @@ public class ModBlocks {
     public static final DeferredBlock<Block> BRONZE_BLOCK = registerBlock("bronze_block",
             () -> new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK)));
     public static final DeferredBlock<Block> STEEL_BLOCK = registerBlock("steel_block",
+            () -> new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK)));
+
+    public static final DeferredBlock<Block> MACHINE_CASING = registerBlock("machine_casing",
             () -> new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK)));
 
     public static final Map<mopk.tmmod.block_func.Accumulators.AccumulatorTier, List<DeferredBlock<AccumulatorBlock>>> ALL_ACCUMULATORS = new EnumMap<>(mopk.tmmod.block_func.Accumulators.AccumulatorTier.class);

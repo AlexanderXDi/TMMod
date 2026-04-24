@@ -1,7 +1,12 @@
 {
   "type": "tmmod:forging",
-  "input": { "item": "tmmod:lead_plate" },
-  "output": { "count": 2, "item": "tmmod:lead_casing" },
+  "input": {
+    "item": "tmmod:lead_plate"
+  },
+  "output": {
+    "count": 2,
+    "id": "tmmod:lead_casing"
+  },
   "energyPerTick": 10,
   "time": 200
 }

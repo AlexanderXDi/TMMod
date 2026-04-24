@@ -1,7 +1,12 @@
 {
   "type": "tmmod:forging",
-  "input": { "item": "tmmod:tin_ingot" },
-  "output": { "item": "tmmod:tin_plate" },
+  "input": {
+    "item": "tmmod:tin_ingot"
+  },
+  "output": {
+    "id": "tmmod:tin_plate",
+    "count": 1
+  },
   "energyPerTick": 10,
   "time": 200
 }

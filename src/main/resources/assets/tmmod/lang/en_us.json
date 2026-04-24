@@ -103,6 +103,7 @@
 
   "item.tmmod.treetap": "Treetap",
   "item.tmmod.voltmeter": "Voltmeter",
+  "item.tmmod.wrench": "Wrench",
   "item.tmmod.iron_hammer": "Hammer",
   "item.tmmod.steel_ingot": "Steel ingot",
   "item.tmmod.tin_ingot": "Tin Ingot",
@@ -118,8 +119,9 @@
   "item.tmmod.lead_dust": "Lead Dust",
   "item.tmmod.bronze_dust": "Bronze Dust",
   "item.tmmod.steel_dust": "Steel Dust",
-
+  "item.tmmod.coal_dust": "Coal Dust",
   "item.tmmod.tiny_iron_dust": "Tiny Pile of Iron Dust",
+
   "item.tmmod.tiny_gold_dust": "Tiny Pile of Gold Dust",
   "item.tmmod.tiny_copper_dust": "Tiny Pile of Copper Dust",
   "item.tmmod.tiny_tin_dust": "Tiny Pile of Tin Dust",
@@ -164,6 +166,13 @@
   "item.tmmod.coil": "Coil",
   "item.tmmod.electric_motor": "Electric motor",
   "item.tmmod.electronic_circuit": "Circuit",
+
+  "item.tmmod.ejector_upgrade": "Ejector Upgrade",
+  "tooltip.tmmod.ejector_side": "Ejection Side: %s",
+  "tooltip.tmmod.ejector_not_set": "Side not set",
+  "tooltip.tmmod.ejector_desc": "Right-click on block face to set side. Shift+Right-click to reset.",
+  "message.tmmod.ejector_side_set": "Ejection side set to: %s",
+  "message.tmmod.ejector_reset": "Ejector settings reset",
 
   "item.tmmod.raw_tin": "Raw Tin",
   "item.tmmod.raw_copper": "Raw Copper",

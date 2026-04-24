@@ -1,4 +1,4 @@
-package mopk.tmmod.energy_network;
+package mopk.tmmod.custom_interfaces;
 
 import net.minecraft.core.Direction;
 

@@ -1,8 +1,8 @@
 package mopk.tmmod.block_func.ElectricFurnace;
 
-import mopk.tmmod.energy_network.CustomEnergyItemInterface;
-import mopk.tmmod.energy_network.CustomEnergyStorage;
-import mopk.tmmod.energy_network.EnergyNetworkManager;
+import mopk.tmmod.custom_interfaces.CustomEnergyItemInterface;
+import mopk.tmmod.custom_interfaces.CustomEnergyStorage;
+import mopk.tmmod.custom_interfaces.EnergyNetworkManager;
 import mopk.tmmod.registration.ModBlockEntities;
 import mopk.tmmod.registration.ModDataComponents;
 import net.minecraft.core.BlockPos;

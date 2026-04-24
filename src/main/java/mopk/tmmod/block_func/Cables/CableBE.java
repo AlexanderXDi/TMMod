@@ -1,7 +1,7 @@
 package mopk.tmmod.block_func.Cables;
 
-import mopk.tmmod.energy_network.CustomEnergyStorage;
-import mopk.tmmod.energy_network.EnergyNetworkManager;
+import mopk.tmmod.custom_interfaces.CustomEnergyStorage;
+import mopk.tmmod.custom_interfaces.EnergyNetworkManager;
 import static mopk.tmmod.registration.ModBlockEntities.CABLE_BE;
 
 import net.minecraft.core.BlockPos;
@@ -50,14 +50,8 @@ public class CableBE extends BlockEntity implements CustomEnergyStorage {
 
     @Override
     public int receiveEnergy(int maxReceive, int incomingTier, boolean simulate) {
-        // 1. ПРОВЕРКА НАПРЯЖЕНИЯ (Вольтаж):
-        // Если входящий тир больше, чем может выдержать кабель, он сгорает.
-        if (incomingTier > this.tier.getTier()) {
-            if (!simulate) {
-                burnout();
-            }
-        }
         // Кабель не может принимать энергию напрямую, всё делает сеть в один клик.
+        // Проверка тира теперь выполняется в EnergyNetwork.tick() для всей сети сразу.
         return 0; 
     }
 

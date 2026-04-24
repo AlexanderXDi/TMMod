@@ -1,7 +1,12 @@
 {
   "type": "tmmod:forging",
-  "input": { "item": "tmmod:bronze_plate" },
-  "output": { "count": 2, "item": "tmmod:bronze_casing" },
+  "input": {
+    "item": "tmmod:bronze_plate"
+  },
+  "output": {
+    "count": 2,
+    "id": "tmmod:bronze_casing"
+  },
   "energyPerTick": 10,
   "time": 200
 }

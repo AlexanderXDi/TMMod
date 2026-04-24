@@ -1,7 +1,12 @@
 {
   "type": "tmmod:forging",
-  "input": { "item": "tmmod:steel_plate" },
-  "output": { "count": 2, "item": "tmmod:steel_casing" },
+  "input": {
+    "item": "tmmod:steel_plate"
+  },
+  "output": {
+    "count": 2,
+    "id": "tmmod:steel_casing"
+  },
   "energyPerTick": 10,
   "time": 200
 }

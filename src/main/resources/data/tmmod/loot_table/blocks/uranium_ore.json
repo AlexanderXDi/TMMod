@@ -26,16 +26,16 @@
                   }
                 }
               ],
-              "name": "tmmod:uranium_ore"
+              "id": "tmmod:uranium_ore"
             },
             {
               "type": "minecraft:item",
               "functions": [
                 {
-                  "function": "minecraft:explosion_ok"
+                  "function": "minecraft:explosion_decay"
                 }
               ],
-              "name": "tmmod:uranium_ore"
+              "id": "tmmod:uranium_ore"
             }
           ]
         }

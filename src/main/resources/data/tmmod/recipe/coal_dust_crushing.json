@@ -1,0 +1,12 @@
+{
+  "type": "tmmod:crushing",
+  "input": {
+    "item": "minecraft:coal"
+  },
+  "output": {
+    "id": "tmmod:coal_dust",
+    "count": 1
+  },
+  "energyPerTick": 2,
+  "time": 200
+}

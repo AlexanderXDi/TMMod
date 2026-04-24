@@ -1,7 +1,12 @@
 {
   "type": "tmmod:forging",
-  "input": { "item": "tmmod:bronze_ingot" },
-  "output": { "item": "tmmod:bronze_plate" },
+  "input": {
+    "item": "tmmod:bronze_ingot"
+  },
+  "output": {
+    "id": "tmmod:bronze_plate",
+    "count": 1
+  },
   "energyPerTick": 10,
   "time": 200
 }

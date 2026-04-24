@@ -1,6 +1,6 @@
 package mopk.tmmod.items;
 
-import mopk.tmmod.energy_network.EnergyNetworkManager;
+import mopk.tmmod.custom_interfaces.EnergyNetworkManager;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;

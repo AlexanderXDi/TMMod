@@ -27,7 +27,5 @@ public class AccumulatorUpgrade extends Item {
 
         Component text = Component.translatable("gui.tmmod.accumulator_upgrade.text");
         tooltipComponents.add(Component.literal( currentAccumulatorBonus + text.getString()));
-
-        super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
     }
 }

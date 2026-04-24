@@ -1,0 +1,18 @@
+{
+  "type": "tmmod:induction_smelting",
+  "input1": {
+    "item": "tmmod:iron_dust"
+  },
+  "count1": 4,
+  "input2": {
+    "item": "tmmod:coal_dust"
+  },
+  "count2": 1,
+  "output1": {
+    "id": "tmmod:steel_ingot",
+    "count": 1
+  },
+  "heatPerSecond": 0,
+  "time": 400,
+  "euPerTick": 20
+}

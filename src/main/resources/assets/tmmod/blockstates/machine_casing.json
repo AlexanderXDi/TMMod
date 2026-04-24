@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "tmmod:block/machine_casing"
+    }
+  }
+}

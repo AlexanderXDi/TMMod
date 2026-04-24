@@ -14,7 +14,7 @@ import static mopk.tmmod.registration.CreativeTab.MOD_TAB;
 import mopk.tmmod.block_func.Compressor.CompressorScreen;
 import mopk.tmmod.block_func.Extractor.ExtractorScreen;
 import mopk.tmmod.block_func.Metalformer.MetalformerModePacket;
-import mopk.tmmod.energy_network.EnergyNetworkManager;
+import mopk.tmmod.custom_interfaces.EnergyNetworkManager;
 import mopk.tmmod.registration.*;
 import mopk.tmmod.block_func.Crusher.CrusherScreen;
 import mopk.tmmod.block_func.Metalformer.MetalformerScreen;
@@ -216,6 +216,12 @@ public class Tmmod {
                     return energy > 0 ? 1.0F : 0.0F;
                 }
             );
+            ItemProperties.register(ModItems.EJECTOR_UPGRADE.get(),
+                ResourceLocation.fromNamespaceAndPath("tmmod", "active"),
+                (stack, level, entity, seed) -> {
+                    return stack.getOrDefault(ModDataComponents.EJECTOR_ACTIVE.get(), false) ? 1.0F : 0.0F;
+                }
+            );
         });
     }
 
@@ -237,12 +243,14 @@ public class Tmmod {
         if (event.getTabKey() == MOD_TAB.getKey()) {
             event.accept(TREETAP.get());
             event.accept(VOLTMETER.get());
+            event.accept(WRENCH.get());
             event.accept(IRON_HAMMER.get());
             
             event.accept(TIN_BLOCK.get());
             event.accept(LEAD_BLOCK.get());
             event.accept(BRONZE_BLOCK.get());
             event.accept(STEEL_BLOCK.get());
+            event.accept(MACHINE_CASING.get());
 
             event.accept(TIN_INGOT.get());
             event.accept(COPPER_INGOT.get());
@@ -287,6 +295,7 @@ public class Tmmod {
             event.accept(LEAD_DUST.get());
             event.accept(BRONZE_DUST.get());
             event.accept(STEEL_DUST.get());
+            event.accept(COAL_DUST.get());
 
             event.accept(TINY_IRON_DUST.get());
             event.accept(TINY_GOLD_DUST.get());
@@ -348,6 +357,7 @@ public class Tmmod {
             event.accept(OVERCLOCKER_UPGRADE.get());
             event.accept(ACCUMULATOR_UPGRADE.get());
             event.accept(TRANSFORMER_UPGRADE.get());
+            event.accept(EJECTOR_UPGRADE.get());
             event.accept(STICKY_RESIN.get());
             event.accept(COIL.get());
             event.accept(ELECTRIC_MOTOR.get());

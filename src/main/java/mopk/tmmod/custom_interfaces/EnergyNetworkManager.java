@@ -1,4 +1,4 @@
-package mopk.tmmod.energy_network;
+package mopk.tmmod.custom_interfaces;
 
 import mopk.tmmod.block_func.Cables.CableBE;
 import net.minecraft.core.BlockPos;
@@ -97,11 +97,25 @@ public class EnergyNetworkManager extends SavedData {
             network.removeCable(pos);
             if (network.isEmpty()) {
                 networks.remove(networkId);
-            } else {
+            } else if (!network.isBurning()) { // Не перестраиваем сеть, если она в процессе сгорания
                 rebuildNetworksFrom(level, pos, network);
             }
             setDirty();
         }
+    }
+
+    /**
+     * Полностью удаляет сеть из менеджера без перестроения.
+     * Используется при массовом сгорании.
+     */
+    public void invalidateNetwork(UUID networkId) {
+        EnergyNetwork network = networks.remove(networkId);
+        if (network != null) {
+            for (BlockPos pos : network.getCables()) {
+                cableToNetworkMap.remove(pos);
+            }
+        }
+        setDirty();
     }
 
     private void rebuildNetworksFrom(Level level, BlockPos removedPos, EnergyNetwork originalNetwork) {

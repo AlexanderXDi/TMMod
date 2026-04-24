@@ -6,7 +6,7 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "tmmod:rubber_sapling"
+          "id": "tmmod:rubber_sapling"
         }
       ],
       "conditions": [
@@ -17,3 +17,4 @@
     }
   ]
 }
+

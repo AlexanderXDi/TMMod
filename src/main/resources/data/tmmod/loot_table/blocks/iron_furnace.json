@@ -6,7 +6,7 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "tmmod:iron_furnace"
+          "id": "tmmod:machine_casing"
         }
       ],
       "conditions": [

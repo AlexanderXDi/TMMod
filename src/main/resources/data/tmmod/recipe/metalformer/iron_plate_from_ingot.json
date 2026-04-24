@@ -1,7 +1,12 @@
 {
   "type": "tmmod:forging",
-  "input": { "item": "minecraft:iron_ingot" },
-  "output": { "item": "tmmod:iron_plate" },
+  "input": {
+    "item": "minecraft:iron_ingot"
+  },
+  "output": {
+    "id": "tmmod:iron_plate",
+    "count": 1
+  },
   "energyPerTick": 10,
   "time": 200
 }

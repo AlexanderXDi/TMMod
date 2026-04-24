@@ -1,8 +1,8 @@
 package mopk.tmmod.block_func.InductionFurnace;
 
-import mopk.tmmod.energy_network.CustomEnergyStorage;
-import mopk.tmmod.energy_network.CustomHeatStorage;
-import mopk.tmmod.energy_network.EnergyNetworkManager;
+import mopk.tmmod.custom_interfaces.CustomEnergyStorage;
+import mopk.tmmod.custom_interfaces.CustomHeatStorage;
+import mopk.tmmod.custom_interfaces.EnergyNetworkManager;
 import mopk.tmmod.registration.ModBlockEntities;
 import mopk.tmmod.registration.ModDataComponents;
 import mopk.tmmod.registration.ModRecipes;
@@ -31,57 +31,90 @@ import net.neoforged.neoforge.items.ItemStackHandler;
 import javax.annotation.Nullable;
 import java.util.Optional;
 
-public class InductionFurnaceBE extends BlockEntity implements MenuProvider, CustomEnergyStorage, CustomHeatStorage {
-    private int energyStored = 0;
-    private final int maxEnergyStored = 40000;
-    private final int energyTier = 2;
-    private final int maxReceiveAmount = 128;
 
-    private int currentHeatFlow = 0; // Накоплено за текущий тик
-    private int lastHeatFlow = 0;    // Для отображения в GUI (hU/t -> hU/s)
-    
+public class InductionFurnaceBE extends BlockEntity implements MenuProvider, CustomEnergyStorage, CustomHeatStorage {
+    private int energyStored;
+    private int currentMaxEnergyStored;
+    private int currentEnergyTier;
+    private int currentMaxReceiveAmount;
+    private int currentHeatFlow = 0;
+    private int lastHeatFlow = 0;
     private int progress = 0;
     private int maxProgress = 0;
     private double currentSpeedMultiplier = 1.0;
 
+
     public InductionFurnaceBE(BlockPos pos, BlockState state) {
         super(ModBlockEntities.INDUCTION_FURNACE_BE.get(), pos, state);
+        this.energyStored = 0;
+        this.currentMaxEnergyStored = 40000;
+        this.currentEnergyTier = 2;
+        this.currentMaxReceiveAmount = 128;
     }
 
-    // --- ENERGY STORAGE ---
-    public CustomEnergyStorage getEnergyStorage(Direction side) { return this; }
-    @Override public int getEnergyStored() { return energyStored; }
-    @Override public int getMaxEnergyStored() { return maxEnergyStored; }
-    @Override public int getEnergyTier() { return energyTier; }
+    public CustomEnergyStorage getEnergyStorage(Direction side) {
+        return this;
+    }
 
-    @Override
+    public int getEnergyStored() {
+        return this.energyStored;
+    }
+
+    public int getMaxEnergyStored() {
+        return this.currentMaxEnergyStored;
+    }
+
+    public int getEnergyTier() {
+        return this.currentEnergyTier;
+    }
+
     public int receiveEnergy(int maxReceive, int tier, boolean simulate) {
-        if (tier > energyTier) {
-            if (!simulate) triggerExplosion();
+        if (tier > this.currentEnergyTier) {
+            if (!simulate) {
+                triggerExplosion();
+                this.energyStored = 0;
+                this.setChanged();
+            }
             return 0;
         }
-        int accepted = Math.min(maxReceive, maxReceiveAmount);
-        int space = maxEnergyStored - energyStored;
-        int received = Math.min(accepted, space);
-        if (!simulate) { energyStored += received; setChanged(); }
-        return received;
-    }
 
-    @Override public int extractEnergy(int maxExtract, boolean simulate) { return 0; }
-    @Override public boolean canReceive(Direction side) { return true; }
-    @Override public boolean canExtract(Direction side) { return false; }
+        int actualMaxReceive = Math.min(maxReceive, this.currentMaxReceiveAmount);
 
-    private void triggerExplosion() {
-        if (this.level != null && !this.level.isClientSide) {
-            this.level.explode(null, worldPosition.getX()+0.5, worldPosition.getY()+0.5, worldPosition.getZ()+0.5, 4.0F, Level.ExplosionInteraction.TNT);
-            this.level.destroyBlock(this.worldPosition, false);
+        int energyReceived = Math.min(actualMaxReceive, this.currentMaxEnergyStored - this.energyStored);
+
+        if (!simulate) {
+            this.energyStored += energyReceived;
+            this.setChanged();
         }
+        return energyReceived;
     }
 
-    // --- HEAT STORAGE ---
-    public CustomHeatStorage getHeatStorage(Direction side) { return this; }
-    @Override public int getHeatStored() { return 0; } // Безбуферная система
-    @Override public int getMaxHeatStored() { return 1000; } // Номинальный предел для входящего потока
+    public int extractEnergy(int maxExtract, boolean simulate) {
+        return 0;
+    }
+
+    public boolean canReceive(Direction side) {
+        Direction facing = getBlockState().getValue(BlockStateProperties.FACING);
+        return side != facing.getCounterClockWise();
+    }
+
+    public boolean canExtract(Direction side) {
+        return false;
+    }
+
+    public CustomHeatStorage getHeatStorage(Direction side) {
+        return this;
+    }
+
+    @Override
+    public int getHeatStored() {
+        return 0;
+    }
+
+    @Override
+    public int getMaxHeatStored() {
+        return 1000;
+    }
 
     @Override
     public int receiveHeat(int maxReceive, boolean simulate) {
@@ -89,26 +122,19 @@ public class InductionFurnaceBE extends BlockEntity implements MenuProvider, Cus
             currentHeatFlow += maxReceive;
             setChanged();
         }
-        return maxReceive; // Принимаем всё, буфера нет
+        return maxReceive;
     }
 
-    @Override public int extractHeat(int maxExtract, boolean simulate) { return 0; }
+    @Override
+    public int extractHeat(int maxExtract, boolean simulate) {
+        return 0;
+    }
 
     @Override
     public boolean canConnectHeat(Direction side) {
-        // Вход для тепла с левой стороны блока относительно фронта
         Direction facing = getBlockState().getValue(BlockStateProperties.FACING);
-        return side == facing.getCounterClockWise(); 
+        return side == facing.getCounterClockWise();
     }
-
-    // --- INVENTORY ---
-    public final ItemStackHandler inventory = new ItemStackHandler(9) {
-        @Override
-        protected void onContentsChanged(int slot) {
-            if (slot >= 5 && slot <= 8) recalculateBonuses();
-            setChanged();
-        }
-    };
 
     private void recalculateBonuses() {
         int totalSpeedModules = 0;
@@ -122,20 +148,43 @@ public class InductionFurnaceBE extends BlockEntity implements MenuProvider, Cus
         setChanged();
     }
 
-    // --- GUI ---
+    private void triggerExplosion() {
+        float explosionRadius = 4.0F;
+        Level.ExplosionInteraction explosionType = Level.ExplosionInteraction.TNT;
+        if (this.level != null && !this.level.isClientSide) {
+            this.level.explode(
+                    null,
+                    this.worldPosition.getX() + 0.5D,
+                    this.worldPosition.getY() + 0.5D,
+                    this.worldPosition.getZ() + 0.5D,
+                    explosionRadius,
+                    explosionType
+            );
+            this.level.destroyBlock(this.worldPosition, false);
+        }
+    }
+
     protected final ContainerData data = new ContainerData() {
-        @Override public int get(int index) {
+        @Override
+        public int get(int index) {
             return switch (index) {
-                case 0 -> energyStored;
-                case 1 -> maxEnergyStored;
-                case 2 -> progress;
-                case 3 -> maxProgress;
-                case 4 -> lastHeatFlow; // hU за прошлый тик
+                case 0 -> InductionFurnaceBE.this.energyStored;
+                case 1 -> InductionFurnaceBE.this.currentMaxEnergyStored;
+                case 2 -> InductionFurnaceBE.this.progress;
+                case 3 -> InductionFurnaceBE.this.maxProgress;
+                case 4 -> InductionFurnaceBE.this.lastHeatFlow;
                 default -> 0;
             };
         }
-        @Override public void set(int index, int value) {}
-        @Override public int getCount() { return 5; }
+
+        @Override
+        public void set(int index, int value) {
+        }
+
+        @Override
+        public int getCount() {
+            return 5;
+        }
     };
 
     @Override
@@ -149,81 +198,119 @@ public class InductionFurnaceBE extends BlockEntity implements MenuProvider, Cus
         return new InductionFurnaceMenu(id, inventory, this, this.data);
     }
 
-    // --- LOGIC ---
+    public final ItemStackHandler inventory = new ItemStackHandler(9) {
+        @Override
+        protected void onContentsChanged(int slot) {
+            if (slot >= 5 && slot <= 8) {
+                recalculateBonuses();
+            }
+            setChanged();
+        }
+    };
+
+    public ItemStackHandler getInventory() {
+        return inventory;
+    }
+
     public void tick(Level level, BlockPos pos, BlockState state) {
         if (level.isClientSide) return;
 
-        // 1. Зарядка (из слота 4)
+        // Выталкивание предметов
+        mopk.tmmod.registration.InventoryUtils.handleEjection(level, pos, inventory, new int[]{5, 6, 7, 8}, new int[]{2, 3}, level.getGameTime());
+
         ItemStack chargeStack = inventory.getStackInSlot(4);
-        if (!chargeStack.isEmpty() && energyStored < maxEnergyStored) {
-            if (chargeStack.getItem() instanceof mopk.tmmod.energy_network.CustomEnergyItemInterface energyItem) {
-                if (energyItem.getTier(chargeStack) <= energyTier) {
-                    int toExtract = Math.min(maxEnergyStored - energyStored, maxReceiveAmount);
+        if (!chargeStack.isEmpty() && energyStored < currentMaxEnergyStored) {
+            if (chargeStack.getItem() instanceof mopk.tmmod.custom_interfaces.CustomEnergyItemInterface energyItem) {
+                if (energyItem.getTier(chargeStack) <= this.currentEnergyTier) {
+                    int space = currentMaxEnergyStored - energyStored;
+                    int transferRate = Math.min(this.currentMaxReceiveAmount, energyItem.getTransferRate(chargeStack));
+                    int toExtract = Math.min(space, transferRate);
                     int extracted = energyItem.extractEnergy(chargeStack, toExtract, false);
-                    if (extracted > 0) { energyStored += extracted; setChanged(); }
+                    if (extracted > 0) {
+                        energyStored += extracted;
+                        setChanged();
+                    }
                 }
             } else if (chargeStack.is(Items.REDSTONE)) {
                 int energyGain = 400;
-                if (energyStored + energyGain <= maxEnergyStored) { energyStored += energyGain; chargeStack.shrink(1); setChanged(); }
+                if (energyStored + energyGain <= currentMaxEnergyStored) {
+                    energyStored += energyGain;
+                    chargeStack.shrink(1);
+                    setChanged();
+                }
             }
         }
 
-        // 2. Крафт
+        RecipeInput input = new RecipeInput() {
+            @Override public ItemStack getItem(int i) { return inventory.getStackInSlot(i); }
+            @Override public int size() { return 2; }
+        };
+
         Optional<RecipeHolder<InductionFurnaceRecipe>> recipeHolder = level.getRecipeManager().getRecipeFor(
-                ModRecipes.INDUCTION_FURNACE_TYPE.get(), 
-                new RecipeInput() {
-                    @Override public ItemStack getItem(int i) { return inventory.getStackInSlot(i); }
-                    @Override public int size() { return 2; }
-                }, 
+                ModRecipes.INDUCTION_FURNACE_TYPE.get(),
+                input,
                 level
         );
 
         boolean isCrafting = false;
         if (recipeHolder.isPresent()) {
             InductionFurnaceRecipe recipe = recipeHolder.get().value();
+            // System.out.println("Recipe found: " + recipeHolder.get().id()); // Раскомментируйте для отладки
             this.maxProgress = recipe.time();
             int euPerTick = recipe.euPerTick();
             int requiredHeatPerTick = recipe.heatPerSecond() / 20;
 
             if (canCraft(recipe) && energyStored >= euPerTick) {
                 energyStored -= euPerTick;
-                
-                // Расчет замедления от нехватки тепла
+
                 double heatEfficiency = 1.0;
                 if (requiredHeatPerTick > 0) {
                     heatEfficiency = Math.min(1.0, (double) currentHeatFlow / requiredHeatPerTick);
                 }
-                
+
                 if (heatEfficiency > 0) {
-                    progress += (int) (100 * heatEfficiency * currentSpeedMultiplier); // Используем 100 как базу для плавности
+                    progress += (int) (100 * heatEfficiency * currentSpeedMultiplier);
                     isCrafting = true;
                     if (progress >= maxProgress * 100) {
                         craft(recipe);
                         progress = 0;
                     }
                 }
-            } else { progress = 0; }
-        } else { progress = 0; }
+            } else {
+                progress = 0;
+            }
+        } else {
+            progress = 0;
+        }
 
         lastHeatFlow = currentHeatFlow;
-        currentHeatFlow = 0; // Сброс для следующего тика
+        currentHeatFlow = 0;
 
         boolean isLit = isCrafting;
         boolean wasLit = state.getValue(BlockStateProperties.LIT);
         if (wasLit != isLit) {
             level.setBlock(pos, state.setValue(BlockStateProperties.LIT, isLit), 3);
         }
-        setChanged();
+
+        if (isLit) {
+            setChanged();
+        }
     }
 
-    @Override public void onLoad() {
+    @Override
+    public void onLoad() {
         super.onLoad();
-        if (level != null && !level.isClientSide()) EnergyNetworkManager.get((ServerLevel) level).onNodeAdded(level, this.worldPosition);
+        if (level != null && !level.isClientSide()) {
+            EnergyNetworkManager.get((ServerLevel) level).onNodeAdded(level, this.worldPosition);
+        }
     }
 
-    @Override public void setRemoved() {
+    @Override
+    public void setRemoved() {
         super.setRemoved();
-        if (level != null && !level.isClientSide()) EnergyNetworkManager.get((ServerLevel) level).onNodeRemoved(this.worldPosition);
+        if (level != null && !level.isClientSide()) {
+            EnergyNetworkManager.get((ServerLevel) level).onNodeRemoved(this.worldPosition);
+        }
     }
 
     private boolean canCraft(InductionFurnaceRecipe recipe) {
@@ -239,33 +326,49 @@ public class InductionFurnaceBE extends BlockEntity implements MenuProvider, Cus
     }
 
     private void craft(InductionFurnaceRecipe recipe) {
-        shrinkIfMatches(0, recipe.input1());
-        shrinkIfMatches(1, recipe.input2());
-        shrinkIfMatches(0, recipe.input2()); 
-        shrinkIfMatches(1, recipe.input1());
+        if (recipe.input2().isEmpty()) {
+            if (recipe.input1().test(inventory.getStackInSlot(0))) {
+                inventory.getStackInSlot(0).shrink(recipe.count1());
+            } else if (recipe.input1().test(inventory.getStackInSlot(1))) {
+                inventory.getStackInSlot(1).shrink(recipe.count1());
+            }
+        } else {
+            // Проверяем, какой ингредиент в каком слоте
+            if (recipe.input1().test(inventory.getStackInSlot(0)) && recipe.input2().test(inventory.getStackInSlot(1))) {
+                inventory.getStackInSlot(0).shrink(recipe.count1());
+                inventory.getStackInSlot(1).shrink(recipe.count2());
+            } else if (recipe.input1().test(inventory.getStackInSlot(1)) && recipe.input2().test(inventory.getStackInSlot(0))) {
+                inventory.getStackInSlot(1).shrink(recipe.count1());
+                inventory.getStackInSlot(0).shrink(recipe.count2());
+            }
+        }
 
         if (!recipe.output1().isEmpty()) inventory.insertItem(2, recipe.output1().copy(), false);
         if (!recipe.output2().isEmpty()) inventory.insertItem(3, recipe.output2().copy(), false);
     }
 
-    private void shrinkIfMatches(int slot, net.minecraft.world.item.crafting.Ingredient ing) {
-        if (ing.test(inventory.getStackInSlot(slot))) inventory.getStackInSlot(slot).shrink(1);
-    }
-
     @Override
     protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
         super.saveAdditional(tag, registries);
-        tag.putInt("energy", energyStored);
-        tag.putInt("progress", progress);
         tag.put("inventory", inventory.serializeNBT(registries));
+        tag.putInt("energy", energyStored);
+        tag.putInt("maxCapacity", currentMaxEnergyStored);
+        tag.putInt("energyTier", currentEnergyTier);
+        tag.putInt("maxReceiveAmount", currentMaxReceiveAmount);
+        tag.putInt("progress", progress);
+        tag.putInt("maxProgress", maxProgress);
     }
 
     @Override
     protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
         super.loadAdditional(tag, registries);
-        energyStored = tag.getInt("energy");
-        progress = tag.getInt("progress");
         inventory.deserializeNBT(registries, tag.getCompound("inventory"));
+        energyStored = tag.getInt("energy");
+        currentMaxEnergyStored = tag.getInt("maxCapacity");
+        currentEnergyTier = tag.getInt("energyTier");
+        currentMaxReceiveAmount = tag.getInt("maxReceiveAmount");
+        progress = tag.getInt("progress");
+        maxProgress = tag.getInt("maxProgress");
         recalculateBonuses();
     }
 }

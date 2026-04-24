@@ -39,6 +39,7 @@
   "block.tmmod.lead_block": "Свинцовый блок",
   "block.tmmod.bronze_block": "Бронзовый блок",
   "block.tmmod.steel_block": "Стальной блок",
+  "block.tmmod.machine_casing": "Корпус механизма",
 
   "block.tmmod.batbox": "BatBox",
   "block.tmmod.cesu": "CESU",
@@ -103,6 +104,7 @@
 
   "item.tmmod.treetap": "Краник",
   "item.tmmod.voltmeter": "Вольтметр",
+  "item.tmmod.wrench": "Гаечный ключ",
   "item.tmmod.iron_hammer": "Молот",
   "item.tmmod.steel_ingot": "Стальной слиток",
   "item.tmmod.tin_ingot": "Оловянный слиток",
@@ -118,8 +120,9 @@
   "item.tmmod.lead_dust": "Свинцовая пыль",
   "item.tmmod.bronze_dust": "Бронзовая пыль",
   "item.tmmod.steel_dust": "Стальная пыль",
-
+  "item.tmmod.coal_dust": "Угольная пыль",
   "item.tmmod.tiny_iron_dust": "Небольшая кучка железной пыли",
+
   "item.tmmod.tiny_gold_dust": "Небольшая кучка золотой пыли",
   "item.tmmod.tiny_copper_dust": "Небольшая кучка медной пыли",
   "item.tmmod.tiny_tin_dust": "Небольшая кучка оловянной пыли",
@@ -164,6 +167,13 @@
   "item.tmmod.coil": "Катушка",
   "item.tmmod.electric_motor": "Моторчик",
   "item.tmmod.electronic_circuit": "Микросхема",
+
+  "item.tmmod.ejector_upgrade": "Улучшение 'Выталкиватель'",
+  "tooltip.tmmod.ejector_side": "Сторона выталкивания: %s",
+  "tooltip.tmmod.ejector_not_set": "Сторона не выбрана",
+  "tooltip.tmmod.ejector_desc": "ПКМ по стороне блока: выбрать сторону. Shift+ПКМ: сбросить.",
+  "message.tmmod.ejector_side_set": "Выбрана сторона: %s",
+  "message.tmmod.ejector_reset": "Настройки выталкивателя сброшены",
 
   "item.tmmod.raw_tin": "Сырое олово",
   "item.tmmod.raw_copper": "Сырая медь",

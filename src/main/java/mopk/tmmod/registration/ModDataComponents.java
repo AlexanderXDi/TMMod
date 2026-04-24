@@ -36,5 +36,17 @@ public class ModDataComponents {
                     () -> DataComponentType.<Boolean>builder()
                             .persistent(Codec.BOOL)
                             .build());
+
+    public static final Supplier<DataComponentType<Integer>> EJECTOR_DIRECTION =
+            DATA_COMPONENTS.register("ejector_direction",
+                    () -> DataComponentType.<Integer>builder()
+                            .persistent(Codec.INT)
+                            .build());
+
+    public static final Supplier<DataComponentType<Boolean>> EJECTOR_ACTIVE =
+            DATA_COMPONENTS.register("ejector_active",
+                    () -> DataComponentType.<Boolean>builder()
+                            .persistent(Codec.BOOL)
+                            .build());
 }
 

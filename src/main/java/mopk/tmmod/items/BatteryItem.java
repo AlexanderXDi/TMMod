@@ -1,8 +1,7 @@
 package mopk.tmmod.items;
 
-import mopk.tmmod.energy_network.CustomEnergyItemInterface;
+import mopk.tmmod.custom_interfaces.CustomEnergyItemInterface;
 import mopk.tmmod.registration.ModDataComponents;
-import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;

@@ -1,7 +1,12 @@
 {
   "type": "tmmod:extracting",
-  "input": { "item": "tmmod:rubber_log" },
-  "output": { "item": "tmmod:rubber" },
+  "input": {
+    "item": "tmmod:rubber_log"
+  },
+  "output": {
+    "id": "tmmod:rubber",
+    "count": 1
+  },
   "energyPerTick": 10,
   "time": 400
 }

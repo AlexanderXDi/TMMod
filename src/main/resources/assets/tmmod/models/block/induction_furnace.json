@@ -1,8 +1,12 @@
 {
-   "parent": "minecraft:block/orientable",
+   "parent": "minecraft:block/cube",
    "textures": {
-      "top": "tmmod:block/induction_furnace/induction_furnace_top",
-      "front": "tmmod:block/induction_furnace/induction_furnace_front",
-      "side": "tmmod:block/induction_furnace/induction_furnace_side"
+      "particle": "tmmod:block/induction_furnace/induction_furnace_side",
+      "down": "tmmod:block/induction_furnace/induction_furnace_side",
+      "up": "tmmod:block/induction_furnace/induction_furnace_top",
+      "north": "tmmod:block/induction_furnace/induction_furnace_front",
+      "south": "tmmod:block/induction_furnace/induction_furnace_port",
+      "east": "tmmod:block/induction_furnace/induction_furnace_side",
+      "west": "tmmod:block/induction_furnace/induction_furnace_side"
    }
 }

@@ -1,7 +1,7 @@
 package mopk.tmmod.block_func.Transformers;
 
-import mopk.tmmod.energy_network.CustomEnergyStorage;
-import mopk.tmmod.energy_network.EnergyNetworkManager;
+import mopk.tmmod.custom_interfaces.CustomEnergyStorage;
+import mopk.tmmod.custom_interfaces.EnergyNetworkManager;
 import mopk.tmmod.registration.CustomCapabilities;
 import mopk.tmmod.registration.ModBlockEntities;
 import net.minecraft.core.BlockPos;
@@ -60,7 +60,7 @@ public class TransformerBE extends BlockEntity implements MenuProvider, CustomEn
 
     @Override
     public Component getDisplayName() {
-        return Component.translatable("container.tmmod." + tier.getName() + "_transformer");
+        return Component.translatable("container.tmmod." + tier.getName());
     }
 
     @Nullable
