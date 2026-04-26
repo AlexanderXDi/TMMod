@@ -12,9 +12,11 @@ import static mopk.tmmod.registration.CreativeTab.CREATIVE_MODE_TABS;
 import static mopk.tmmod.registration.CreativeTab.MOD_TAB;
 
 import mopk.tmmod.block_func.Compressor.CompressorScreen;
+import mopk.tmmod.block_func.Recycler.RecyclerScreen;
 import mopk.tmmod.block_func.Extractor.ExtractorScreen;
 import mopk.tmmod.block_func.Metalformer.MetalformerModePacket;
 import mopk.tmmod.custom_interfaces.EnergyNetworkManager;
+import mopk.tmmod.items.LiquidCapsuleItem;
 import mopk.tmmod.registration.*;
 import mopk.tmmod.block_func.Crusher.CrusherScreen;
 import mopk.tmmod.block_func.Metalformer.MetalformerScreen;
@@ -26,12 +28,23 @@ import mopk.tmmod.block_func.Transformers.TransformerModePacket;
 import mopk.tmmod.block_func.Transformers.TransformerScreen;
 import mopk.tmmod.registration.ModNetwork;
 import net.minecraft.client.renderer.item.ItemProperties;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.item.BucketItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.material.Fluids;
+import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.neoforge.client.event.ModelEvent;
+import net.minecraft.client.resources.model.ModelResourceLocation;
+import net.minecraft.client.resources.model.BakedModel;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
@@ -44,6 +57,9 @@ import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import mopk.tmmod.registration.ModTreeDecorators;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 
+import net.minecraft.world.level.material.FlowingFluid;
+import net.neoforged.neoforge.registries.RegisterEvent;
+
 @Mod(Tmmod.MODID)
 public class Tmmod {
 
@@ -55,8 +71,8 @@ public class Tmmod {
         modEventBus.addListener(this::registerCapabilities);
         modEventBus.addListener(this::registerMetalformerNetworking);
         modEventBus.addListener(this::registerTransformerNetworking);
+        // modEventBus.addListener(this::registerCannerNetworking);
         modEventBus.addListener(this::gatherData);
-
 
         BLOCK_ENTITIES.register(modEventBus);
         ITEMS.register(modEventBus);
@@ -69,12 +85,19 @@ public class Tmmod {
         SOUND_EVENTS.register(modEventBus);
         ModTreeDecorators.TREE_DECORATORS.register(modEventBus);
         
-        mopk.tmmod.registration.ModFluids.FLUID_TYPES.register(modEventBus);
-        mopk.tmmod.registration.ModFluids.FLUIDS.register(modEventBus);
+        // mopk.tmmod.registration.ModFluids.FLUID_TYPES.register(modEventBus);
+        // mopk.tmmod.registration.ModFluids.FLUIDS.register(modEventBus);
 
+        modEventBus.addListener(this::onModelRegisterAdditional);
+        modEventBus.addListener(this::onModelModifyBakingResult);
+        modEventBus.addListener(EventPriority.LOW, this::onRegister);
         modEventBus.addListener(this::buildCreativeTabs);
 
         NeoForge.EVENT_BUS.register(this);
+    }
+
+    private void onRegister(RegisterEvent event) {
+        // mopk.tmmod.registration.ModFluids.registerDynamicFluidItems(event);
     }
 
     @SubscribeEvent
@@ -100,6 +123,20 @@ public class Tmmod {
                 TransformerModePacket.CODEC,
                 ModNetwork::handleTransformerMode
         );
+    }
+
+    private void registerCannerNetworking(final RegisterPayloadHandlersEvent event) {
+        /* final PayloadRegistrar registrar = event.registrar("tmmod");
+        registrar.playToServer(
+                mopk.tmmod.block_func.Canner.CannerModePacket.TYPE,
+                mopk.tmmod.block_func.Canner.CannerModePacket.CODEC,
+                ModNetwork::handleCannerMode
+        );
+        registrar.playToServer(
+                mopk.tmmod.block_func.Canner.CannerSwapFluidPacket.TYPE,
+                mopk.tmmod.block_func.Canner.CannerSwapFluidPacket.CODEC,
+                ModNetwork::handleCannerSwapFluid
+        ); */
     }
 
     public void gatherData(GatherDataEvent event) {
@@ -145,6 +182,12 @@ public class Tmmod {
 
         event.registerBlockEntity(
                 CustomCapabilities.ENERGY,
+                ModBlockEntities.RECYCLER_BE.get(),
+                (blockEntity, direction) -> blockEntity.getEnergyStorage(direction)
+        );
+
+        event.registerBlockEntity(
+                CustomCapabilities.ENERGY,
                 ModBlockEntities.COMPRESSOR_BE.get(),
                 (blockEntity, direction) -> blockEntity.getEnergyStorage(direction)
         );
@@ -154,6 +197,18 @@ public class Tmmod {
                 ModBlockEntities.METALFORMER_BE.get(),
                 (blockEntity, direction) -> blockEntity.getEnergyStorage(direction)
         );
+
+        /* event.registerBlockEntity(
+                CustomCapabilities.ENERGY,
+                ModBlockEntities.CANNER_BE.get(),
+                (blockEntity, direction) -> blockEntity.getEnergyStorage(direction)
+        );
+
+        event.registerBlockEntity(
+                net.neoforged.neoforge.capabilities.Capabilities.FluidHandler.BLOCK,
+                ModBlockEntities.CANNER_BE.get(),
+                (blockEntity, direction) -> blockEntity
+        ); */
 
         event.registerBlockEntity(
                 CustomCapabilities.ENERGY,
@@ -231,12 +286,38 @@ public class Tmmod {
         event.register(ModMenuTypes.ACCUMULATOR_MENU.get(), AccumulatorScreen::new);
         event.register(ModMenuTypes.TRANSFORMER_MENU.get(), TransformerScreen::new);
         event.register(ModMenuTypes.CRUSHER_MENU.get(), CrusherScreen::new);
+        event.register(ModMenuTypes.RECYCLER_MENU.get(), RecyclerScreen::new);
         event.register(ModMenuTypes.COMPRESSOR_MENU.get(), CompressorScreen::new);
         event.register(ModMenuTypes.EXTRACTOR_MENU.get(), ExtractorScreen::new);
         event.register(ModMenuTypes.ELECTRIC_HEAT_GENERATOR_MENU.get(), mopk.tmmod.block_func.ElectricHeatGenerator.ElectricHeatGeneratorScreen::new);
         event.register(ModMenuTypes.METALFORMER_MENU.get(), MetalformerScreen::new);
+        // event.register(ModMenuTypes.CANNER_MENU.get(), mopk.tmmod.block_func.Canner.CannerScreen::new);
         event.register(ModMenuTypes.ELECTRIC_FURNACE_MENU.get(), ElectricFurnaceScreen::new);
         event.register(ModMenuTypes.INDUCTION_FURNACE_MENU.get(), mopk.tmmod.block_func.InductionFurnace.InductionFurnaceScreen::new);
+    }
+
+    private void onModelRegisterAdditional(ModelEvent.RegisterAdditional event) {
+        event.register(ModelResourceLocation.inventory(ResourceLocation.fromNamespaceAndPath(MODID, "liquid_capsule")));
+        event.register(ModelResourceLocation.inventory(ResourceLocation.fromNamespaceAndPath(MODID, "empty_capsule")));
+    }
+
+    private void onModelModifyBakingResult(ModelEvent.ModifyBakingResult event) {
+        ResourceLocation baseLoc = ResourceLocation.fromNamespaceAndPath(MODID, "item/liquid_capsule");
+        BakedModel baseModel = event.getModels().get(baseLoc);
+        
+        if (baseModel == null) {
+            baseModel = event.getModels().get(new ModelResourceLocation(baseLoc, "inventory"));
+        }
+
+        if (baseModel != null) {
+            for (var entry : BuiltInRegistries.ITEM.asHolderIdMap()) {
+                Item item = entry.value();
+                ResourceLocation id = BuiltInRegistries.ITEM.getKey(item);
+                if (id.getNamespace().equals(MODID) && item instanceof LiquidCapsuleItem) {
+                    event.getModels().put(ModelResourceLocation.inventory(id), baseModel);
+                }
+            }
+        }
     }
 
     private void buildCreativeTabs(final BuildCreativeModeTabContentsEvent event) {
@@ -245,81 +326,14 @@ public class Tmmod {
             event.accept(VOLTMETER.get());
             event.accept(WRENCH.get());
             event.accept(IRON_HAMMER.get());
-            
+            event.accept(EMPTY_CAPSULE.get());
+
+            /* ModFluids.ALL_FLUIDS.forEach(fluidObj -> {
+                event.accept(fluidObj.bucket.get());
+                event.accept(fluidObj.capsule.get());
+            }); */
+
             event.accept(TIN_BLOCK.get());
-            event.accept(LEAD_BLOCK.get());
-            event.accept(BRONZE_BLOCK.get());
-            event.accept(STEEL_BLOCK.get());
-            event.accept(MACHINE_CASING.get());
-
-            event.accept(TIN_INGOT.get());
-            event.accept(COPPER_INGOT.get());
-            event.accept(LEAD_INGOT.get());
-            event.accept(BRONZE_INGOT.get());
-            event.accept(STEEL_INGOT.get());
-            event.accept(COMPOSITE_INGOT.get());
-
-            event.accept(RAW_TIN.get());
-            event.accept(RAW_COPPER.get());
-            event.accept(RAW_LEAD.get());
-
-            event.accept(IRON_PLATE.get());
-            event.accept(GOLD_PLATE.get());
-            event.accept(COPPER_PLATE.get());
-            event.accept(TIN_PLATE.get());
-            event.accept(LEAD_PLATE.get());
-            event.accept(BRONZE_PLATE.get());
-            event.accept(STEEL_PLATE.get());
-            event.accept(COMPOSITE.get());
-
-            event.accept(DENSE_IRON_PLATE.get());
-            event.accept(DENSE_GOLD_PLATE.get());
-            event.accept(DENSE_COPPER_PLATE.get());
-            event.accept(DENSE_TIN_PLATE.get());
-            event.accept(DENSE_LEAD_PLATE.get());
-            event.accept(DENSE_BRONZE_PLATE.get());
-            event.accept(DENSE_STEEL_PLATE.get());
-
-            event.accept(IRON_CASING.get());
-            event.accept(GOLD_CASING.get());
-            event.accept(COPPER_CASING.get());
-            event.accept(TIN_CASING.get());
-            event.accept(LEAD_CASING.get());
-            event.accept(BRONZE_CASING.get());
-            event.accept(STEEL_CASING.get());
-
-            event.accept(IRON_DUST.get());
-            event.accept(GOLD_DUST.get());
-            event.accept(COPPER_DUST.get());
-            event.accept(TIN_DUST.get());
-            event.accept(LEAD_DUST.get());
-            event.accept(BRONZE_DUST.get());
-            event.accept(STEEL_DUST.get());
-            event.accept(COAL_DUST.get());
-
-            event.accept(TINY_IRON_DUST.get());
-            event.accept(TINY_GOLD_DUST.get());
-            event.accept(TINY_COPPER_DUST.get());
-            event.accept(TINY_TIN_DUST.get());
-            event.accept(TINY_LEAD_DUST.get());
-            event.accept(TINY_BRONZE_DUST.get());
-            event.accept(TINY_STEEL_DUST.get());
-
-            event.accept(net.minecraft.world.item.Items.WATER_BUCKET);
-            event.accept(net.minecraft.world.item.Items.LAVA_BUCKET);
-            event.accept(mopk.tmmod.registration.ModFluids.UU_MATTER.bucket.get());
-            event.accept(mopk.tmmod.registration.ModFluids.CONSTRUCTION_FOAM.bucket.get());
-            event.accept(mopk.tmmod.registration.ModFluids.COOLANT.bucket.get());
-            event.accept(mopk.tmmod.registration.ModFluids.HOT_COOLANT.bucket.get());
-            event.accept(mopk.tmmod.registration.ModFluids.PAHOEHOE_LAVA.bucket.get());
-            event.accept(mopk.tmmod.registration.ModFluids.BIOMASS.bucket.get());
-            event.accept(mopk.tmmod.registration.ModFluids.PESTICIDE.bucket.get());
-            event.accept(mopk.tmmod.registration.ModFluids.DISTILLED_WATER.bucket.get());
-            event.accept(mopk.tmmod.registration.ModFluids.HOT_WATER.bucket.get());
-            event.accept(mopk.tmmod.registration.ModFluids.CREOSOTE.bucket.get());
-            event.accept(mopk.tmmod.registration.ModFluids.MILK.bucket.get());
-
-            event.accept(IRON_FURNACE.get());
             event.accept(GENERATOR.get());
             event.accept(BATTERY.get());
             event.accept(ADVANCED_BATTERY.get());
@@ -348,9 +362,11 @@ public class Tmmod {
             });
 
             event.accept(CRUSHER.get());
+            event.accept(RECYCLER.get());
             event.accept(EXTRACTOR.get());
             event.accept(COMPRESSOR.get());
             event.accept(METALFORMER.get());
+            // event.accept(CANNER.get());
             event.accept(ELECTRIC_FURNACE.get());
             event.accept(INDUCTION_FURNACE.get());
             event.accept(ELECTRIC_HEAT_GENERATOR.get());
@@ -362,6 +378,7 @@ public class Tmmod {
             event.accept(COIL.get());
             event.accept(ELECTRIC_MOTOR.get());
             event.accept(RUBBER.get());
+            event.accept(SCRAP.get());
             event.accept(RUBBER_LOG.get());
             event.accept(RUBBER_LEAVES.get());
             event.accept(RUBBER_SAPLING.get());

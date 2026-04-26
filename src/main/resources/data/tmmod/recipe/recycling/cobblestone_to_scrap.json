@@ -1,0 +1,12 @@
+{
+  "type": "tmmod:recycling",
+  "input": {
+    "item": "minecraft:cobblestone"
+  },
+  "output": {
+    "count": 1,
+    "id": "tmmod:scrap"
+  },
+  "energyPerTick": 1,
+  "time": 45
+}

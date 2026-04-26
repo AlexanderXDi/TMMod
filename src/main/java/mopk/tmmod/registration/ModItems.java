@@ -34,7 +34,12 @@ public class ModItems {
             () -> new Item(new Item.Properties()));
     public static final DeferredItem<Item> RUBBER = ITEMS.register("rubber",
             () -> new Item(new Item.Properties()));
+    public static final DeferredItem<Item> SCRAP = ITEMS.register("scrap",
+            () -> new Item(new Item.Properties()));
     public static final DeferredItem<Item> ELECTRONIC_CIRCUIT = ITEMS.register("electronic_circuit",
+            () -> new Item(new Item.Properties()));
+
+    public static final DeferredItem<Item> EMPTY_CAPSULE = ITEMS.register("empty_capsule",
             () -> new Item(new Item.Properties()));
 
     public static final DeferredItem<Item> RAW_TIN = ITEMS.register("raw_tin",

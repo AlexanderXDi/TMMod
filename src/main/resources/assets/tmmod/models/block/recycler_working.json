@@ -1,0 +1,11 @@
+{
+  "parent": "minecraft:block/cube",
+  "textures": {
+    "down": "tmmod:block/recycler/recycler_side",
+    "up": "tmmod:block/recycler/recycler_top_working",
+    "north": "tmmod:block/recycler/recycler_working",
+    "south": "tmmod:block/recycler/recycler_side",
+    "west": "tmmod:block/recycler/recycler_side",
+    "east": "tmmod:block/recycler/recycler_side"
+  }
+}

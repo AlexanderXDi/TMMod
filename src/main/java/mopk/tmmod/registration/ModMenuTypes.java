@@ -2,6 +2,7 @@ package mopk.tmmod.registration;
 
 import mopk.tmmod.block_func.Compressor.CompressorMenu;
 import mopk.tmmod.block_func.Crusher.CrusherMenu;
+import mopk.tmmod.block_func.Recycler.RecyclerMenu;
 import mopk.tmmod.block_func.Extractor.ExtractorMenu;
 import mopk.tmmod.block_func.Metalformer.MetalformerMenu;
 import mopk.tmmod.block_func.ElectricFurnace.ElectricFurnaceMenu;
@@ -27,6 +28,9 @@ public class ModMenuTypes {
     public static final DeferredHolder<MenuType<?>, MenuType<CrusherMenu>> CRUSHER_MENU = MENUS.register("crusher_menu",
             () -> IMenuTypeExtension.create(CrusherMenu::new));
 
+    public static final DeferredHolder<MenuType<?>, MenuType<RecyclerMenu>> RECYCLER_MENU = MENUS.register("recycler_menu",
+            () -> IMenuTypeExtension.create(RecyclerMenu::new));
+
     public static final DeferredHolder<MenuType<?>, MenuType<ExtractorMenu>> EXTRACTOR_MENU = MENUS.register("extractor_menu",
             () -> IMenuTypeExtension.create(ExtractorMenu::new));
 
@@ -50,5 +54,8 @@ public class ModMenuTypes {
 
     public static final DeferredHolder<MenuType<?>, MenuType<mopk.tmmod.block_func.Transformers.TransformerMenu>> TRANSFORMER_MENU = MENUS.register("transformer_menu",
             () -> IMenuTypeExtension.create(mopk.tmmod.block_func.Transformers.TransformerMenu::new));
+
+    /* public static final DeferredHolder<MenuType<?>, MenuType<mopk.tmmod.block_func.Canner.CannerMenu>> CANNER_MENU = MENUS.register("canner_menu",
+            () -> IMenuTypeExtension.create(mopk.tmmod.block_func.Canner.CannerMenu::new)); */
 }
 

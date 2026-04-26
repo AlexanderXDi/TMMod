@@ -78,6 +78,9 @@ public class ModBlocks {
     public static final DeferredBlock<Block> CRUSHER = registerBlock("crusher",
             () -> new Crusher(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK)));
 
+    public static final DeferredBlock<Block> RECYCLER = registerBlock("recycler",
+            () -> new Recycler(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK)));
+
     public static final DeferredBlock<Block> EXTRACTOR = registerBlock("extractor",
             () -> new Extractor(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK)));
 
@@ -92,6 +95,9 @@ public class ModBlocks {
 
     public static final DeferredBlock<Block> METALFORMER = registerBlock("metalformer",
             () -> new Metalformer(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK)));
+
+    /* public static final DeferredBlock<Block> CANNER = registerBlock("canner",
+            () -> new Canner(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK))); */
 
     public static final DeferredBlock<Block> ELECTRIC_FURNACE = registerBlock("electric_furnace",
             () -> new ElectricFurnace(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK)));

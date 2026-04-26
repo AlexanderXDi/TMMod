@@ -9,6 +9,7 @@ import mopk.tmmod.block_func.Metalformer.MetalformerBE;
 import mopk.tmmod.block_func.ElectricFurnace.ElectricFurnaceBE;
 import mopk.tmmod.block_func.Generator.GeneratorBE;
 import mopk.tmmod.block_func.IronFurnace.IronFurnaceBE;
+import mopk.tmmod.block_func.Recycler.RecyclerBE;
 import mopk.tmmod.blocks.CableBlock;
 
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -46,6 +47,13 @@ public class ModBlockEntities {
                             ModBlocks.CRUSHER.get()
                     ).build(null));
 
+    public static final Supplier<BlockEntityType<RecyclerBE>> RECYCLER_BE =
+            BLOCK_ENTITIES.register("recycler_be",
+                    () -> BlockEntityType.Builder.of(
+                            RecyclerBE::new,
+                            ModBlocks.RECYCLER.get()
+                    ).build(null));
+
     public static final Supplier<BlockEntityType<ExtractorBE>> EXTRACTOR_BE =
             BLOCK_ENTITIES.register("extractor_be",
                     () -> BlockEntityType.Builder.of(
@@ -80,6 +88,13 @@ public class ModBlockEntities {
                             MetalformerBE::new,
                             ModBlocks.METALFORMER.get()
                     ).build(null));
+
+    /* public static final Supplier<BlockEntityType<mopk.tmmod.block_func.Canner.CannerBE>> CANNER_BE =
+            BLOCK_ENTITIES.register("canner_be",
+                    () -> BlockEntityType.Builder.of(
+                            mopk.tmmod.block_func.Canner.CannerBE::new,
+                            ModBlocks.CANNER.get()
+                    ).build(null)); */
 
     public static final Supplier<BlockEntityType<ElectricFurnaceBE>> ELECTRIC_FURNACE_BE =
             BLOCK_ENTITIES.register("electric_furnace_be",
