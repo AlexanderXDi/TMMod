@@ -1,4 +1,4 @@
-/* 
+ 
 package mopk.tmmod.block_func.Canner;
 
 import mopk.tmmod.custom_interfaces.CustomEnergyStorage;
@@ -171,7 +171,7 @@ public class CannerBE extends BlockEntity implements MenuProvider, CustomEnergyS
 
         if (recipe.fluidOutput().isPresent()) {
             FluidStack recipeOutputFluid = recipe.fluidOutput().get();
-            if (!outputTank.getFluid().isEmpty() && !outputTank.getFluid().isFluidEqual(recipeOutputFluid)) return false;
+            if (!outputTank.getFluid().isEmpty() && !outputTank.getFluid().is(recipeOutputFluid.getFluid())) return false;
             if (outputTank.getFluidAmount() + recipeOutputFluid.getAmount() > outputTank.getCapacity()) return false;
         }
 
@@ -317,4 +317,4 @@ public class CannerBE extends BlockEntity implements MenuProvider, CustomEnergyS
         if (level != null && !level.isClientSide()) EnergyNetworkManager.get((ServerLevel) level).onNodeRemoved(this.worldPosition);
     }
 }
-*/
+

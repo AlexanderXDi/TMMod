@@ -26,7 +26,7 @@
                   }
                 }
               ],
-              "id": "tmmod:lead_ore"
+              "name": "tmmod:lead_ore"
             },
             {
               "type": "minecraft:item",
@@ -49,7 +49,7 @@
                   "function": "minecraft:explosion_decay"
                 }
               ],
-              "id": "tmmod:raw_lead"
+              "name": "tmmod:raw_lead"
             }
           ]
         }

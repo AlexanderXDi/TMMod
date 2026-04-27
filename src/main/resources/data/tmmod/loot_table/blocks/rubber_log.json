@@ -6,7 +6,7 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "id": "tmmod:rubber_log"
+          "name": "tmmod:rubber_log"
         }
       ],
       "conditions": [

@@ -26,7 +26,7 @@
                   }
                 }
               ],
-              "id": "tmmod:deepslate_uranium_ore"
+              "name": "tmmod:deepslate_uranium_ore"
             },
             {
               "type": "minecraft:item",
@@ -35,7 +35,7 @@
                   "function": "minecraft:explosion_decay"
                 }
               ],
-              "id": "tmmod:deepslate_uranium_ore"
+              "name": "tmmod:deepslate_uranium_ore"
             }
           ]
         }

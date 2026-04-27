@@ -22,7 +22,7 @@ public class ModNetwork {
         });
     }
 
-    /* public static void handleCannerMode(mopk.tmmod.block_func.Canner.CannerModePacket data, IPayloadContext context) {
+    public static void handleCannerMode(mopk.tmmod.block_func.Canner.CannerModePacket data, IPayloadContext context) {
         context.enqueueWork(() -> {
             if (context.player().level().getBlockEntity(data.pos()) instanceof mopk.tmmod.block_func.Canner.CannerBE be) {
                 be.toggleMode();
@@ -36,5 +36,5 @@ public class ModNetwork {
                 be.swapFluids();
             }
         });
-    } */
+    }
 }

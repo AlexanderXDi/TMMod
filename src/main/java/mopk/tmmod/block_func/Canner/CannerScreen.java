@@ -1,4 +1,4 @@
-/*
+
 package mopk.tmmod.block_func.Canner;
 
 import net.minecraft.client.gui.GuiGraphics;
@@ -145,4 +145,4 @@ public class CannerScreen extends AbstractContainerScreen<CannerMenu> {
         }
     }
 }
-*/
+

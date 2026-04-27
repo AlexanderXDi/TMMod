@@ -6,7 +6,7 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "id": "tmmod:rubber_sapling",
+          "name": "tmmod:rubber_sapling",
           "conditions": [
             {
               "condition": "minecraft:random_chance",
@@ -16,7 +16,7 @@
         },
         {
           "type": "minecraft:item",
-          "id": "minecraft:stick",
+          "name": "minecraft:stick",
           "conditions": [
             {
               "condition": "minecraft:random_chance",

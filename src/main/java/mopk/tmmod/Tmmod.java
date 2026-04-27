@@ -16,7 +16,7 @@ import mopk.tmmod.block_func.Recycler.RecyclerScreen;
 import mopk.tmmod.block_func.Extractor.ExtractorScreen;
 import mopk.tmmod.block_func.Metalformer.MetalformerModePacket;
 import mopk.tmmod.custom_interfaces.EnergyNetworkManager;
-import mopk.tmmod.items.LiquidCapsuleItem;
+// Removed LiquidCapsuleItem import
 import mopk.tmmod.registration.*;
 import mopk.tmmod.block_func.Crusher.CrusherScreen;
 import mopk.tmmod.block_func.Metalformer.MetalformerScreen;
@@ -71,7 +71,7 @@ public class Tmmod {
         modEventBus.addListener(this::registerCapabilities);
         modEventBus.addListener(this::registerMetalformerNetworking);
         modEventBus.addListener(this::registerTransformerNetworking);
-        // modEventBus.addListener(this::registerCannerNetworking);
+        modEventBus.addListener(this::registerCannerNetworking);
         modEventBus.addListener(this::gatherData);
 
         BLOCK_ENTITIES.register(modEventBus);
@@ -85,11 +85,11 @@ public class Tmmod {
         SOUND_EVENTS.register(modEventBus);
         ModTreeDecorators.TREE_DECORATORS.register(modEventBus);
         
-        // mopk.tmmod.registration.ModFluids.FLUID_TYPES.register(modEventBus);
-        // mopk.tmmod.registration.ModFluids.FLUIDS.register(modEventBus);
+        mopk.tmmod.registration.ModFluids.FLUID_TYPES.register(modEventBus);
+        mopk.tmmod.registration.ModFluids.FLUIDS.register(modEventBus);
 
-        modEventBus.addListener(this::onModelRegisterAdditional);
-        modEventBus.addListener(this::onModelModifyBakingResult);
+        // modEventBus.addListener(this::onModelRegisterAdditional);
+        // modEventBus.addListener(this::onModelModifyBakingResult);
         modEventBus.addListener(EventPriority.LOW, this::onRegister);
         modEventBus.addListener(this::buildCreativeTabs);
 
@@ -97,7 +97,7 @@ public class Tmmod {
     }
 
     private void onRegister(RegisterEvent event) {
-        // mopk.tmmod.registration.ModFluids.registerDynamicFluidItems(event);
+        mopk.tmmod.registration.ModFluids.registerDynamicFluidItems(event);
     }
 
     @SubscribeEvent
@@ -126,7 +126,7 @@ public class Tmmod {
     }
 
     private void registerCannerNetworking(final RegisterPayloadHandlersEvent event) {
-        /* final PayloadRegistrar registrar = event.registrar("tmmod");
+        final PayloadRegistrar registrar = event.registrar("tmmod");
         registrar.playToServer(
                 mopk.tmmod.block_func.Canner.CannerModePacket.TYPE,
                 mopk.tmmod.block_func.Canner.CannerModePacket.CODEC,
@@ -136,7 +136,7 @@ public class Tmmod {
                 mopk.tmmod.block_func.Canner.CannerSwapFluidPacket.TYPE,
                 mopk.tmmod.block_func.Canner.CannerSwapFluidPacket.CODEC,
                 ModNetwork::handleCannerSwapFluid
-        ); */
+        );
     }
 
     public void gatherData(GatherDataEvent event) {
@@ -198,7 +198,7 @@ public class Tmmod {
                 (blockEntity, direction) -> blockEntity.getEnergyStorage(direction)
         );
 
-        /* event.registerBlockEntity(
+        event.registerBlockEntity(
                 CustomCapabilities.ENERGY,
                 ModBlockEntities.CANNER_BE.get(),
                 (blockEntity, direction) -> blockEntity.getEnergyStorage(direction)
@@ -208,7 +208,7 @@ public class Tmmod {
                 net.neoforged.neoforge.capabilities.Capabilities.FluidHandler.BLOCK,
                 ModBlockEntities.CANNER_BE.get(),
                 (blockEntity, direction) -> blockEntity
-        ); */
+        );
 
         event.registerBlockEntity(
                 CustomCapabilities.ENERGY,
@@ -238,6 +238,16 @@ public class Tmmod {
                 CustomCapabilities.HEAT,
                 ModBlockEntities.ELECTRIC_HEAT_GENERATOR_BE.get(),
                 (blockEntity, direction) -> blockEntity.getHeatStorage(direction)
+        );
+
+        event.registerItem(
+                net.neoforged.neoforge.capabilities.Capabilities.FluidHandler.ITEM,
+                (itemStack, context) -> new net.neoforged.neoforge.fluids.capability.templates.FluidHandlerItemStack(
+                        ModDataComponents.FLUID_CONTENT,
+                        itemStack,
+                        1000
+                ),
+                ModItems.EMPTY_CAPSULE.get()
         );
     }
 
@@ -291,7 +301,7 @@ public class Tmmod {
         event.register(ModMenuTypes.EXTRACTOR_MENU.get(), ExtractorScreen::new);
         event.register(ModMenuTypes.ELECTRIC_HEAT_GENERATOR_MENU.get(), mopk.tmmod.block_func.ElectricHeatGenerator.ElectricHeatGeneratorScreen::new);
         event.register(ModMenuTypes.METALFORMER_MENU.get(), MetalformerScreen::new);
-        // event.register(ModMenuTypes.CANNER_MENU.get(), mopk.tmmod.block_func.Canner.CannerScreen::new);
+        event.register(ModMenuTypes.CANNER_MENU.get(), mopk.tmmod.block_func.Canner.CannerScreen::new);
         event.register(ModMenuTypes.ELECTRIC_FURNACE_MENU.get(), ElectricFurnaceScreen::new);
         event.register(ModMenuTypes.INDUCTION_FURNACE_MENU.get(), mopk.tmmod.block_func.InductionFurnace.InductionFurnaceScreen::new);
     }
@@ -313,7 +323,7 @@ public class Tmmod {
             for (var entry : BuiltInRegistries.ITEM.asHolderIdMap()) {
                 Item item = entry.value();
                 ResourceLocation id = BuiltInRegistries.ITEM.getKey(item);
-                if (id.getNamespace().equals(MODID) && item instanceof LiquidCapsuleItem) {
+                if (id.getNamespace().equals(MODID) && item instanceof mopk.tmmod.items.UniversalCapsuleItem) {
                     event.getModels().put(ModelResourceLocation.inventory(id), baseModel);
                 }
             }
@@ -328,10 +338,9 @@ public class Tmmod {
             event.accept(IRON_HAMMER.get());
             event.accept(EMPTY_CAPSULE.get());
 
-            /* ModFluids.ALL_FLUIDS.forEach(fluidObj -> {
+            ModFluids.ALL_FLUIDS.forEach(fluidObj -> {
                 event.accept(fluidObj.bucket.get());
-                event.accept(fluidObj.capsule.get());
-            }); */
+            });
 
             event.accept(TIN_BLOCK.get());
             event.accept(GENERATOR.get());
@@ -366,7 +375,7 @@ public class Tmmod {
             event.accept(EXTRACTOR.get());
             event.accept(COMPRESSOR.get());
             event.accept(METALFORMER.get());
-            // event.accept(CANNER.get());
+            event.accept(CANNER.get());
             event.accept(ELECTRIC_FURNACE.get());
             event.accept(INDUCTION_FURNACE.get());
             event.accept(ELECTRIC_HEAT_GENERATOR.get());

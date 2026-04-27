@@ -1,4 +1,4 @@
-/* 
+ 
 package mopk.tmmod.block_func.Canner;
 
 import com.mojang.serialization.Codec;
@@ -35,9 +35,8 @@ public record CannerRecipe(
         }
 
         if (fluidInput.isPresent()) {
-            if (input.fluid().isEmpty() || !input.fluid().containsFluid(fluidInput.get())) return false;
+            if (input.fluid().isEmpty() || !input.fluid().is(fluidInput.get().getFluid()) || input.fluid().getAmount() < fluidInput.get().getAmount()) return false;
         }
-
         return true;
     }
 
@@ -61,7 +60,7 @@ public record CannerRecipe(
         return switch (mode) {
             case ITEMS_TO_ITEM -> ModRecipes.CANNER_ITEMS_TO_ITEM_SERIALIZER.get();
             case ITEM_TO_ITEM_FLUID -> ModRecipes.CANNER_ITEM_TO_ITEM_FLUID_SERIALIZER.get();
-            case ITEM_FLUID_TO_ITEM -> ModRecipes.CANNER_ITEM_FLUID_TO_ITEM_TYPE.get(); // Fixed mismatch
+            case ITEM_FLUID_TO_ITEM -> ModRecipes.CANNER_ITEM_FLUID_TO_ITEM_SERIALIZER.get();
             case ITEMS_FLUID_TO_ITEM_FLUID -> ModRecipes.CANNER_ITEMS_FLUID_TO_ITEM_FLUID_SERIALIZER.get();
         };
     }
@@ -143,4 +142,4 @@ public record CannerRecipe(
         }
     }
 }
-*/
+

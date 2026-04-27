@@ -3,7 +3,7 @@
   "ingredient": {
     "item": "minecraft:iron_ingot"
   },
-  "result": "tmmod:steel_ingot",
+  "result": { "id": "tmmod:steel_ingot" },
   "experience": 0.5,
   "cookingtime": 200
 }

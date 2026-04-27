@@ -40,7 +40,7 @@ public class ModItems {
             () -> new Item(new Item.Properties()));
 
     public static final DeferredItem<Item> EMPTY_CAPSULE = ITEMS.register("empty_capsule",
-            () -> new Item(new Item.Properties()));
+            () -> new UniversalCapsuleItem(new Item.Properties().stacksTo(16)));
 
     public static final DeferredItem<Item> RAW_TIN = ITEMS.register("raw_tin",
             () -> new Item(new Item.Properties()));

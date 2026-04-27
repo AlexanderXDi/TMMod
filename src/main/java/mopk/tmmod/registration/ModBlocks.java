@@ -96,8 +96,8 @@ public class ModBlocks {
     public static final DeferredBlock<Block> METALFORMER = registerBlock("metalformer",
             () -> new Metalformer(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK)));
 
-    /* public static final DeferredBlock<Block> CANNER = registerBlock("canner",
-            () -> new Canner(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK))); */
+    public static final DeferredBlock<Block> CANNER = registerBlock("canner",
+            () -> new Canner(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK)));
 
     public static final DeferredBlock<Block> ELECTRIC_FURNACE = registerBlock("electric_furnace",
             () -> new ElectricFurnace(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK)));

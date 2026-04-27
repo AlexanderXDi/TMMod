@@ -89,12 +89,12 @@ public class ModBlockEntities {
                             ModBlocks.METALFORMER.get()
                     ).build(null));
 
-    /* public static final Supplier<BlockEntityType<mopk.tmmod.block_func.Canner.CannerBE>> CANNER_BE =
+    public static final Supplier<BlockEntityType<mopk.tmmod.block_func.Canner.CannerBE>> CANNER_BE =
             BLOCK_ENTITIES.register("canner_be",
                     () -> BlockEntityType.Builder.of(
                             mopk.tmmod.block_func.Canner.CannerBE::new,
                             ModBlocks.CANNER.get()
-                    ).build(null)); */
+                    ).build(null));
 
     public static final Supplier<BlockEntityType<ElectricFurnaceBE>> ELECTRIC_FURNACE_BE =
             BLOCK_ENTITIES.register("electric_furnace_be",

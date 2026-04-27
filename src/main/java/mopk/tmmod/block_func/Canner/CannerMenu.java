@@ -1,4 +1,4 @@
-/* 
+ 
 package mopk.tmmod.block_func.Canner;
 
 import mopk.tmmod.registration.ModBlocks;
@@ -97,4 +97,4 @@ public class CannerMenu extends AbstractContainerMenu {
         }
     }
 }
-*/
+

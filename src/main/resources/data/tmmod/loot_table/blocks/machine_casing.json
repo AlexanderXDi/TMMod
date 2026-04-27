@@ -6,7 +6,7 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "id": "tmmod:machine_casing"
+          "name": "tmmod:machine_casing"
         }
       ],
       "conditions": [

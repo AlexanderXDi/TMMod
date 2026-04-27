@@ -48,5 +48,11 @@ public class ModDataComponents {
                     () -> DataComponentType.<Boolean>builder()
                             .persistent(Codec.BOOL)
                             .build());
+
+    public static final Supplier<DataComponentType<net.neoforged.neoforge.fluids.SimpleFluidContent>> FLUID_CONTENT =
+            DATA_COMPONENTS.register("fluid_content",
+                    () -> DataComponentType.<net.neoforged.neoforge.fluids.SimpleFluidContent>builder()
+                            .persistent(net.neoforged.neoforge.fluids.SimpleFluidContent.CODEC)
+                            .build());
 }
 

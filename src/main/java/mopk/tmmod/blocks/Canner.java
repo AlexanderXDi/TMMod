@@ -1,4 +1,4 @@
-/*
+
 package mopk.tmmod.blocks;
 
 import mopk.tmmod.block_func.Canner.CannerBE;
@@ -84,4 +84,4 @@ public class Canner extends Block implements EntityBlock {
         }
     }
 }
-*/
+

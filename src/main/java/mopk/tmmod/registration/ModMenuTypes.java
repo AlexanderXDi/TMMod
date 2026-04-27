@@ -55,7 +55,7 @@ public class ModMenuTypes {
     public static final DeferredHolder<MenuType<?>, MenuType<mopk.tmmod.block_func.Transformers.TransformerMenu>> TRANSFORMER_MENU = MENUS.register("transformer_menu",
             () -> IMenuTypeExtension.create(mopk.tmmod.block_func.Transformers.TransformerMenu::new));
 
-    /* public static final DeferredHolder<MenuType<?>, MenuType<mopk.tmmod.block_func.Canner.CannerMenu>> CANNER_MENU = MENUS.register("canner_menu",
-            () -> IMenuTypeExtension.create(mopk.tmmod.block_func.Canner.CannerMenu::new)); */
+    public static final DeferredHolder<MenuType<?>, MenuType<mopk.tmmod.block_func.Canner.CannerMenu>> CANNER_MENU = MENUS.register("canner_menu",
+            () -> IMenuTypeExtension.create(mopk.tmmod.block_func.Canner.CannerMenu::new));
 }
 
