@@ -90,6 +90,15 @@ public class ModBlocks {
     public static final DeferredBlock<Block> ELECTRIC_HEAT_GENERATOR = registerBlock("electric_heat_generator",
             () -> new ElectricHeatGenerator(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK)));
 
+    public static final DeferredBlock<Block> SOLID_FUEL_HEAT_GENERATOR = registerBlock("solid_fuel_heat_generator",
+            () -> new SolidFuelHeatGenerator(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK)));
+
+    public static final DeferredBlock<Block> LIQUID_HEAT_GENERATOR = registerBlock("liquid_heat_generator",
+            () -> new LiquidHeatGenerator(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK)));
+
+    public static final DeferredBlock<Block> LIQUID_HEAT_EXCHANGER = registerBlock("liquid_heat_exchanger",
+            () -> new LiquidHeatExchanger(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK)));
+
     public static final DeferredBlock<Block> INDUCTION_FURNACE = registerBlock("induction_furnace",
             () -> new InductionFurnace(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK)));
 

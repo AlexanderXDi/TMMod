@@ -1,12 +1,8 @@
-
 package mopk.tmmod.blocks;
 
-import mopk.tmmod.block_func.Canner.CannerBE;
-import mopk.tmmod.registration.ModSounds;
+import mopk.tmmod.block_func.LiquidHeatGenerator.LiquidHeatGeneratorBE;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.sounds.SoundSource;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Player;
@@ -26,11 +22,11 @@ import net.minecraft.world.phys.BlockHitResult;
 
 import javax.annotation.Nullable;
 
-public class Canner extends Block implements EntityBlock {
+public class LiquidHeatGenerator extends Block implements EntityBlock {
     public static final BooleanProperty LIT = BlockStateProperties.LIT;
     public static final DirectionProperty FACING = BlockStateProperties.FACING;
 
-    public Canner(Properties properties) {
+    public LiquidHeatGenerator(Properties properties) {
         super(properties);
         this.registerDefaultState(this.stateDefinition.any()
                 .setValue(LIT, false)
@@ -41,7 +37,7 @@ public class Canner extends Block implements EntityBlock {
     @Nullable
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
-        return new CannerBE(pos, state);
+        return new LiquidHeatGeneratorBE(pos, state);
     }
 
     @Override
@@ -52,7 +48,8 @@ public class Canner extends Block implements EntityBlock {
     @Nullable
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context) {
-        return this.defaultBlockState().setValue(FACING, context.getNearestLookingDirection().getOpposite());
+        return this.defaultBlockState()
+                .setValue(FACING, context.getNearestLookingDirection().getOpposite());
     }
 
     @Override
@@ -70,18 +67,7 @@ public class Canner extends Block implements EntityBlock {
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
         return level.isClientSide ? null : (lvl, pos, st, be) -> {
-            if (be instanceof CannerBE canner) canner.tick(lvl, pos, st);
+            if (be instanceof LiquidHeatGeneratorBE generator) generator.tick(lvl, pos, st);
         };
     }
-
-    @Override
-    public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random) {
-        if (state.getValue(LIT) && random.nextDouble() < 0.5D) {
-            level.playLocalSound(pos.getX(), pos.getY(), pos.getZ(),
-                    ModSounds.METALFORMER_HUM.get(),
-                    SoundSource.BLOCKS,
-                    100F, 1.0F, false);
-        }
-    }
 }
-

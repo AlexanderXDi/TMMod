@@ -1,0 +1,12 @@
+{
+  "parent": "minecraft:block/cube",
+  "textures": {
+    "particle": "tmmod:block/machine_casing",
+    "north": "tmmod:block/liquid_heat_exchanger_front_active",
+    "south": "tmmod:block/machine_casing",
+    "east": "tmmod:block/machine_casing",
+    "west": "tmmod:block/machine_casing",
+    "up": "tmmod:block/machine_casing",
+    "down": "tmmod:block/machine_casing"
+  }
+}

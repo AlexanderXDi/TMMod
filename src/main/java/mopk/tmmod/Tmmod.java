@@ -240,6 +240,36 @@ public class Tmmod {
                 (blockEntity, direction) -> blockEntity.getHeatStorage(direction)
         );
 
+        event.registerBlockEntity(
+                CustomCapabilities.HEAT,
+                ModBlockEntities.SOLID_FUEL_HEAT_GENERATOR_BE.get(),
+                (blockEntity, direction) -> blockEntity.getHeatStorage(direction)
+        );
+
+        event.registerBlockEntity(
+                CustomCapabilities.HEAT,
+                ModBlockEntities.LIQUID_HEAT_GENERATOR_BE.get(),
+                (blockEntity, direction) -> blockEntity.getHeatStorage(direction)
+        );
+
+        event.registerBlockEntity(
+                net.neoforged.neoforge.capabilities.Capabilities.FluidHandler.BLOCK,
+                ModBlockEntities.LIQUID_HEAT_GENERATOR_BE.get(),
+                (blockEntity, direction) -> blockEntity.getFluidTank()
+        );
+
+        event.registerBlockEntity(
+                CustomCapabilities.HEAT,
+                ModBlockEntities.LIQUID_HEAT_EXCHANGER_BE.get(),
+                (blockEntity, direction) -> blockEntity
+        );
+
+        event.registerBlockEntity(
+                net.neoforged.neoforge.capabilities.Capabilities.FluidHandler.BLOCK,
+                ModBlockEntities.LIQUID_HEAT_EXCHANGER_BE.get(),
+                (blockEntity, direction) -> blockEntity
+        );
+
         event.registerItem(
                 net.neoforged.neoforge.capabilities.Capabilities.FluidHandler.ITEM,
                 (itemStack, context) -> new net.neoforged.neoforge.fluids.capability.templates.FluidHandlerItemStack(
@@ -300,10 +330,12 @@ public class Tmmod {
         event.register(ModMenuTypes.COMPRESSOR_MENU.get(), CompressorScreen::new);
         event.register(ModMenuTypes.EXTRACTOR_MENU.get(), ExtractorScreen::new);
         event.register(ModMenuTypes.ELECTRIC_HEAT_GENERATOR_MENU.get(), mopk.tmmod.block_func.ElectricHeatGenerator.ElectricHeatGeneratorScreen::new);
+        event.register(ModMenuTypes.SOLID_FUEL_HEAT_GENERATOR_MENU.get(), mopk.tmmod.block_func.SolidFuelHeatGenerator.SolidFuelHeatGeneratorScreen::new);
         event.register(ModMenuTypes.METALFORMER_MENU.get(), MetalformerScreen::new);
         event.register(ModMenuTypes.CANNER_MENU.get(), mopk.tmmod.block_func.Canner.CannerScreen::new);
         event.register(ModMenuTypes.ELECTRIC_FURNACE_MENU.get(), ElectricFurnaceScreen::new);
         event.register(ModMenuTypes.INDUCTION_FURNACE_MENU.get(), mopk.tmmod.block_func.InductionFurnace.InductionFurnaceScreen::new);
+        event.register(ModMenuTypes.LIQUID_HEAT_EXCHANGER_MENU.get(), mopk.tmmod.block_func.LiquidHeatExchanger.LiquidHeatExchangerScreen::new);
     }
 
     private void onModelRegisterAdditional(ModelEvent.RegisterAdditional event) {
@@ -379,6 +411,11 @@ public class Tmmod {
             event.accept(ELECTRIC_FURNACE.get());
             event.accept(INDUCTION_FURNACE.get());
             event.accept(ELECTRIC_HEAT_GENERATOR.get());
+            event.accept(SOLID_FUEL_HEAT_GENERATOR.get());
+            event.accept(LIQUID_HEAT_GENERATOR.get());
+            event.accept(LIQUID_HEAT_EXCHANGER.get());
+            event.accept(HEAT_CONDUCTOR.get());
+            event.accept(ASH.get());
             event.accept(OVERCLOCKER_UPGRADE.get());
             event.accept(ACCUMULATOR_UPGRADE.get());
             event.accept(TRANSFORMER_UPGRADE.get());

@@ -54,5 +54,26 @@ public class ModRecipeProvider extends RecipeProvider {
                         .save(recipeOutput, ResourceLocation.fromNamespaceAndPath(Tmmod.MODID, recipeName));
             }
         }
+
+        // Рецепт теплопровода (условно: медь и резина)
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModItems.HEAT_CONDUCTOR.get())
+                .pattern("RRR")
+                .pattern("CCC")
+                .pattern("RRR")
+                .define('R', ModItems.RUBBER.get())
+                .define('C', ModItems.COPPER_PLATE.get())
+                .unlockedBy("has_copper_plate", has(ModItems.COPPER_PLATE.get()))
+                .save(recipeOutput);
+
+        // Рецепт теплообменника (условно: корпус, микросхема, стекло и медь)
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModBlocks.LIQUID_HEAT_EXCHANGER.get())
+                .pattern("GCG")
+                .pattern("CMC")
+                .pattern("GCG")
+                .define('G', Items.GLASS)
+                .define('C', ModItems.COPPER_PLATE.get())
+                .define('M', ModItems.MACHINE_CASING.get())
+                .unlockedBy("has_machine_casing", has(ModItems.MACHINE_CASING.get()))
+                .save(recipeOutput);
     }
 }

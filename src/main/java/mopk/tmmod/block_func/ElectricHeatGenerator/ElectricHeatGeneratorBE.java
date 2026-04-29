@@ -35,7 +35,6 @@ public class ElectricHeatGeneratorBE extends BlockEntity implements CustomEnergy
     private int currentMaxEnergyStored;
     private int currentEnergyTier;
     private int currentMaxReceiveAmount;
-    private int heatBuffer = 0;
     private int activeCoils = 0;
     private float energyFraction = 0.0f;
 
@@ -103,12 +102,12 @@ public class ElectricHeatGeneratorBE extends BlockEntity implements CustomEnergy
 
     @Override
     public int getHeatStored() {
-        return heatBuffer;
+        return 0;
     }
 
     @Override
     public int getMaxHeatStored() {
-        return 1000;
+        return 0;
     }
 
     @Override
@@ -118,12 +117,7 @@ public class ElectricHeatGeneratorBE extends BlockEntity implements CustomEnergy
 
     @Override
     public int extractHeat(int maxExtract, boolean simulate) {
-        int toExtract = Math.min(heatBuffer, maxExtract);
-        if (!simulate) {
-            heatBuffer -= toExtract;
-            setChanged();
-        }
-        return toExtract;
+        return 0;
     }
 
     @Override
@@ -240,24 +234,7 @@ public class ElectricHeatGeneratorBE extends BlockEntity implements CustomEnergy
         }
 
         if (activeCoils > 0) {
-            float exactCost = activeCoils * 3.2f;
-            int intCost = (int) exactCost;
-            energyFraction += (exactCost - intCost);
-            if (energyFraction >= 1.0f) {
-                intCost += 1;
-                energyFraction -= 1.0f;
-            }
-
-            int heatToGenerate = activeCoils * 10;
-            if (energyStored >= intCost && heatBuffer + heatToGenerate <= getMaxHeatStored()) {
-                energyStored -= intCost;
-                heatBuffer += heatToGenerate;
-                isLit = true;
-                setChanged();
-            }
-        }
-
-        if (heatBuffer > 0) {
+            int maxHeatToGenerate = activeCoils * 10;
             Direction facing = state.getValue(BlockStateProperties.FACING);
             BlockPos targetPos = pos.relative(facing);
             BlockEntity targetBE = level.getBlockEntity(targetPos);
@@ -265,12 +242,28 @@ public class ElectricHeatGeneratorBE extends BlockEntity implements CustomEnergy
             if (targetBE != null) {
                 CustomHeatStorage targetStorage = level.getCapability(CustomCapabilities.HEAT, targetPos, targetBE.getBlockState(), targetBE, facing.getOpposite());
                 if (targetStorage != null && targetStorage.canConnectHeat(facing.getOpposite())) {
-                    int toSend = Math.min(heatBuffer, 100);
-                    int accepted = targetStorage.receiveHeat(toSend, false);
+                    // Пробуем передать тепло. Прием "без ограничений" вернет всё переданное.
+                    int accepted = targetStorage.receiveHeat(maxHeatToGenerate, false);
                     if (accepted > 0) {
-                        heatBuffer -= accepted;
-                        isLit = true;
-                        setChanged();
+                        // Расчет стоимости EU пропорционально переданному теплу (100 HU = 32 EU)
+                        float exactCost = accepted * 0.32f;
+                        int intCost = (int) exactCost;
+                        energyFraction += (exactCost - intCost);
+                        if (energyFraction >= 1.0f) {
+                            intCost += 1;
+                            energyFraction -= 1.0f;
+                        }
+
+                        if (energyStored >= intCost) {
+                            energyStored -= intCost;
+                            isLit = true;
+                            setChanged();
+                        } else {
+                            // Если энергии не хватило, возвращаем тепло (имитация отката, так как буфера нет)
+                            // В реальности при "без ограничений" мы просто сожжем энергию до 0
+                            energyStored = 0;
+                            isLit = energyStored > 0;
+                        }
                     }
                 }
             }
@@ -310,7 +303,6 @@ public class ElectricHeatGeneratorBE extends BlockEntity implements CustomEnergy
         tag.putInt("maxCapacity", currentMaxEnergyStored);
         tag.putInt("energyTier", currentEnergyTier);
         tag.putInt("maxReceiveAmount", currentMaxReceiveAmount);
-        tag.putInt("heatBuffer", heatBuffer);
     }
 
     @Override
@@ -321,7 +313,6 @@ public class ElectricHeatGeneratorBE extends BlockEntity implements CustomEnergy
         currentMaxEnergyStored = tag.getInt("maxCapacity");
         currentEnergyTier = tag.getInt("energyTier");
         currentMaxReceiveAmount = tag.getInt("maxReceiveAmount");
-        heatBuffer = tag.getInt("heatBuffer");
         recalculateCoils();
     }
 }

@@ -164,4 +164,10 @@ public class ModItems {
             () -> new BatteryItem(BatteryTier.ENERGY_CRYSTAL, new Item.Properties()));
     public static final DeferredItem<Item> LAPOTRON_CRYSTAL = ITEMS.register("lapotron_crystal",
             () -> new BatteryItem(BatteryTier.LAPOTRON_CRYSTAL, new Item.Properties()));
+
+    public static final DeferredItem<Item> HEAT_CONDUCTOR = ITEMS.register("heat_conductor",
+            () -> new Item(new Item.Properties()));
+
+    public static final DeferredItem<Item> ASH = ITEMS.register("ash",
+            () -> new Item(new Item.Properties()));
 }

@@ -2,6 +2,8 @@
   "replace": false,
   "values": [
     "tmmod:uranium_ore",
-    "tmmod:deepslate_uranium_ore"
+    "tmmod:deepslate_uranium_ore",
+    "tmmod:liquid_heat_generator",
+    "tmmod:liquid_heat_exchanger"
   ]
 }

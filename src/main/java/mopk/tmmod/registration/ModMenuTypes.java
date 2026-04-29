@@ -40,6 +40,15 @@ public class ModMenuTypes {
     public static final DeferredHolder<MenuType<?>, MenuType<mopk.tmmod.block_func.ElectricHeatGenerator.ElectricHeatGeneratorMenu>> ELECTRIC_HEAT_GENERATOR_MENU = MENUS.register("electric_heat_generator_menu",
             () -> IMenuTypeExtension.create(mopk.tmmod.block_func.ElectricHeatGenerator.ElectricHeatGeneratorMenu::new));
 
+    public static final DeferredHolder<MenuType<?>, MenuType<mopk.tmmod.block_func.SolidFuelHeatGenerator.SolidFuelHeatGeneratorMenu>> SOLID_FUEL_HEAT_GENERATOR_MENU = MENUS.register("solid_fuel_heat_generator_menu",
+            () -> IMenuTypeExtension.create(mopk.tmmod.block_func.SolidFuelHeatGenerator.SolidFuelHeatGeneratorMenu::new));
+
+    public static final DeferredHolder<MenuType<?>, MenuType<mopk.tmmod.block_func.LiquidHeatGenerator.LiquidHeatGeneratorMenu>> LIQUID_HEAT_GENERATOR_MENU = MENUS.register("liquid_heat_generator_menu",
+            () -> IMenuTypeExtension.create(mopk.tmmod.block_func.LiquidHeatGenerator.LiquidHeatGeneratorMenu::new));
+
+    public static final DeferredHolder<MenuType<?>, MenuType<mopk.tmmod.block_func.LiquidHeatExchanger.LiquidHeatExchangerMenu>> LIQUID_HEAT_EXCHANGER_MENU = MENUS.register("liquid_heat_exchanger_menu",
+            () -> IMenuTypeExtension.create(mopk.tmmod.block_func.LiquidHeatExchanger.LiquidHeatExchangerMenu::new));
+
     public static final DeferredHolder<MenuType<?>, MenuType<MetalformerMenu>> METALFORMER_MENU = MENUS.register("metalformer_menu",
             () -> IMenuTypeExtension.create(MetalformerMenu::new));
 

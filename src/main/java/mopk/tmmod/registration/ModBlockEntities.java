@@ -71,9 +71,30 @@ public class ModBlockEntities {
     public static final Supplier<BlockEntityType<mopk.tmmod.block_func.ElectricHeatGenerator.ElectricHeatGeneratorBE>> ELECTRIC_HEAT_GENERATOR_BE =
             BLOCK_ENTITIES.register("electric_heat_generator_be",
                     () -> BlockEntityType.Builder.of(
-                            mopk.tmmod.block_func.ElectricHeatGenerator.ElectricHeatGeneratorBE::new,
-                            ModBlocks.ELECTRIC_HEAT_GENERATOR.get()
-                    ).build(null));
+                                    mopk.tmmod.block_func.ElectricHeatGenerator.ElectricHeatGeneratorBE::new,
+                                    ModBlocks.ELECTRIC_HEAT_GENERATOR.get()
+                            )
+                            .build(null)
+            );
+
+    public static final Supplier<BlockEntityType<mopk.tmmod.block_func.SolidFuelHeatGenerator.SolidFuelHeatGeneratorBE>> SOLID_FUEL_HEAT_GENERATOR_BE =
+            BLOCK_ENTITIES.register("solid_fuel_heat_generator_be",
+                    () -> BlockEntityType.Builder.of(
+                                    mopk.tmmod.block_func.SolidFuelHeatGenerator.SolidFuelHeatGeneratorBE::new,
+                                    ModBlocks.SOLID_FUEL_HEAT_GENERATOR.get()
+                            )
+                            .build(null)
+            );
+
+    public static final Supplier<BlockEntityType<mopk.tmmod.block_func.LiquidHeatGenerator.LiquidHeatGeneratorBE>> LIQUID_HEAT_GENERATOR_BE =
+            BLOCK_ENTITIES.register("liquid_heat_generator_be",
+                    () -> BlockEntityType.Builder.of(
+                                    mopk.tmmod.block_func.LiquidHeatGenerator.LiquidHeatGeneratorBE::new,
+                                    ModBlocks.LIQUID_HEAT_GENERATOR.get()
+                            )
+                            .build(null)
+            );
+
 
     public static final Supplier<BlockEntityType<mopk.tmmod.block_func.InductionFurnace.InductionFurnaceBE>> INDUCTION_FURNACE_BE =
             BLOCK_ENTITIES.register("induction_furnace_be",
