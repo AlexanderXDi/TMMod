@@ -72,8 +72,8 @@ public class ModRecipeProvider extends RecipeProvider {
                 .pattern("GCG")
                 .define('G', Items.GLASS)
                 .define('C', ModItems.COPPER_PLATE.get())
-                .define('M', ModItems.MACHINE_CASING.get())
-                .unlockedBy("has_machine_casing", has(ModItems.MACHINE_CASING.get()))
+                .define('M', ModBlocks.MACHINE_CASING.get())
+                .unlockedBy("has_machine_casing", has(ModBlocks.MACHINE_CASING.get()))
                 .save(recipeOutput);
     }
 }

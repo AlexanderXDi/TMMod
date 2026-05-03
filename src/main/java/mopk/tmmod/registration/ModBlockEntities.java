@@ -95,6 +95,24 @@ public class ModBlockEntities {
                             .build(null)
             );
 
+    public static final Supplier<BlockEntityType<mopk.tmmod.block_func.LiquidHeatExchanger.LiquidHeatExchangerBE>> LIQUID_HEAT_EXCHANGER_BE =
+            BLOCK_ENTITIES.register("liquid_heat_exchanger_be",
+                    () -> BlockEntityType.Builder.of(
+                                    mopk.tmmod.block_func.LiquidHeatExchanger.LiquidHeatExchangerBE::new,
+                                    ModBlocks.LIQUID_HEAT_EXCHANGER.get()
+                            )
+                            .build(null)
+            );
+
+    public static final Supplier<BlockEntityType<mopk.tmmod.block_func.RadioisotopeHeatGenerator.RadioisotopeHeatGeneratorBE>> RADIOISOTOPE_HEAT_GENERATOR_BE =
+            BLOCK_ENTITIES.register("radioisotope_heat_generator_be",
+                    () -> BlockEntityType.Builder.of(
+                                    mopk.tmmod.block_func.RadioisotopeHeatGenerator.RadioisotopeHeatGeneratorBE::new,
+                                    ModBlocks.RADIOISOTOPE_HEAT_GENERATOR.get()
+                            )
+                            .build(null)
+            );
+
 
     public static final Supplier<BlockEntityType<mopk.tmmod.block_func.InductionFurnace.InductionFurnaceBE>> INDUCTION_FURNACE_BE =
             BLOCK_ENTITIES.register("induction_furnace_be",

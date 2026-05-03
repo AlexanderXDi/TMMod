@@ -253,6 +253,12 @@ public class Tmmod {
         );
 
         event.registerBlockEntity(
+                CustomCapabilities.HEAT,
+                ModBlockEntities.RADIOISOTOPE_HEAT_GENERATOR_BE.get(),
+                (blockEntity, direction) -> blockEntity
+        );
+
+        event.registerBlockEntity(
                 net.neoforged.neoforge.capabilities.Capabilities.FluidHandler.BLOCK,
                 ModBlockEntities.LIQUID_HEAT_GENERATOR_BE.get(),
                 (blockEntity, direction) -> blockEntity.getFluidTank()
@@ -331,11 +337,13 @@ public class Tmmod {
         event.register(ModMenuTypes.EXTRACTOR_MENU.get(), ExtractorScreen::new);
         event.register(ModMenuTypes.ELECTRIC_HEAT_GENERATOR_MENU.get(), mopk.tmmod.block_func.ElectricHeatGenerator.ElectricHeatGeneratorScreen::new);
         event.register(ModMenuTypes.SOLID_FUEL_HEAT_GENERATOR_MENU.get(), mopk.tmmod.block_func.SolidFuelHeatGenerator.SolidFuelHeatGeneratorScreen::new);
+        event.register(ModMenuTypes.LIQUID_HEAT_GENERATOR_MENU.get(), mopk.tmmod.block_func.LiquidHeatGenerator.LiquidHeatGeneratorScreen::new);
         event.register(ModMenuTypes.METALFORMER_MENU.get(), MetalformerScreen::new);
         event.register(ModMenuTypes.CANNER_MENU.get(), mopk.tmmod.block_func.Canner.CannerScreen::new);
         event.register(ModMenuTypes.ELECTRIC_FURNACE_MENU.get(), ElectricFurnaceScreen::new);
         event.register(ModMenuTypes.INDUCTION_FURNACE_MENU.get(), mopk.tmmod.block_func.InductionFurnace.InductionFurnaceScreen::new);
         event.register(ModMenuTypes.LIQUID_HEAT_EXCHANGER_MENU.get(), mopk.tmmod.block_func.LiquidHeatExchanger.LiquidHeatExchangerScreen::new);
+        event.register(ModMenuTypes.RADIOISOTOPE_HEAT_GENERATOR_MENU.get(), mopk.tmmod.block_func.RadioisotopeHeatGenerator.RadioisotopeHeatGeneratorScreen::new);
     }
 
     private void onModelRegisterAdditional(ModelEvent.RegisterAdditional event) {
@@ -414,6 +422,8 @@ public class Tmmod {
             event.accept(SOLID_FUEL_HEAT_GENERATOR.get());
             event.accept(LIQUID_HEAT_GENERATOR.get());
             event.accept(LIQUID_HEAT_EXCHANGER.get());
+            event.accept(RADIOISOTOPE_HEAT_GENERATOR.get());
+            event.accept(RTG_FUEL.get());
             event.accept(HEAT_CONDUCTOR.get());
             event.accept(ASH.get());
             event.accept(OVERCLOCKER_UPGRADE.get());

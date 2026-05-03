@@ -1,16 +1,17 @@
 package mopk.tmmod.blocks;
 
-import mopk.tmmod.registration.ModBlockEntities;
-import mopk.tmmod.block_func.LiquidHeatExchanger.LiquidHeatExchangerBE;
+import mopk.tmmod.block_func.RadioisotopeHeatGenerator.RadioisotopeHeatGeneratorBE;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.RenderShape;
+import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -21,20 +22,12 @@ import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.phys.BlockHitResult;
 import org.jetbrains.annotations.Nullable;
-import com.mojang.serialization.MapCodec;
 
-public class LiquidHeatExchanger extends BaseEntityBlock {
-    public static final MapCodec<LiquidHeatExchanger> CODEC = simpleCodec(LiquidHeatExchanger::new);
+public class RadioisotopeHeatGenerator extends Block implements EntityBlock {
     public static final DirectionProperty FACING = BlockStateProperties.FACING;
-
-    @Override
-    protected MapCodec<? extends BaseEntityBlock> codec() {
-        return CODEC;
-    }
-
     public static final BooleanProperty LIT = BlockStateProperties.LIT;
 
-    public LiquidHeatExchanger(Properties properties) {
+    public RadioisotopeHeatGenerator(Properties properties) {
         super(properties);
         this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(LIT, false));
     }
@@ -50,23 +43,29 @@ public class LiquidHeatExchanger extends BaseEntityBlock {
         return this.defaultBlockState().setValue(FACING, context.getNearestLookingDirection().getOpposite());
     }
 
-    @Override
-    public RenderShape getRenderShape(BlockState state) {
-        return RenderShape.MODEL;
-    }
-
     @Nullable
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
-        return new LiquidHeatExchangerBE(pos, state);
+        return new RadioisotopeHeatGeneratorBE(pos, state);
     }
 
     @Override
-    public InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hitResult) {
+    protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
         if (!level.isClientSide) {
             BlockEntity be = level.getBlockEntity(pos);
-            if (be instanceof LiquidHeatExchangerBE exchanger) {
-                player.openMenu(exchanger, pos);
+            if (be instanceof RadioisotopeHeatGeneratorBE generator) {
+                player.openMenu(generator, pos);
+            }
+        }
+        return ItemInteractionResult.SUCCESS;
+    }
+
+    @Override
+    protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hitResult) {
+        if (!level.isClientSide) {
+            BlockEntity be = level.getBlockEntity(pos);
+            if (be instanceof RadioisotopeHeatGeneratorBE generator) {
+                player.openMenu(generator, pos);
             }
         }
         return InteractionResult.SUCCESS;
@@ -75,7 +74,8 @@ public class LiquidHeatExchanger extends BaseEntityBlock {
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
-        return createTickerHelper(type, ModBlockEntities.LIQUID_HEAT_EXCHANGER_BE.get(),
-                (lvl, pos, st, be) -> be.tick(lvl, pos, st));
+        return (lvl, pos, st, be) -> {
+            if (be instanceof RadioisotopeHeatGeneratorBE generator) generator.tick(lvl, pos, st);
+        };
     }
 }

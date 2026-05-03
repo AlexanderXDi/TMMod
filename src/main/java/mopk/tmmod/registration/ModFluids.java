@@ -2,6 +2,7 @@ package mopk.tmmod.registration;
 
 import mopk.tmmod.Tmmod;
 import mopk.tmmod.fluids.EffectLiquidBlock;
+import mopk.tmmod.fluids.GasFluid;
 import mopk.tmmod.fluids.GasLiquidBlock;
 import mopk.tmmod.fluids.TransformingLiquidBlock;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -103,8 +104,9 @@ public class ModFluids {
         FluidRegistryObject obj = new FluidRegistryObject();
 
         // 1. Fluid Type
+        int finalDensity = isGas ? -density : density;
         obj.type = FLUID_TYPES.register(name, () -> new FluidType(FluidType.Properties.create()
-                .viscosity(viscosity).density(density).canExtinguish(!setsOnFire)) {
+                .viscosity(viscosity).density(finalDensity).canExtinguish(!setsOnFire)) {
             @Override
             public void initializeClient(java.util.function.Consumer<net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions> consumer) {
                 consumer.accept(new net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions() {
@@ -129,7 +131,8 @@ public class ModFluids {
         if (isGas) {
             obj.block = (DeferredBlock) ModBlocks.BLOCKS.register(name + "_block", () -> new GasLiquidBlock(
                     (net.minecraft.world.level.material.FlowingFluid) obj.source.get(),
-                    blockProps));
+                    blockProps,
+                    effect, setsOnFire));
         } else if (transformTarget != null) {
             obj.block = (DeferredBlock) ModBlocks.BLOCKS.register(name + "_block", () -> new TransformingLiquidBlock(
                     (net.minecraft.world.level.material.FlowingFluid) obj.source.get(),
@@ -150,8 +153,13 @@ public class ModFluids {
         obj.properties = () -> new BaseFlowingFluid.Properties(obj.type, obj.source, obj.flowing)
                 .bucket(obj.bucket).block(obj.block).tickRate(tickRate);
 
-        obj.source = FLUIDS.register(name, () -> new BaseFlowingFluid.Source(obj.properties.get()));
-        obj.flowing = FLUIDS.register(name + "_flowing", () -> new BaseFlowingFluid.Flowing(obj.properties.get()));
+        if (isGas) {
+            obj.source = FLUIDS.register(name, () -> new GasFluid.Source(obj.properties.get()));
+            obj.flowing = FLUIDS.register(name + "_flowing", () -> new GasFluid.Flowing(obj.properties.get()));
+        } else {
+            obj.source = FLUIDS.register(name, () -> new BaseFlowingFluid.Source(obj.properties.get()));
+            obj.flowing = FLUIDS.register(name + "_flowing", () -> new BaseFlowingFluid.Flowing(obj.properties.get()));
+        }
 
         ALL_FLUIDS.add(obj);
         return obj;

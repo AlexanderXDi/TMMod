@@ -15,6 +15,7 @@
     "tmmod:copper_ore",
     "tmmod:deepslate_copper_ore",
     "tmmod:liquid_heat_generator",
-    "tmmod:liquid_heat_exchanger"
+    "tmmod:liquid_heat_exchanger",
+    "tmmod:radioisotope_heat_generator"
   ]
 }

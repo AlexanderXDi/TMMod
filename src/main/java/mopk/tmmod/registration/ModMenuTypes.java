@@ -49,6 +49,9 @@ public class ModMenuTypes {
     public static final DeferredHolder<MenuType<?>, MenuType<mopk.tmmod.block_func.LiquidHeatExchanger.LiquidHeatExchangerMenu>> LIQUID_HEAT_EXCHANGER_MENU = MENUS.register("liquid_heat_exchanger_menu",
             () -> IMenuTypeExtension.create(mopk.tmmod.block_func.LiquidHeatExchanger.LiquidHeatExchangerMenu::new));
 
+    public static final DeferredHolder<MenuType<?>, MenuType<mopk.tmmod.block_func.RadioisotopeHeatGenerator.RadioisotopeHeatGeneratorMenu>> RADIOISOTOPE_HEAT_GENERATOR_MENU = MENUS.register("radioisotope_heat_generator_menu",
+            () -> IMenuTypeExtension.create(mopk.tmmod.block_func.RadioisotopeHeatGenerator.RadioisotopeHeatGeneratorMenu::new));
+
     public static final DeferredHolder<MenuType<?>, MenuType<MetalformerMenu>> METALFORMER_MENU = MENUS.register("metalformer_menu",
             () -> IMenuTypeExtension.create(MetalformerMenu::new));
 

@@ -170,4 +170,7 @@ public class ModItems {
 
     public static final DeferredItem<Item> ASH = ITEMS.register("ash",
             () -> new Item(new Item.Properties()));
+
+    public static final DeferredItem<Item> RTG_FUEL = ITEMS.register("rtg_fuel",
+            () -> new Item(new Item.Properties().stacksTo(64)));
 }

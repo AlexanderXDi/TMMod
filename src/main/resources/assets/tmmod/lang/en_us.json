@@ -29,6 +29,7 @@
   "block.tmmod.canner": "Canner",
   "block.tmmod.electric_furnace": "Electric furnace",
   "block.tmmod.liquid_heat_exchanger": "Liquid Heat Exchanger",
+  "block.tmmod.radioisotope_heat_generator": "Radioisotope Heat Generator",
 
   "block.tmmod.uranium_ore": "Uranium Ore",
   "block.tmmod.deepslate_uranium_ore": "Deepslate Uranium Ore",
@@ -78,6 +79,7 @@
   "container.tmmod.electric_furnace": "Electric furnace",
   "container.tmmod.electric_heat_generator": "Electric Heat Generator",
   "container.tmmod.induction_furnace": "Induction Furnace",
+  "container.tmmod.radioisotope_heat_generator": "Radioisotope Heat Generator",
   "container.tmmod.lv_transformer": "LV-Transformer",
   "container.tmmod.mv_transformer": "MV-Transformer",
   "container.tmmod.hv_transformer": "HV-Transformer",
@@ -127,6 +129,7 @@
   "item.tmmod.steel_dust": "Steel Dust",
   "item.tmmod.coal_dust": "Coal Dust",
   "item.tmmod.ash": "Ash",
+  "item.tmmod.rtg_fuel": "RTG Fuel",
   "item.tmmod.tiny_iron_dust": "Tiny Pile of Iron Dust",
 
   "item.tmmod.tiny_gold_dust": "Tiny Pile of Gold Dust",

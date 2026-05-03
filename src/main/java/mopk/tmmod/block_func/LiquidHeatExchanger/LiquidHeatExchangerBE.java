@@ -80,7 +80,7 @@ public class LiquidHeatExchangerBE extends BlockEntity implements CustomHeatStor
     @Override
     public @NotNull FluidStack drain(FluidStack resource, FluidAction action) {
         if (resource.isEmpty()) return FluidStack.EMPTY;
-        if (coldTank.getFluid().isFluidEqual(resource)) {
+        if (FluidStack.isSameFluid(coldTank.getFluid(), resource)) {
             return coldTank.drain(resource.getAmount(), action);
         }
         return FluidStack.EMPTY;

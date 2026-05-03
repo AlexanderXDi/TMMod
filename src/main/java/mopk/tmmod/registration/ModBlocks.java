@@ -99,6 +99,9 @@ public class ModBlocks {
     public static final DeferredBlock<Block> LIQUID_HEAT_EXCHANGER = registerBlock("liquid_heat_exchanger",
             () -> new LiquidHeatExchanger(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK)));
 
+    public static final DeferredBlock<Block> RADIOISOTOPE_HEAT_GENERATOR = registerBlock("radioisotope_heat_generator",
+            () -> new RadioisotopeHeatGenerator(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK)));
+
     public static final DeferredBlock<Block> INDUCTION_FURNACE = registerBlock("induction_furnace",
             () -> new InductionFurnace(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK)));
 
